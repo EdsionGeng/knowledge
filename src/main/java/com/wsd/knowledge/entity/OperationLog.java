@@ -34,6 +34,14 @@ public class OperationLog implements Serializable {
     @Column(name = "operationTime", nullable = false, length=64,columnDefinition=" '操作时间'")
     private String operationTime;//操作文件时间
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getDepartmentName() {
         return departmentName;
     }
