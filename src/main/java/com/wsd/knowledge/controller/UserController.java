@@ -1,13 +1,14 @@
 package com.wsd.knowledge.controller;
 
-import com.wsd.knowledge.util.ApiResult;
+
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.stereotype.Controller;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,8 +21,10 @@ import javax.servlet.http.HttpServletRequest;
  * @Description 设计用户模块界面交互层
  * @Date:9:53 2017/10/31
  */
+
 @RestController
 @EnableAutoConfiguration
+@Api(description = "用户类接口", value = "用户类接口")
 @RequestMapping("user")
 public class UserController {
 
@@ -46,4 +49,10 @@ public class UserController {
            return "";
         }
     }
+
+
+
+
+
+
 }
