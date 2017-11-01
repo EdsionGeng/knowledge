@@ -130,7 +130,11 @@ public class SystemUser implements Serializable {
         this.password = password;
     }
 
-    public SystemUser(String username, String password, String department, String usergroup, String mobile, String email, String workWexinId, String duty, int isAdmin, int userGroupId, int job, String tDate) {
+    public SystemUser(String username, String password,
+                      String department, String usergroup,
+                      String mobile, String email, String workWexinId,
+                      String duty, int isAdmin, int userGroupId,
+                      int job, String tDate) {
         this.username = username;
         this.password = password;
         this.department = department;
