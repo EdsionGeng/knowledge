@@ -25,17 +25,28 @@ public class OperationLog implements Serializable {
     @Column(name = "userId", nullable = false, columnDefinition=" '用户ID'")
     private int userId;//用户ID
 
+    @Column(name = "username", nullable = false, columnDefinition=" '用户ID'")
+    private String username;//用户ID
+
     @Column(name = "fileId", nullable = false, columnDefinition=" '文件ID'")
     private int fileId;//文件ID
 
     @Column(name = "operationStyle", nullable = false, columnDefinition=" '操作文档动作类型'")
-    private int operationStyle;//操作类型 0添加文档 2删除文档  3更改文档 4 查阅文档
+    private int operationStyle;//操作类型 1添加文档 2删除文档  3更改文档 4 查阅文档
 
     @Column(name = "operationTime", nullable = false, length=64,columnDefinition=" '操作时间'")
     private String operationTime;//操作文件时间
 
     public int getId() {
         return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setId(int id) {
@@ -82,8 +93,9 @@ public class OperationLog implements Serializable {
         this.operationTime = operationTime;
     }
 
-    public OperationLog(String departmentName, int userId, int fileId, int operationStyle, String operationTime) {
+    public OperationLog(String departmentName,String username, int userId, int fileId, int operationStyle, String operationTime) {
         this.departmentName = departmentName;
+        this.username=username;
         this.userId = userId;
         this.fileId = fileId;
         this.operationStyle = operationStyle;

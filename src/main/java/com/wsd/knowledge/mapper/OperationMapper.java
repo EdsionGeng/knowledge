@@ -1,7 +1,14 @@
 package com.wsd.knowledge.mapper;
 
 import com.wsd.knowledge.entity.OperationLog;
+import com.wsd.knowledge.util.StringUtils;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author EdsionGeng
@@ -15,10 +22,86 @@ public interface OperationMapper {
      * @param operationLog
      * @return
      */
-    @Insert("insert into OperationLog(departmentName,fileId,operationStyle,operationTime,userId) " +
-            "values(#{departmentName},#{fileId},#{operationStyle},#{operationTime},#{userId})")
+    @Insert("insert into OperationLog(departmentName,username,fileId,operationStyle,operationTime,userId) " +
+            "values(#{departmentName},#{username},#{fileId},#{operationStyle},#{operationTime},#{userId})")
     Integer insertOperationLog(OperationLog operationLog);
 
 
+    /**
+     * 查询某一文件操作日志记录
+     * @param fileId
+     * @return
+     */
+    @Select("select o.*,CASE o.operationStyle\\n\" +\n" +
+            "            \"WHEN 1 THEN\\n\" +\n" +
+            "            \"\\t'添加文档'\\n\" +\n" +
+            "            \"WHEN 2 THEN '删除文档' WHEN 3 THEN '更改文档' WHEN 3 THEN '查阅文档' ELSE\\n\" +\n" +
+            "            \"\\t'其他'\\n\" +\n" +
+            "            \"END AS operation from OperationLog  o  where o.fileId=#{fileId} order by o.operationTime DESC \\n\" +\n")
+    List<Map> showAllOperationLog(@Param("fileId")int fileId);
 
+    /**
+     * 统计日志记录数量
+     * @param fileId
+     * @return
+     */
+    @Select("select count(*) from OperationLog where  fileId=#{fileId}")
+    Integer countOperationLog(@Param("fileId")int fileId);
+
+    /**
+     * 组合查询操作日志
+     *
+     *
+     * @param map
+     * @return
+     */
+    @SelectProvider(type = Operation.class, method = "queryLogByDep")
+    List<Map> queryLogByIf(Map<String, Object> map);
+
+
+    /**
+     * 统计查询日志数量
+     * @param map
+     * @return
+     */
+    @SelectProvider(type = Operation.class, method = "countLogByDep")
+    List<Map> countLogByIf(Map<String, Object> map);
+
+
+    class Operation {
+        public String queryLogByDep(Map<String, Object> map) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("select o.*,CASE o.operationStyle WHEN 1 THEN '添加文档' WHEN 2 THEN '删除文档' WHEN 3 THEN '更改文档' WHEN 3 THEN '查阅文档' ELSE '其他' " +
+                "END AS operation from OperationLog  o  where o.fileId=#{fileId}");
+
+        if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
+            sql.append(" AND o.departmentName <= #{departmentName} ");
+        }
+        if (StringUtils.isNotEmpty((String) map.get("operationStyle"))) {
+            sql.append(" AND a.operationStyle = #{operationStyle} ");
+        }
+        if (StringUtils.isNotEmpty((String) map.get("type"))) {
+            if ("asc".equals(map.get("type"))) {
+                sql.append("order by a.entryDate asc");
+            } else if ("desc".equals(map.get("type"))) {
+                sql.append("order by a.entryDate desc");
+            }
+        }
+        sql.append(" limit #{startsize},#{limit} ");
+        return sql.toString();
+    }
+
+    public String countLogByDep(Map<String, Object> map) {
+        StringBuffer sql = new StringBuffer();
+        sql.append("select count(*) from OperationLog  o  where o.fileId=#{fileId}");
+
+        if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
+            sql.append(" AND o.departmentName <= #{departmentName} ");
+        }
+        if (StringUtils.isNotEmpty((String) map.get("operationStyle"))) {
+            sql.append(" AND a.operationStyle = #{operationStyle} ");
+        }
+        return sql.toString();
+    }
+}
 }

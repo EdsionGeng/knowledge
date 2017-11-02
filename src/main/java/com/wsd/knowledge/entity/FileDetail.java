@@ -7,6 +7,7 @@ package com.wsd.knowledge.entity;
  */
 
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -19,41 +20,59 @@ public class FileDetail implements Serializable {
     @GeneratedValue
     private int id;
 
-    //@Column(name = "departmentName", nullable = false, length=32,columnDefinition=" '部门名字'")
+    @Column(name = "departmentName", nullable = false, length = 32, columnDefinition = " '部门名字'")
     private String departmentName;//上传部门
 
-    //@Column(name = "userId", nullable = false, columnDefinition=" '用户ID'")
+    @Column(name = "userId", nullable = false, columnDefinition = " '用户ID'")
     private int userId;//上传用户ID
 
-    // @Column(name = "fileNo", nullable = false, length=32,columnDefinition=" '文件编号'")
+    @Column(name = "username", nullable = false,length = 32, columnDefinition = " '用户名字'")
+    private String  username;//上传用户ID
+    @Column(name = "fileNo", nullable = false, length = 32, columnDefinition = " '文件编号'")
     private String fileNo;//文件编号
 
-    //@Column(name = "title", nullable = false, length = 96, columnDefinition = " '文件标题'")
+    @Column(name = "title", nullable = false, length = 96, columnDefinition = " '文件标题'")
     private String title;//文件标题
 
-    //@Column(name = "fileStyle", nullable = false, length=32,columnDefinition=" '文件类型'")
+    @Column(name = "fileStyle", nullable = false, length = 32, columnDefinition = " '文件类型'")
     private String fileStyle;//文件类型
 
-    //@Column(name = "fileContent", nullable = false, length=4896,columnDefinition=" '文件内容'")
+    @Column(name = "fileContent", nullable = false, length = 4896, columnDefinition = " '文件内容'")
     private String fileContent;//文件内容
 
-    // @Column(name = "fileSize", nullable = false, length=64,columnDefinition=" '文件大小'")
+    @Column(name = "fileSize", nullable = false, length = 64, columnDefinition = " '文件大小'")
     private String fileSize;//文件大小
 
-    //@Column(name = "fileUrl",  length=688,columnDefinition=" '附件URL'")
+    @Column(name = "fileUrl", length = 688, columnDefinition = " '附件URL'")
     private String fileUrl;//附件URL
 
-    //@Column(name = "photoUrl", nullable = false, length=64,columnDefinition=" '封面图片URL'")
+    @Column(name = "fileStyleId", nullable = false, columnDefinition = " '文件类型层级ID'")
+    private int fileStyleId;
+
+    @Column(name = "photoUrl", nullable = false, length = 64, columnDefinition = " '封面图片URL'")
     private String photoUrl;//封面图片URL
 
-    //@Column(name = "addFileTime", nullable = false, columnDefinition=" '添加文件时间 yyyy-MM-dd hh:mm格式'")
+    @Column(name = "addFileTime", nullable = false, columnDefinition = " '添加文件时间 yyyy-MM-dd hh:mm格式'")
     private String addFileTime;//添加文件时间
 
-    //@Column(name = "lookPcs", nullable = false, columnDefinition=" '文件查看次数'")
+    @Column(name = "lookPcs", nullable = false, columnDefinition = " '文件查看次数'")
     private int lookPcs;//文件查看次数
 
-    //@Column(name = "downloadPcs", nullable = false, columnDefinition=" '文件下载次数'")
+    @Column(name = "downloadPcs", nullable = false, columnDefinition = " '文件下载次数'")
     private int downloadPcs;//文件下载次数
+
+    @Column(name = "updatePcs", nullable = false, columnDefinition = " '文件修改次数'")
+    private int updatePcs;//文件下载次数
+    @Column(name = "fileDisplay", columnDefinition = " '文件是否显示 0 不显示 1显示'")
+    private int fileDisplay;//文件是否显示 0 不显示 1显示
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public int getId() {
         return id;
@@ -127,6 +146,30 @@ public class FileDetail implements Serializable {
         this.fileSize = fileSize;
     }
 
+    public int getFileStyleId() {
+        return fileStyleId;
+    }
+
+    public void setFileStyleId(int fileStyleId) {
+        this.fileStyleId = fileStyleId;
+    }
+
+    public int getUpdatePcs() {
+        return updatePcs;
+    }
+
+    public void setUpdatePcs(int updatePcs) {
+        this.updatePcs = updatePcs;
+    }
+
+    public int getFileDisplay() {
+        return fileDisplay;
+    }
+
+    public void setFileDisplay(int fileDisplay) {
+        this.fileDisplay = fileDisplay;
+    }
+
     public String getAddFileTime() {
         return addFileTime;
     }
@@ -159,8 +202,10 @@ public class FileDetail implements Serializable {
         this.downloadPcs = downloadPcs;
     }
 
-    public FileDetail(String departmentName, int userId, String fileNo, String title, String fileStyle, String fileContent, String fileUrl, String photoUrl, int lookPcs, int downloadPcs, String fileSize, String addFileTime) {
+    public FileDetail(String departmentName,String username, int userId, int fileStyleId, String fileNo, String title, String fileStyle, String fileContent, String fileUrl, String photoUrl, int lookPcs, int downloadPcs, int updatePcs, String fileSize, int fileDisplay, String addFileTime) {
         this.departmentName = departmentName;
+        this.username=username;
+        this.fileStyleId = fileStyleId;
         this.userId = userId;
         this.fileNo = fileNo;
         this.title = title;
@@ -170,7 +215,9 @@ public class FileDetail implements Serializable {
         this.photoUrl = photoUrl;
         this.lookPcs = lookPcs;
         this.downloadPcs = downloadPcs;
+        this.updatePcs = updatePcs;
         this.fileSize = fileSize;
+        this.fileDisplay = fileDisplay;
         this.addFileTime = addFileTime;
     }
 

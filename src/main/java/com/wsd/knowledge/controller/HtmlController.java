@@ -15,8 +15,11 @@ public class HtmlController {
 
     @RequestMapping("login")
     public String login() {
-        return "login";
+        return "userlogin";
     }
 
-
+    @RequestMapping("index")
+    public String index() {
+        return "index";
+    }
 }
