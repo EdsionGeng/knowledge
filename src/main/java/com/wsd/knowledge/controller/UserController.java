@@ -58,6 +58,4 @@ public class UserController {
             return new JsonResult(2,0,"登录失败" ,0);
         }
     }
-
-
 }

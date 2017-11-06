@@ -101,11 +101,7 @@
             <version>2.6.1</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper -->
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper</artifactId>
-            <version>5.1.2</version>
-        </dependency>
+
 
         <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
         <dependency>
@@ -174,6 +170,11 @@
                 <configuration>
                     <fork>true</fork>
                 </configuration>
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>springloaded</artifactId>
+                    <version>1.2.6.RELEASE</version>
+                </dependency>
             </plugin>
         </plugins>
     </build>

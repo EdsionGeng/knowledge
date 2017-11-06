@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.io.Serializable;
-
 /**
  *@Author EdsionGeng
  *@Description 系统里面公告实体类
@@ -31,10 +30,10 @@ public class CommonAdvertisement implements Serializable {
     @Column(name = "userId", nullable = false, columnDefinition = " '用户ID'")
     private int userId;
 
-    //@Column(name = "sendTime",  length=96,columnDefinition=" '发送公告时间'")
+    @Column(name = "sendTime",  length=96,columnDefinition=" '发送公告时间'")
     private String sendTime;//发送时间
 
-    //@Column(name = "sendObject",  length=96,columnDefinition=" '发送具体对象'")
+    @Column(name = "sendObject",  length=96,columnDefinition=" '发送具体对象'")
     private String sendObject;//发送具体对象
 
     public String getDepartmentName() {

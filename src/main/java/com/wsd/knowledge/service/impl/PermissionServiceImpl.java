@@ -29,8 +29,8 @@ public class PermissionServiceImpl implements PermissionService {
      */
     @Override
     public JsonResult insertUserPermission(Integer[] userids, Integer[] operationStyleIds, Integer fileId) {
-        if (userids == null || operationStyleIds == null) {
-            return new JsonResult(2, 0, "异常2", 0);
+        if (userids == null || operationStyleIds == null||fileId==null) {
+            return new JsonResult(2, 0, "缺少参数", 0);
         }
         int lengths = userids.length;
         Integer j = null;

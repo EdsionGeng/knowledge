@@ -1,0 +1,33 @@
+.layui-body{
+    bottom: 0 !important;
+    padding: 10px 0 20px 10px;
+    overflow-y: hidden;
+    top:0 !important;
+}
+.layui-side{
+    top:0!important;
+}
+
+.layui-side-scroll{
+    position: fixed;
+    width: 100%;
+    height: 5%;
+}
+.layui-body{
+    margin-top: 45px;
+    width: 100%;
+    height: 95%;
+    overflow-y: auto;
+}
+.required-color{
+    color: red;
+    margin-right: 5px;
+}
+.layui-nav .layui-nav-item a {
+    display: block;
+    padding: 0 30px;
+    color: #fff;
+    color: rgba(255,255,255,.7);
+    transition: all .3s;
+    -webkit-transition: all .3s;
+}

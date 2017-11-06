@@ -38,7 +38,7 @@ public class OperationController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "page", value = "页码", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "limit", value = "每页数量", required = true),
     })
-    @RequestMapping(value="show/userdownload.htmls",method= RequestMethod.GET)
+    @RequestMapping(value = "show/userdownload.htmls", method = RequestMethod.GET)
     public JsonResult showUserDown(Integer userId, Integer page, Integer limit) {
         return operationService.showUserDownload(userId, page, limit);
     }
@@ -55,7 +55,7 @@ public class OperationController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "page", value = "页码", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "limit", value = "每页数量", required = true),
     })
-    @RequestMapping(value="show/alldownload.htmls",method=RequestMethod.GET)
+    @RequestMapping(value = "show/alldownload.htmls", method = RequestMethod.GET)
     public JsonResult showAllDown(Integer page, Integer limit) {
         return operationService.showAllDown(page, limit);
     }
@@ -74,8 +74,47 @@ public class OperationController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "page", value = "页码", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "limit", value = "每页数量", required = true),
     })
-    @RequestMapping(value="show/allupload.htmls",method=RequestMethod.GET)
+    @RequestMapping(value = "show/allupload.htmls", method = RequestMethod.GET)
     public JsonResult showAllUpload(Integer userId, Integer page, Integer limit) {
         return operationService.showUserUp(userId, page, limit);
+    }
+
+    /**
+     * 展示当天信息数据
+     * @return
+     */
+    @RequestMapping(value = "show/daydata.htmls", method = RequestMethod.GET)
+    public JsonResult showDayData() {
+        return operationService.showDayData();
+    }
+
+    /**
+     * 展示本周信息数据
+     * @return
+     */
+    @RequestMapping(value = "show/weekdata.htmls", method = RequestMethod.GET)
+    public JsonResult showWeekData() {
+        return operationService.showWeekData();
+    }
+
+    /**
+     * 展示本月信息数据
+     * @return
+     */
+    @RequestMapping(value = "show/monthdata.htmls", method = RequestMethod.GET)
+    public JsonResult showMonthData() {
+        return operationService.showMonthData();
+    }
+
+    /**
+     * 展示单个文件操作日志记录
+     * @param fileId
+     * @param page
+     * @param limit
+     * @return
+     */
+    @RequestMapping(value="show/fileLog.htmls",method = RequestMethod.GET)
+    public JsonResult showSingleFileLog(Integer fileId,Integer page,Integer limit){
+        return operationService.showSingleFileLog(fileId,page,limit);
     }
 }

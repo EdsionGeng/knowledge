@@ -31,10 +31,10 @@ public interface UserRepositoty  {
     SystemUser  findInfo(@Param("id")int id);
 
     //查看部门列表
-@Select("   SELECT id,deptno,no,pid,deptno AS name FROM Department_new\n" +
-        "        WHERE 1 = 1\n" +
-        "        <if test=\"id != null and id != ''\">\n" +
-        "            AND pid = #{id}\n" +
+@Select("   SELECT id,deptno,no,pid,deptno AS name FROM Department_new" +
+        "        WHERE 1 = 1" +
+        "        <if test=id != null and id != ''>" +
+        "            AND pid = #{id}" +
         "        </if>")
     List<NewDepartment> findList(NewDepartment department);
 

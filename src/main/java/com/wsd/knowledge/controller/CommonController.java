@@ -2,6 +2,9 @@ package com.wsd.knowledge.controller;
 import com.wsd.knowledge.entity.NewDepartment;
 import com.wsd.knowledge.service.CommonService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,11 +33,17 @@ private CommonService commonService;
      * @param department
      * @return
      */
+    @ApiOperation(value = "阅读文件接口", notes = "传递必要参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "Object", name = "department", value = "文件ID"),
+
+    })
     @RequestMapping(value="getListByTree", method= RequestMethod.GET)
     @ResponseBody
     public List<NewDepartment> getListByTree(NewDepartment department) {
         return commonService.getListByTree(department);
     }
+
 
 
 }

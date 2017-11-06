@@ -5,14 +5,11 @@ package com.wsd.knowledge.entity;
  * @Description 文件具体信息实体类
  * @Date:10:56 2017/11/1
  */
-
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.io.Serializable;
-
 @Entity
 public class FileDetail implements Serializable {
 

@@ -4,6 +4,7 @@ import com.wsd.knowledge.entity.CommonAdvertisement;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * @Author EdsionGeng
@@ -31,4 +32,9 @@ public interface AdvertisementMapper {
      */
     @Delete("delete from CommonAdvertisement where id=#{id}")
     Integer deleteAd(@Param("id") int id);
+
+
+
+    @Update("update UserRecAdvertisement set ifRead =1 where userId=#{userId} and commonId=#{commonId}")
+    Integer updateAdStatus(@Param("userId")Integer userId,@Param("commonId")Integer commonId);
 }

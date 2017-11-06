@@ -22,4 +22,15 @@ public class HtmlController {
     public String index() {
         return "index";
     }
+
+    @RequestMapping("addfile")
+    public String addFile() {
+        return "addFile";
+    }
+
+    @RequestMapping("adminIndex")
+    public String adminIndex() {
+        return "admin_index";
+    }
+
 }

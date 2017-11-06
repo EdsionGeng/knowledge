@@ -1,12 +1,13 @@
 package com.wsd.knowledge.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2017/10/30.
  */
-public class NewDepartment extends BaseEntity {
-
+public class NewDepartment implements Serializable {
+    private String id;
     private String deptno;//名称
     private String no;//外部系统编号
     private String pid;//上级id
@@ -70,5 +71,13 @@ public class NewDepartment extends BaseEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

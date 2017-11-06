@@ -59,5 +59,19 @@ public class AdvertisementController {
         return advertisementService.deleteAd(id);
     }
 
-
+    /**
+     * 批量删除公告
+     * @param userId
+     * @param commonId
+     * @return
+     */
+    @ApiOperation(value = "删除公告接口", notes = "传递必要参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "userId", value = "文件ID", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "commonId", value = "文件ID", required = true)
+    })
+    @RequestMapping(value = "readCommon.htmls", method = RequestMethod.DELETE)
+    public JsonResult readAd(Integer  userId,Integer commonId) {
+        return advertisementService.readAd(userId,commonId);
+    }
 }

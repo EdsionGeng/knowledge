@@ -1,6 +1,8 @@
 package com.wsd.knowledge.service;
 
 import com.wsd.knowledge.util.JsonResult;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * @Author EdsionGeng
@@ -37,5 +39,29 @@ public interface OperationService {
      */
     JsonResult showUserUp(Integer userId, Integer page, Integer limit);
 
+    /**
+     * 展示当天数据
+     * @return
+     */
+    JsonResult showDayData();
+
+    /**
+     * 展示本周数据
+     * @return
+     */
+    JsonResult showWeekData();
+
+    /**
+     * 展示当月数据
+     * @return
+     */
+    JsonResult showMonthData();
+
+    /**
+     * 查看某一文件操作日志记录
+     * @param fileId
+     * @return
+     */
+    JsonResult showSingleFileLog(Integer fileId,Integer page,Integer limit);
 
 }

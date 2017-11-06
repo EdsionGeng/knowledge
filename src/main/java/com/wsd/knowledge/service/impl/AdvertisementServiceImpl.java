@@ -10,6 +10,7 @@ import com.wsd.knowledge.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 /**
  * @Author EdsionGeng
  * @Description 公告实现类
@@ -37,7 +38,9 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     @Override
     @Transactional(readOnly = false)
     public JsonResult insertCommonAd(String title, String content, String sendDepartmentName, Integer userId) {
-
+        if (title == null || content == null || sendDepartmentName == null || userId == null) {
+            return new JsonResult(2, 0, "参数为空", 0);
+        }
         String str = new DateUtil().cacheExist(String.valueOf(userId));
         if (str.equals("full")) {
             return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
@@ -63,7 +66,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     @Transactional(readOnly = false)
     public JsonResult deleteAd(Integer[] id) {
         if (id == null) {
-            id[0] = 0;
+            return new JsonResult(2, 0, "参数为空", 0);
         }
         Integer j = null;
         int lengths = id.length;
@@ -74,7 +77,23 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             return new JsonResult(0, 0, "操作成功", 0);
         }
         return new JsonResult(2, 0, "操作失败", 0);
+    }
 
-
+    /**
+     * 公告已读状态
+     * @param userId
+     * @param commonId
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public JsonResult readAd(Integer userId, Integer commonId) {
+        if (userId == null || commonId == null) {
+            return new JsonResult(2, 0, "参数为空", 0);
+        }
+        if (advertisementMapper.updateAdStatus(userId, commonId) != null) {
+            return new JsonResult(0, 0, "操作成功", 0);
+        }
+        return new JsonResult(2, 0, "操作失败", 0);
     }
 }

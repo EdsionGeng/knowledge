@@ -136,7 +136,6 @@ public class FileServiceImpl implements FileService {
 //        this.fileDisplay = fileDisplay;
 //        this.addFileTime = addFileTime;
         if (fileMapper.insertFileDetail(fileDetail) != null) {
-
             //添加文件成功 ，获得此文件ID返回前台，执行权限添加操作
             Integer fileId = fileMapper.selectIdByIf(fileNo);
             OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, fileId, 1, new DateUtil().getSystemTime());
@@ -182,8 +181,13 @@ public class FileServiceImpl implements FileService {
         if (fileMapper.lookPcs(fileId) != null) {
             SystemUser systemUser = userRepositoty.findInfo(userId);
             //添加操作日志
-            OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, fileId, 4, new DateUtil().getSystemTime());
-            j = operationMapper.insertOperationLog(operationLog);
+            if (operationMapper.queryLookLog(userId, fileId) == null) {
+                OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, fileId, 4, new DateUtil().getSystemTime());
+                j = operationMapper.insertOperationLog(operationLog);
+            }
+            else{
+                return  new JsonResult(0, 0, "已查阅过日志", 0);
+            }
         }
         if (j != null) {
             return new JsonResult(0, 0, "操作成功", 0);
@@ -206,10 +210,14 @@ public class FileServiceImpl implements FileService {
         }
         Integer j = null;
         if (fileMapper.updateDownPcs(id) != null) {
+            if(operationMapper.queryDownLog(userId,id)==null){
             SystemUser systemUser = userRepositoty.findInfo(userId);
             //添加操作日志
             OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, id, 5, new DateUtil().getSystemTime());
-            j = operationMapper.insertOperationLog(operationLog);
+            j = operationMapper.insertOperationLog(operationLog);}
+            else{
+                return  new JsonResult(0, 0, "已下载过日志", 0);
+           }
         }
         if (j != null) {
             return new JsonResult(0, 0, "操作成功", 0);
