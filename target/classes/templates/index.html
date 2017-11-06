@@ -1,131 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html >
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>聚财人事管理系统</title>
-    <link rel="stylesheet" href="plugins/layui/css/layui.css">
-    <link rel="stylesheet" href="css/index.css">
 
+<h1>ff</h1>
 </head>
 <body>
-<script type="text/html" id="updatepwd">
-    <form class="layui-form" action="" style="margin-top:20px;">
-        <div class="layui-form-item">
-            <label class="layui-form-label">姓名<i class="required-color">*</i>：</label>
-            <div class="layui-input-inline">
-                <input type="text" name="username" lay-verify="required" autocomplete="off" placeholder="请输入姓名"
-                       class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">旧密码<i class="required-color">*</i>：</label>
-            <div class="layui-input-inline">
-                <input type="text" name="password" lay-verify="required" autocomplete="off" placeholder="请输入旧密码"
-                       class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">新密码名<i class="required-color">*</i>：</label>
-            <div class="layui-input-inline">
-                <input type="text" name="newpassword" lay-verify="required" autocomplete="off" placeholder="请输入新密码"
-                       class="layui-input">
-            </div>
-        </div>
 
-        <div class="layui-form-item">
-            <button class="layui-btn" lay-submit lay-filter="updatePWD" style="margin-left:150px;">确认</button>
-        </div>
-    </form>
-</script>
-<div class="layui-layout layui-layout-admin">
-    <!--<div class="layui-header">-->
-        <!--<div class="layui-logo">RMS</div>-->
-        <!--&lt;!&ndash; 头部区域（可配合layui已有的水平导航） &ndash;&gt;-->
-        <!--<ul class="layui-nav layui-layout-right">-->
-            <!--<li class="layui-nav-item">-->
-                <!--<a href="javascript:;">-->
-                    <!--&lt;!&ndash;<p th:text="${session.username}"></p>&ndash;&gt;-->
-                <!--</a>-->
-                <!--&lt;!&ndash;<dl class="layui-nav-child">&ndash;&gt;-->
-                    <!--&lt;!&ndash;<dd><a href="exit.htmls">安全退出</a></dd>&ndash;&gt;-->
-                    <!--&lt;!&ndash;&lt;!&ndash;<div class="layui-btn-add">&ndash;&gt;&ndash;&gt;-->
-                        <!--&lt;!&ndash;&lt;!&ndash;<button class="layui-btn" id="updatePassWord" data-type="reload">修改密码</button>&ndash;&gt;&ndash;&gt;-->
-                    <!--&lt;!&ndash;&lt;!&ndash;</div>&ndash;&gt;&ndash;&gt;-->
-                <!--&lt;!&ndash;</dl>&ndash;&gt;-->
-            <!--</li>-->
-        <!--</ul>-->
-    <!--</div>-->
-    <div class="layui-side layui-bg-black">
-        <div class="layui-side-scroll">
-            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-            <ul class="layui-nav layui-nav-tree" lay-filter="nav" id="menus">
-            </ul>
-        </div>
-    </div>
-    <div class="layui-body" style="background-color: #fff;">
-        <!-- 内容主体区域 -->
-        <div class="admin-bdnav">
-                <span class="layui-breadcrumb">
-                        <a href="javascript:;">首页</a>
-                </span>
-            <hr class="layui-bg-green">
-        </div>
-        <div class="layui-body-container" >
-            <!-- 动态添加内容-->
-        </div>
-    </div>
-</div>
-<script src="https://cdn.bootcss.com/jquery/1.11.1/jquery.js"></script>
-<script src="plugins/layui/layui.js"></script>
-<script src="js/thirdParty/echarts.min.js"></script>
-<script>
-    (function () {
-        $.getScript('js/modules/index.js', function (data, textStatus, jqxhr) {
-            console.log('index.js 加载成功');
-        });
-    })();
-    layui.use(['form', 'layer','element'], function () {
-        var form = layui.form,
-            layer = layui.layer;
-        var element = layui.element;
-        $('#updatePassWord').on('click', function () {
-            // 获取模板数据
-            var updatePwdHtml = updatepwd.innerHTML;
-            layer.open({
-                type: 1,
-                content: updatePwdHtml,
-                area: ['400px', '300px']
-            })
-            form.on('submit(updatePWD)', function (data) {
-                var username = data.field.username;
-               // console.log(username);
-                var password = data.field.password;
-                var newpassword = data.field.newpassword;
-                $.ajax({
-                    url: 'update/oldpwd.htmls',
-                    method: 'post',
-                    data: {
-                        username: username,
-                        password: password,
-                        newpassword: newpassword
-                    },
-                    success: function (data) {
-                        if (data.code == 2) {
-                            layer.msg("修改失敗");
-                        }
-                        else {
-                            layer.msg('修改成功!');
-                            layer.closeAll();
-                            entrytableins.reload();
-                        }
-                    }
-                });
-                return false;
-            })
-        })
-    });
-</script>
 </body>
 </html>

@@ -1,7 +1,10 @@
 package com.wsd.knowledge.mapper1;
+import com.wsd.knowledge.entity.NewDepartment;
 import com.wsd.knowledge.entity.SystemUser;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
 *@Author EdsionGeng
@@ -26,4 +29,14 @@ public interface UserRepositoty  {
      */
     @Select("select username,department from SystemUser where id=#{id} ")
     SystemUser  findInfo(@Param("id")int id);
+
+    //查看部门列表
+@Select("   SELECT id,deptno,no,pid,deptno AS name FROM Department_new\n" +
+        "        WHERE 1 = 1\n" +
+        "        <if test=\"id != null and id != ''\">\n" +
+        "            AND pid = #{id}\n" +
+        "        </if>")
+    List<NewDepartment> findList(NewDepartment department);
+
+
 }

@@ -110,8 +110,9 @@ public interface OperationMapper {
     @Select("select f.* from FileDetail f  where f.fileDisplay= 1 and userId=#{userId} order by f.addFileTime DESC limit #{startSize},#{limit}")
     List<Map> showUserUpFile(@Param("userId")Integer userId,@Param("startSize")Integer startSize,@Param("limit")Integer limit);
 
-    @Select("select count(*) from FileDetail where fileDisplay= 1 and userId=#{userId}")
-    Integer countAllFilePcs(@Param("userId")Integer userId);
+//    @Select("select count(*) from FileDetail where fileDisplay= 1 and userId=#{userId} ")
+@Select("select count(id) from ((select  id from FileDetail f  where f.fileDisplay= 1 and userId=#{userId}  limit #{startSize},#{limit}) as s)")
+    Integer countAllFilePcs(@Param("userId")Integer userId,@Param("startSize")Integer startSize,@Param("limit")Integer limit);
 
     class Operation {
         public String queryLogByDep(Map<String, Object> map) {

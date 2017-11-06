@@ -20,27 +20,28 @@ public interface FileMapper {
      * @param fileDetail
      * @return
      */
-    @Insert("insert into FileDetail(addFileTime,departmentName,downloadPcs,fileContent,fileNo,fileSize,fileStyle,fileUrl," +
-            "lookPcs,photoUrl,title,userId,updatePcs,fileStyleId,username) values(#{addFileTime},#{departmentName},#{downloadPcs},#{fileContent},#{fileNo}," +
-            "#{fileSize},#{fileStyle},#{fileUrl},#{lookPcs},#{updatePcs},#{photoUrl},#{title},#{userId},#{fileStyleId},#{username})")
+    @Insert("insert into FileDetail(departmentName,username,fileStyleId,userId,fileNo,title,fileStyle,fileContent,fileUrl,photoUrl," +
+            "lookPcs,downloadPcs,updatePcs,fileSize,fileDisplay,addFileTime) values(#{departmentName},#{username},#{fileStyleId},#{userId},#{fileNo},#{title},#{fileStyle},#{fileContent},#{fileUrl},#{photoUrl},#{lookPcs},#{downloadPcs}," +
+            "#{updatePcs},#{fileSize},#{fileDisplay},#{addFileTime})")
     Integer insertFileDetail(FileDetail fileDetail);
+//        this.departmentName = departmentName;
+//        this.username=username;
+//        this.fileStyleId = fileStyleId;
+//        this.userId = userId;
+//        this.fileNo = fileNo;
+//        this.title = title;
+//        this.fileStyle = fileStyle;
+//        this.fileContent = fileContent;
+//        this.fileUrl = fileUrl;
+//        this.photoUrl = photoUrl;
+//        this.lookPcs = lookPcs;
+//        this.downloadPcs = downloadPcs;
+//        this.updatePcs = updatePcs;
+//        this.fileSize = fileSize;
+//        this.fileDisplay = fileDisplay;
+//        this.addFileTime = addFileTime;
 
-    /**
-     * 展示上传文件书面信息
-     *
-     * @return
-     */
-    @Select("select f.id,f.fileNo,f.addFileTime,f.username,f.departmentName from fileDetail f  where f.fileDisplay= 1 order by f.addFileTime DESC ")
-    List<Map> showFileInfo();
 
-    /**
-     * 删除文件，修改属性让其不显示
-     *
-     * @param id
-     * @return
-     */
-    @Update(" update FileDetail set fileDisplay=0 where id=#{id}")
-    Integer updateFileDisplay(@Param("id") int id);
 
     /**
      * 更新此文件下载次数
@@ -49,7 +50,7 @@ public interface FileMapper {
      * @return
      */
     @Update("update FileDetail set downloadPcs=downloadPcs+1 where id=#{id}")
-    Integer updateDwonPcs(@Param("id") int id);
+    Integer updateDownPcs(@Param("id") int id);
 
     /**
      * 更新此文件更新次数
@@ -69,20 +70,53 @@ public interface FileMapper {
     @Update("update FileDetail set lookPcs = lookPcs+1 where id=#{id}")
     Integer lookPcs(@Param("id") int id);
 
-
+    /**
+     * 查找所有文件分页处理
+     * @param startSize
+     * @param limit
+     * @return
+     */
     @Select("select * from FileDetail  where fileDisplay = 1 Order By addFileTime DESC limit #{startSize},#{limit} ")
     List<Map> showAllFile(@Param("startSize") int startSize, @Param("limit") int limit);
 
-    @Select("select count(*) from FileDetail where fileDisplay=1")
-    Integer countFile();
-
+    /**
+     * 统计数量
+     * @return
+     */
+    @Select("select count(id) from ((select id from FileDetail where fileDisplay=1 limit #{startSize},#{limit})as s)")
+    Integer countFile(@Param("startSize")Integer startSize,@Param("limit")Integer limit);
+    /**
+     * 组合查询文件结果
+     *
+     */
     @SelectProvider(type = FileQuery.class, method = "queryFileByDep")
     List<Map> queryFileByIf(Map<String, Object> map);
 
+    /**
+     * 组合查询结果数量
+     * @param map
+     * @return
+     */
     @SelectProvider(type = FileQuery.class, method = "countFilePcs")
     Integer countFilePcs(Map<String, Object> map);
-    class FileQuery{
 
+    /**
+     * 查找文件ID返回前台执行其他操作
+     * @param fileNo
+     * @return
+     */
+    @Select("select id from FileDetail where fileNo=#{fileNo}")
+    Integer selectIdByIf(@Param("fileNo")String fileNo);
+
+    /**
+     * 删除文件让其不显示
+     * @param id
+     * @return
+     */
+    @Update("update FileDetail set fileDisplay=0 where id=#{id}")
+    Integer updateFileShow(@Param("id")Integer id);
+
+    class FileQuery{
          public String queryFileByDep(Map<String,Object> map ){
              StringBuffer sql = new StringBuffer();
              sql.append("select o.* from FileDetail  o  where o.fileDisplay=1 ");
@@ -100,20 +134,20 @@ public interface FileMapper {
                      sql.append("order by o.addFileTime desc");
                  }
              }
-             sql.append(" limit #{startsize},#{limit} ");
+             sql.append(" limit #{startSize},#{limit} ");
              return sql.toString();
          }
         public String countFilePcs(Map<String,Object> map ){
             StringBuffer sql = new StringBuffer();
-            sql.append("select o.* from FileDetail  o  where o.fileDisplay=1 ");
+            sql.append(" select  count(id ) from ((select id from  FileDetail  o  where o.fileDisplay=1 ");
 
             if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
                 sql.append(" AND o.departmentName = #{departmentName} ");
             }
             if (StringUtils.isNotEmpty((String) map.get("operationStyle"))) {
-                sql.append(" AND a.fileStyleId = #{fileStyleId} ");
+                sql.append(" AND o.fileStyleId = #{fileStyleId} ");
             }
-
+            sql.append(" limit #{startSize},#{limit}) as s) ");
             return sql.toString();
         }
     }

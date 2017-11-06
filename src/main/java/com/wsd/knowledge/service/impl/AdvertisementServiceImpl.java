@@ -7,12 +7,9 @@ import com.wsd.knowledge.mapper1.UserRepositoty;
 import com.wsd.knowledge.service.AdvertisementService;
 import com.wsd.knowledge.util.DateUtil;
 import com.wsd.knowledge.util.JsonResult;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-
 /**
  * @Author EdsionGeng
  * @Description 公告实现类

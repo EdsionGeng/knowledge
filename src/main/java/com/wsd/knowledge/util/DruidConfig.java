@@ -10,6 +10,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
@@ -73,7 +74,7 @@ public class DruidConfig {
         reg.addUrlMappings("/druid/*");
         reg.addInitParameter("loginUsername", username);
         reg.addInitParameter("loginPassword", password);
-       // reg.addInitParameter("logSlowSql", logSlowSql);
+        // reg.addInitParameter("logSlowSql", logSlowSql);
         return reg;
     }
 
@@ -95,12 +96,12 @@ public class DruidConfig {
         datasource.setPassword(password);
         datasource.setDriverClassName(driverClassName);
         datasource.setInitialSize(initialSize);
-     // datasource.setMinIdle(minIdle);
+        // datasource.setMinIdle(minIdle);
         datasource.setMaxActive(maxActive);
         datasource.setMaxWait(maxWait);
         datasource.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMillis);
         datasource.setMinEvictableIdleTimeMillis(minEvictableIdleTimeMillis);
-     // datasource.setValidationQuery(validationQuery);
+        // datasource.setValidationQuery(validationQuery);
         datasource.setTestWhileIdle(testWhileIdle);
         datasource.setTestOnBorrow(testOnBorrow);
         datasource.setTestOnReturn(testOnReturn);

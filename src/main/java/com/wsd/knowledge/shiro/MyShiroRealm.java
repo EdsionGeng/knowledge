@@ -3,6 +3,7 @@ package com.wsd.knowledge.shiro;
 import com.wsd.knowledge.entity.SystemUser;
 import com.wsd.knowledge.service.UserService;
 import com.wsd.knowledge.util.HashAlorgithum;
+import org.apache.catalina.servlet4preview.ServletContext;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -12,6 +13,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -63,6 +65,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         }
         //SystemUser userIn = adminService.login(username,pwd);
         logger.info("身份认证成功，登录用户：" + name);
+
         return new SimpleAuthenticationInfo(systemUser, password, getName());
     }
 

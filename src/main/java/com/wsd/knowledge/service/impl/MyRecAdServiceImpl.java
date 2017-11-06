@@ -28,6 +28,9 @@ public class MyRecAdServiceImpl implements MyRecAdService {
      */
     @Override
     public JsonResult showAllRecAd(Integer page, Integer limit, Integer userId) {
+        if(userId==null||page==null||limit==null){
+            return new JsonResult(2,0,"参数为空",0);
+        }
         int startSize = (page - 1) * limit;
         List<Map> map = userRecAdMapper.showUserRecAd(userId, startSize, limit);
         return new JsonResult(0, map, "查询结果", userRecAdMapper.countUserAdPcs());
