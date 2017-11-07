@@ -5,21 +5,42 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.List;
 
-@Entity
+//@Entity
 public class FileKind {
-    @Id
-    @GeneratedValue
+    //    @Id
+//    @GeneratedValue
     private int id;
 
-    @Column(name = "fileKindName", nullable = false, length = 32, columnDefinition = " '文件类型名称'")
+    // @Column(name = "fileKindName", nullable = false, length = 32, columnDefinition = " '文件类型名称'")
     private String fileKindName;
 
-    @Column(name = "fileParentId", nullable = false, columnDefinition = " '文件的上一级Id'")
+    //@Column(name = "fileParentId", nullable = false, columnDefinition = " '文件的上一级Id'")
     private int fileParentId;//文件的上一级Id
 
-    @Column(name = "operationTime", nullable = false, length = 32, columnDefinition = " '操作时间'")
+    // @Column(name = "operationTime", nullable = false, length = 32, columnDefinition = " '操作时间'")
     private String operationTime;
+
+    private int checked;//是否选中
+
+    private List<FileKind> children;
+
+    public int getChecked() {
+        return checked;
+    }
+
+    public List<FileKind> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<FileKind> children) {
+        this.children = children;
+    }
+
+    public void setChecked(int checked) {
+        this.checked = checked;
+    }
 
     public int getId() {
         return id;

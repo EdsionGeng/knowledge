@@ -1,5 +1,6 @@
 package com.wsd.knowledge.service;
 
+import com.wsd.knowledge.entity.FileKind;
 import com.wsd.knowledge.entity.NewDepartment;
 import com.wsd.knowledge.util.JsonResult;
 
@@ -20,4 +21,11 @@ public interface CommonService {
      * @return
      */
     List<NewDepartment> getListByTree(NewDepartment department);
+
+    /**
+     * 文件目录树形结构
+     * @param fileKind
+     * @return
+     */
+    List<FileKind> getKindTree(FileKind fileKind);
 }

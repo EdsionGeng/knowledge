@@ -68,7 +68,7 @@ public interface OperationMapper {
      * @param limit
      * @return
      */
-    @Select("select o.*，f.*  from OperationLog o  Left Join FileDetail f on o.fileId=f.id  where o.operationStyle=5 and o.userId=#{userId} Order By o.operationTime DESC" +
+    @Select("select o.* ,f.*  from OperationLog o  Left Join FileDetail f on o.fileId=f.id  where o.operationStyle=5 and o.userId=#{userId} Order By o.operationTime DESC" +
             " limit #{startSize},#{limit} ")
     List<Map> queryUserDownload(@Param("userId") Integer userId, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
 
@@ -78,7 +78,7 @@ public interface OperationMapper {
      * @param userId
      * @return
      */
-    @Select("select count(*) from OperationLog where o.operationStyle=5 and o.userId=#{userId}")
+    @Select("select count(*) from OperationLog where operationStyle=5 and userId=#{userId}")
     Integer counUserDownPcs(@Param("userId") Integer userId);
 
     /**
@@ -88,7 +88,7 @@ public interface OperationMapper {
      * @param limit
      * @return
      */
-    @Select("select o.*，f.*  from OperationLog o  Left Join FileDetail f on o.fileId=f.id  where o.operationStyle=5  Order By o.operationTime DESC" +
+    @Select("select o.*,f.*  from OperationLog o  Left Join FileDetail f on o.fileId=f.id  where o.operationStyle=5  Order By o.operationTime DESC" +
             " limit #{startSize},#{limit} ")
     List<Map> queryAllDownload(@Param("startSize") Integer startSize, @Param("limit") Integer limit);
 

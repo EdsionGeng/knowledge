@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 @Entity
 public class CommonAdvertisement implements Serializable {
-    @Id
+   @Id
     @GeneratedValue
     private int id;
     @Column(name = "adTitle", nullable = false, length=96,columnDefinition=" '公告标题'")
@@ -27,7 +27,7 @@ public class CommonAdvertisement implements Serializable {
     @Column(name = "addUser", nullable = false, length=1024,columnDefinition=" '公告人'")
     private String addUser;//添加公告人
 
-    @Column(name = "userId", nullable = false, columnDefinition = " '用户ID'")
+   @Column(name = "userId", nullable = false, columnDefinition = " '用户ID'")
     private int userId;
 
     @Column(name = "sendTime",  length=96,columnDefinition=" '发送公告时间'")

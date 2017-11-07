@@ -54,12 +54,12 @@ public class FileServiceImpl implements FileService {
     @Override
     public JsonResult showAllFile(String departmentName, String fileStyleId, String downType, String fileTimeType, Integer page, Integer limit) {
 
-                int startSize = (page - 1) * limit;
+        int startSize = (page - 1) * limit;
 
         if (("").equals(departmentName)) {
             departmentName = "";
         }
-        if (("").equals(downType)){
+        if (("").equals(downType)) {
             downType = "";
         }
         if (("").equals(fileTimeType)) {
@@ -68,11 +68,11 @@ public class FileServiceImpl implements FileService {
         if (("").equals(fileStyleId)) {
             fileStyleId = "";
         }
-        if (departmentName .equals("")  && fileStyleId .equals( "") && downType .equals("") && fileTimeType.equals("desc")) {
+        if (departmentName.equals("") && fileStyleId.equals("") && downType.equals("") && fileTimeType.equals("desc")) {
             List<Map> map = fileMapper.showAllFile(startSize, limit);
-            Integer j=fileMapper.countFile(startSize,limit);
-            if(j==null){
-                j=0;
+            Integer j = fileMapper.countFile(startSize, limit);
+            if (j == null) {
+                j = 0;
             }
             return new JsonResult(0, map, "查询结果", j);
 
@@ -116,7 +116,7 @@ public class FileServiceImpl implements FileService {
         SystemUser systemUser = userRepositoty.findInfo(userId);
         FileKind fileKind = fileKindMapper.selectFileKind(fileStyleId);
         //生成实体类
-        FileDetail fileDetail = new FileDetail(systemUser.getDepartment(), systemUser.getUsername(), userId,fileStyleId, fileNo, title
+        FileDetail fileDetail = new FileDetail(systemUser.getDepartment(), systemUser.getUsername(), userId, fileStyleId, fileNo, title
                 , fileKind.getFileKindName(), content, fileurl, photourl, 0, 0, 0, filesize, 1, new DateUtil().getSystemTime());
         Integer j = null;
 //        this.departmentName = departmentName;
@@ -184,9 +184,8 @@ public class FileServiceImpl implements FileService {
             if (operationMapper.queryLookLog(userId, fileId) == null) {
                 OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, fileId, 4, new DateUtil().getSystemTime());
                 j = operationMapper.insertOperationLog(operationLog);
-            }
-            else{
-                return  new JsonResult(0, 0, "已查阅过日志", 0);
+            } else {
+                return new JsonResult(0, 0, "已查阅过日志", 0);
             }
         }
         if (j != null) {
@@ -210,14 +209,14 @@ public class FileServiceImpl implements FileService {
         }
         Integer j = null;
         if (fileMapper.updateDownPcs(id) != null) {
-            if(operationMapper.queryDownLog(userId,id)==null){
-            SystemUser systemUser = userRepositoty.findInfo(userId);
-            //添加操作日志
-            OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, id, 5, new DateUtil().getSystemTime());
-            j = operationMapper.insertOperationLog(operationLog);}
-            else{
-                return  new JsonResult(0, 0, "已下载过日志", 0);
-           }
+            if (operationMapper.queryDownLog(userId, id) == null) {
+                SystemUser systemUser = userRepositoty.findInfo(userId);
+                //添加操作日志
+                OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, id, 5, new DateUtil().getSystemTime());
+                j = operationMapper.insertOperationLog(operationLog);
+            } else {
+                return new JsonResult(0, 0, "已下载过日志", 0);
+            }
         }
         if (j != null) {
             return new JsonResult(0, 0, "操作成功", 0);

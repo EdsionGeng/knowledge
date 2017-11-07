@@ -5,11 +5,13 @@ package com.wsd.knowledge.entity;
  * @Description 文件具体信息实体类
  * @Date:10:56 2017/11/1
  */
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.io.Serializable;
+
 @Entity
 public class FileDetail implements Serializable {
 
@@ -20,11 +22,11 @@ public class FileDetail implements Serializable {
     @Column(name = "departmentName", nullable = false, length = 32, columnDefinition = " '部门名字'")
     private String departmentName;//上传部门
 
-    @Column(name = "userId", nullable = false, columnDefinition = " '用户ID'")
+    // @Column(name = "userId", nullable = false, columnDefinition = " '用户ID'")
     private int userId;//上传用户ID
 
-    @Column(name = "username", nullable = false,length = 32, columnDefinition = " '用户名字'")
-    private String  username;//上传用户ID
+    @Column(name = "username", nullable = false, length = 32, columnDefinition = " '用户名字'")
+    private String username;//上传用户ID
     @Column(name = "fileNo", nullable = false, length = 32, columnDefinition = " '文件编号'")
     private String fileNo;//文件编号
 
@@ -199,9 +201,9 @@ public class FileDetail implements Serializable {
         this.downloadPcs = downloadPcs;
     }
 
-    public FileDetail(String departmentName,String username, int userId, int fileStyleId, String fileNo, String title, String fileStyle, String fileContent, String fileUrl, String photoUrl, int lookPcs, int downloadPcs, int updatePcs, String fileSize, int fileDisplay, String addFileTime) {
+    public FileDetail(String departmentName, String username, int userId, int fileStyleId, String fileNo, String title, String fileStyle, String fileContent, String fileUrl, String photoUrl, int lookPcs, int downloadPcs, int updatePcs, String fileSize, int fileDisplay, String addFileTime) {
         this.departmentName = departmentName;
-        this.username=username;
+        this.username = username;
         this.fileStyleId = fileStyleId;
         this.userId = userId;
         this.fileNo = fileNo;

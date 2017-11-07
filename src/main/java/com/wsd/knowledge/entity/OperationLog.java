@@ -34,7 +34,7 @@ public class OperationLog implements Serializable {
     @Column(name = "operationStyle", nullable = false, columnDefinition=" '操作文档动作类型'")
     private int operationStyle;//操作类型 1添加文档 2删除文档  3更改文档 4 查阅文档 5下载附件
 
-    @Column(name = "operationTime", nullable = false, length=64,columnDefinition=" '操作时间'")
+   @Column(name = "operationTime", nullable = false, length=64,columnDefinition=" '操作时间'")
     private String operationTime;//操作文件时间
 
     public int getId() {

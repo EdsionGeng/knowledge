@@ -2,6 +2,7 @@ package com.wsd.knowledge.controller;
 
 import com.wsd.knowledge.service.OperationService;
 import com.wsd.knowledge.util.JsonResult;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Description 数值展示界面交互层
  * @Date:15:21 2017/11/3
  */
+@Api(description = "数据展示视图层接口", value = "数据展示视图层接口")
 @RestController
 @EnableAutoConfiguration
 public class OperationController {
@@ -81,8 +83,10 @@ public class OperationController {
 
     /**
      * 展示当天信息数据
+     *
      * @return
      */
+    @ApiOperation(value = "查看当天信息数据", notes = "传递必要参数")
     @RequestMapping(value = "show/daydata.htmls", method = RequestMethod.GET)
     public JsonResult showDayData() {
         return operationService.showDayData();
@@ -90,8 +94,10 @@ public class OperationController {
 
     /**
      * 展示本周信息数据
+     *
      * @return
      */
+    @ApiOperation(value = "查看本周数据记录", notes = "传递必要参数")
     @RequestMapping(value = "show/weekdata.htmls", method = RequestMethod.GET)
     public JsonResult showWeekData() {
         return operationService.showWeekData();
@@ -99,8 +105,10 @@ public class OperationController {
 
     /**
      * 展示本月信息数据
+     *
      * @return
      */
+    @ApiOperation(value = "查看本月数据记录", notes = "传递必要参数")
     @RequestMapping(value = "show/monthdata.htmls", method = RequestMethod.GET)
     public JsonResult showMonthData() {
         return operationService.showMonthData();
@@ -108,13 +116,20 @@ public class OperationController {
 
     /**
      * 展示单个文件操作日志记录
+     *
      * @param fileId
      * @param page
      * @param limit
      * @return
      */
-    @RequestMapping(value="show/fileLog.htmls",method = RequestMethod.GET)
-    public JsonResult showSingleFileLog(Integer fileId,Integer page,Integer limit){
-        return operationService.showSingleFileLog(fileId,page,limit);
+    @ApiOperation(value = "查看个人历史上传文件接口", notes = "传递必要参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileId", value = "文件ID", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "page", value = "页码", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "limit", value = "每页数量", required = true),
+    })
+    @RequestMapping(value = "show/fileLog.htmls", method = RequestMethod.GET)
+    public JsonResult showSingleFileLog(Integer fileId, Integer page, Integer limit) {
+        return operationService.showSingleFileLog(fileId, page, limit);
     }
 }

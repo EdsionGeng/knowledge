@@ -65,7 +65,6 @@ public class MyShiroRealm extends AuthorizingRealm {
         }
         //SystemUser userIn = adminService.login(username,pwd);
         logger.info("身份认证成功，登录用户：" + name);
-
         return new SimpleAuthenticationInfo(systemUser, password, getName());
     }
 

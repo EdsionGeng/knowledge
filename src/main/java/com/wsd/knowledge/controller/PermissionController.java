@@ -2,6 +2,7 @@ package com.wsd.knowledge.controller;
 
 import com.wsd.knowledge.service.PermissionService;
 import com.wsd.knowledge.util.JsonResult;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Description 添加文件执行 相应人员权限
  * @Date:8:57 2017/11/3
  */
+@Api(description = "文件权限接口", value = "文件权限接口")
 @RestController
 public class PermissionController {
 

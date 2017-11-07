@@ -1,6 +1,7 @@
 layui.define([
     'layer'
 ], function(exports) {
+    var $ = layui.jquery;
     var obj = {
         pageLoad:function(url){
             $layui_body_container = $('admin-container')

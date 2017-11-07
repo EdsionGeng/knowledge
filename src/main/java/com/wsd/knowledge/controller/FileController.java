@@ -2,6 +2,7 @@ package com.wsd.knowledge.controller;
 
 import com.wsd.knowledge.service.FileService;
 import com.wsd.knowledge.util.JsonResult;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +20,7 @@ import java.util.Random;
  * @Description 文件界面交互层
  * @Date:11:11 2017/11/2
  */
+@Api(description = "文件视图层接口", value = "文件视图层接口")
 @RestController
 @EnableAutoConfiguration
 public class FileController {

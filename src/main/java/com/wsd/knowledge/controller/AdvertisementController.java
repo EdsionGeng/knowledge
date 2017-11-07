@@ -2,6 +2,7 @@ package com.wsd.knowledge.controller;
 
 import com.wsd.knowledge.service.AdvertisementService;
 import com.wsd.knowledge.util.JsonResult;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Description 公告视图交互层
  * @Date:14:26 2017/11/2
  */
+@Api(description = "公告类接口", value = "公告类接口")
 @RestController
 @EnableAutoConfiguration
 public class AdvertisementController {
@@ -40,12 +42,12 @@ public class AdvertisementController {
     })
     @RequestMapping(value = "insertAd.htmls", method = RequestMethod.PUT)
     public JsonResult insertAd(String title, String content, String sendDepartmentName, Integer userId) {
-
         return advertisementService.insertCommonAd(title, content, sendDepartmentName, userId);
     }
 
     /**
      * 批量删除公告
+     *
      * @param id
      * @return
      */
@@ -61,6 +63,7 @@ public class AdvertisementController {
 
     /**
      * 批量删除公告
+     *
      * @param userId
      * @param commonId
      * @return
@@ -71,7 +74,7 @@ public class AdvertisementController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "commonId", value = "文件ID", required = true)
     })
     @RequestMapping(value = "readCommon.htmls", method = RequestMethod.DELETE)
-    public JsonResult readAd(Integer  userId,Integer commonId) {
-        return advertisementService.readAd(userId,commonId);
+    public JsonResult readAd(Integer userId, Integer commonId) {
+        return advertisementService.readAd(userId, commonId);
     }
 }

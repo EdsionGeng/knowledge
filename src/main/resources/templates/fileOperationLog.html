@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="layui-form-search">
+<form class="layui-form">
+    <div class="layui-form-item">
+
+
+        <label class="layui-form-label">部门:</label>
+        <div class="layui-input-inline">
+            <select name="dept" id="departsearch" lay-filter="departsearch">
+            </select>
+        </div>
+        <label class="layui-form-label">操作类型:</label>
+        <div class="layui-input-inline">
+            <select name="state" id="entrystate">
+                <option value="0">请选择</option>
+                <option value="1">查阅文档</option>
+                <option value="2">修改文档</option>
+                <option value="3">删除文档</option>
+                <option value="3">下载文档及附件</option>
+            </select>
+        </div>
+
+        <button class="layui-btn" lay-submit lay-filter="entrysearch">查询</button>
+    </div>
+</form>
+</div>
+<script>
+    var setting = {
+        async: {
+            enable: false
+        },
+        callback: {
+            onClick: function (event, treeId, treeNode) {//事件的类型可变
+                $("#department").val(treeNode.id);
+            }
+        }
+    };
+
+    $(function () {
+        //主页树加载
+        $.ajax({
+            async: false,//是否异步
+            cache: false,//是否使用缓存
+            type: 'POST',//请求方式：post
+            dataType: 'json',//数据传输格式：json
+            url: 'department/getListByTree',//请求的action路径
+            success: function (data) {
+                //把后台封装好的简单Json格式赋给treeNodes
+                //默认选中
+                $.fn.zTree.init($("#mainTree"), setting, data);
+            }
+        });
+    })
+    layui.use(['table', 'form', 'laydate', 'layer', 'selectinit', 'laytpl'], function () {
+        var table = layui.table,
+            form = layui.form,
+            laytpl = layui.laytpl,
+            laydate = layui.laydate,
+            selectinit = layui.selectinit,
+            layer = layui.layer;
+        form.verify({
+            trialsalary: [/^([0-9]*[1-9][0-9]*)?$/, '试用期薪资请填写正整数字,谢谢！'],
+            offsalary: [/^([0-9]*[1-9][0-9]*)?$/, '转正薪资请填写正整数字,谢谢！']
+        });
+
+        var entrytableins = table.render({
+            elem: '#induction-manage',
+            where: {"date1": $("#inducdate1").val(), "date2": $("#inducdate2").val()},
+            url: 'show/hireemp.htmls',
+            cols: [[
+                {field: 'username', title: '姓名', width: 120}
+                , {field: 'sex', title: '性别', width: 110}
+                , {field: 'department', title: '部门', width: 110}
+                , {field: 'group', title: '所属分组', width: 100}
+                , {field: 'station', title: '职位', width: 120}
+                , {field: 'entryDate', title: '入职日期', event: 'editTime', width: 120,sort:true}
+                , {field: 'phone', title: '手机号', width: 120}
+                , {field: 'mail', title: '邮箱', width: 170}
+                , {field: 'WQnum', title: '微信/QQ', width: 140}
+//                ,{field:'trialSalary',title:'试用期薪资',width:120,edit:'text'}
+//                ,{field:'offSalary',title:'转正薪资',width:100,edit:'text'}
+                , {field: 'inserttime', title: '添加时间', width: 170}
+                , {field: 'InState', title: '入职状态', width: 110, templet: '#renderstatus'}
+                , {
+                    field: 'InState',
+                    title: '操作',
+                    width: 200,
+                    fixed: 'right',
+                    align: 'center',
+                    toolbar: '#entryopertion'
+                }
+            ]]
+            , page: true
+            , height: 750,
+            id: 'indmanage'
+        });
+        table.on('edit(indmanage)', function (obj) {
+            console.log(obj);
+            var data = {
+                username: obj.data.username,
+                sex: obj.data.sex,
+                phone: obj.data.phone,
+                mail: obj.data.mail,
+                wqnum: obj.data.WQnum,
+                department: obj.data.department,
+                group: obj.data.group,
+                station: obj.data.station
+            }
+            $.post("update/info.htmls", data, function (data) {
+                if (data.code == 0) {
+                    entrytableins.reload();
+                    layer.msg("编辑成功", {
+                        time: 1000
+                    });
+                } else {
+                }
+                lay.msg("编辑失败");
+            });
+        })
+        //日期范围
+        laydate.render({
+            elem: '#inducdate1'
+            , range: false
+        });
+        laydate.render({
+            elem: '#inducdate2'
+            , range: false
+        });
+
+        //添加弹窗初始化
+        $('.inducbtnadd').on('click', function () {
+            var addindform = $('#addinduction').html();
+            layer.open({
+                type: 1,
+                title: '添加入职员工信息',
+                content: addindform,
+                area: ['400px', '550px']
+            })
+            laydate.render({
+                elem: '#entrydate'
+                , range: false
+            });
+            selectinit.selectdeptoption($('#addredept'),
+                'show/all/dep.htmls', {}, form);
+            form.render();
+        })
+
+
+
+        // 监听添加事件表单
+        form.on('submit(addentryplan)', function (data) {
+            var username = data.field.username;
+            var departmentid = data.field.departmentid;
+            var groupid = data.field.groupid;
+            var sex = data.field.sex;
+            var stationid = data.field.stationid;
+            var entrydate = data.field.entrydate;
+            var email = data.field.email;
+            var phone = data.field.phone;
+            var wqnum = data.field.wqnum;
+            var trialsalary = data.field.trialsalary;
+            var offsalary = data.field.offsalary;
+            $.ajax({
+                url: 'insert/newemp.htmls',
+                method: 'post',
+                data: {
+                    username: username,
+                    departmentid: departmentid,
+                    groupid: groupid,
+                    stationid: stationid,
+                    sex: sex,
+                    entrydate: entrydate,
+                    email: email,
+                    phone: phone,
+                    wqnum: wqnum,
+                    trialsalary: trialsalary,
+                    offsalary: offsalary
+                },
+
+                success: function (data) {
+                    if (data.code == 2) {
+                        layer.msg("手机号码已存在");
+                    }
+                    else {
+                        layer.msg('添加成功!');
+                        layer.closeAll();
+                        entrytableins.reload();
+                    }
+                }
+            });
+            return false;
+        })
+        // 监听列表操作工具栏事件
+        table.on('tool(indmanage)', function (obj) {
+
+            var data = obj.data;
+            if (obj.event === 'enter-entry') {
+                layer.open({
+                    type: 1,
+                    shade: false,
+                    content: $("#resumedelete2"),
+                    area: ['500px', '300px'],
+                    btn: ['确定', '取消'],
+                    yes: function (index1, layero) {
+                        var department = $("#department").val();
+                        if(department == null || department == ''){
+                            layer.msg("请选择员工所在的组织");
+                            return false;
+                        }
+                        // 点击确认之后进行相应的操作
+                        layer.confirm('入职确认后，该人员将进入试用期，确定入职吗?', function (index) {
+                            obj.del();
+                            layer.close(index1);
+                            layer.close(index);
+                            var username = data.username;
+                            var departmentid = data.departmentId;
+                            var groupid = data.groupId;
+                            var sex = data.sex;
+                            var stationid = data.stationId;
+                            var entrydate = data.entryDate;
+                            var email = data.mail;
+                            var phone = data.phone;
+                            var wqnum = data.WQnum;
+                            var trialsalary = data.trialSalary;
+                            var offsalary = data.offSalary;
+                            $.ajax({
+                                url: 'insert/baseinfo.htmls',
+                                method: 'post',
+                                data: {
+                                    username: username,
+                                    departmentid: departmentid,
+                                    groupid: groupid,
+                                    stationid: stationid,
+                                    sex: sex,
+                                    entrydate: entrydate,
+                                    email: email,
+                                    phone: phone,
+                                    wqnum: wqnum,
+                                    trialsalary: trialsalary,
+                                    offsalary: offsalary,
+                                    userGroupId:department
+                                },
+                                success: function test(test) {
+                                    layer.msg("已添加到转正员工");
+                                }
+                            });
+
+                        });
+                    }
+                });
+            } else if (obj.event === 'entry-delete') {
+                var deletetpl = resumedelete.innerHTML;
+                layer.open({
+                    type: 1,
+                    content: deletetpl,
+                    area: ['500px', '300px'],
+                    btn: ['确定', '取消'],
+                    yes: function (index, layero) {
+                        var markvalue = $('#resumedeletemark').val();
+                        var params = {
+                            id: data.id,
+                            content: markvalue
+                        };
+                        $.ajax({
+                            url: 'delete/emp.htmls',
+                            data: params,
+                            method: 'post',
+                            success: function (result) {
+                                if (result.code === 0) {
+                                    entrytableins.reload();
+                                    layer.msg('删除信息成功！')
+                                    layer.close(index);
+                                } else {
+                                    layer.msg('删除信息失败!')
+                                }
+                            }
+                        });
+                    }
+                })
+            } else if (obj.event === 'entry-shenhe') {
+                var $reportshenhe = $('#reportshenhe').html();
+                // 根据电话号码和姓名获取基本信息数据
+                var params = {
+                    username: data.username,
+                    phone: data.phone
+                };
+
+                $('#editTimecancel').on('click', function () {
+                    layer.closeAll();
+                })
+                laydate.render({
+                    elem: '#entryDate'
+                });
+            }
+        })
+        // 监听搜索按钮提交
+        form.on('submit(entrysearch)', function (data) {
+            entrytableins.reload({
+                where: data.field
+            });
+            return false;
+        })
+        form.render();
+
+        // 查询下拉框初始化
+        selectinit.selectdeptoption($('#departsearch'),
+            'show/all/dep.htmls', {}, form);
+
+        form.on('select(departsearch)', function (data) {
+            selectinit.selectgrouption($('#groupsearch'),
+                'show/dep/group.htmls',
+                {departmentId: data.value}, form, false);
+        })
+        form.on('select(departadd)', function (data) {
+            selectinit.selectgrouption($('#groupadd'),
+                'show/dep/group.htmls',
+                {departmentId: data.value}, form);
+        })
+        form.on('select(groupadd)', function (data) {
+            selectinit.selectstatoption($('#statadd'),
+                'show/group/station.htmls',
+                {groupId: data.value}, form)
+        });
+        table.on('sort(indmanage)', function (obj) {
+//            console.log(obj);
+            // 表格重载
+//            var dept=$('#departsearch').val();
+//            console.log(dept);
+//            var date1=$('#inducdate1').val();
+//            console.log(date1);
+//            var date2=$('#inducdate2').val();
+//            console.log(date2);
+//            var entryState=$('#entryState').val();
+            table.reload('indmanage', {
+                initSort: obj,
+                where: {
+                    field: obj.field,
+                    type: obj.type,
+//                    dept:dept,
+//                    date1:date1,
+//                    date2:date2,
+//                    state:entryState
+                }
+            })
+        })
+    }) ;
+</script>
+
+</body>
+</html>
