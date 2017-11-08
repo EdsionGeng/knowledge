@@ -39,31 +39,31 @@ layui.config({
         }
     }
 
-    // $.ajax({
-    //     url: 'menu/getMenus.htmls',
-    //     data: {},
-    //     success: function (data) {
-    //         var html = "";
-    //         if (data.data != null) {
-    //             $.each(data.data, function (i, d) {
-    //                 html += "<li class='layui-nav-item layui-nav-itemed'>";
-    //                 html += "<a href='javascript:;' data-url='" + d.menuurl + "'>" + d.name + "</a>";
-    //                 if (d.children != null && d.children.length > 0) {
-    //                     html += "<dl class='layui-nav-child'>";
-    //                     $.each(d.children, function (j, item) {
-    //                         html += "<dd><a href='javascript:;' data-url='" + item.menuurl + "'>" + item.name + "</a></dd>";
-    //                     })
-    //                     html += "</dl>";
-    //                 }
-    //                 html += "</li>";
-    //             });
-    //         }
-    //         $("#menus").empty();
-    //         $("#menus").append(html);
-    //         element.init();
-    //         initHome();
-    //     }
-    // });
+    $.ajax({
+        url: 'getMenus.htmls',
+        data: {},
+        success: function (data) {
+            var html = "";
+            if (data.data != null) {
+                $.each(data.data, function (i, d) {
+                    html += "<li class='layui-nav-item layui-nav-itemed'>";
+                    html += "<a href='javascript:;' data-url='" + d.menuurl + "'>" + d.name + "</a>";
+                    if (d.children != null && d.children.length > 0) {
+                        html += "<dl class='layui-nav-child'>";
+                        $.each(d.children, function (j, item) {
+                            html += "<dd><a href='javascript:;' data-url='" + item.menuurl + "'>" + item.name + "</a></dd>";
+                        })
+                        html += "</dl>";
+                    }
+                    html += "</li>";
+                });
+            }
+            $("#menus").empty();
+            $("#menus").append(html);
+            element.init();
+            initHome();
+        }
+    });
 
     /**
      * 初始化首页内容加载
@@ -89,7 +89,7 @@ layui.config({
                 layer.closeAll('loading');
             } else if (status === "error") {
                 layer.closeAll('loading');
-                layer.msg("加载失败，请检查网络链接是否正常！");
+                layer.msg("加载失败，请检查网络链接是否正常!");
             }
         });
     }

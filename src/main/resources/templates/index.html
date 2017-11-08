@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -46,7 +46,7 @@
         </div>
         <div class="admin-side-menu">
             <ul class="layui-nav layui-nav-tree layui-inline" lay-filter="demo" style="margin-right: 10px;">
-                <li class="layui-nav-item"><a href="">首页</a></li>
+                <li class="layui-nav-item"><a href="">首页<th th: text=" ${LOGIN_USER_ID} "></th></a></li>
                 <li class="layui-nav-item layui-nav-itemed">
                     <a href="javascript:;">文件管理</a>
                     <dl class="layui-nav-child">
@@ -63,8 +63,13 @@
                         <dd><a href="">文档目录管理</a></dd>
                     </dl>
                 </li>
-                <!--<li class="layui-nav-item"><a href="">云市场</a></li>-->
-                <!--<li class="layui-nav-item"><a href="">社区</a></li>-->
+                <li class="layui-nav-item">
+                    <a href="javascript:;">个人中心</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="">消息中心</a></dd>
+                    </dl>
+                </li>
+
             </ul>
         </div>
     </div>
@@ -74,8 +79,14 @@
 </div>
 <script src="../layui/layui.js"></script>
 <script src="../js/modules/index.js"></script>
+<script src="../js/jquery-1.8.3.min.js"></script>
 <script>
     //JavaScript代码区域
+    (function () {
+        $.getScript('js/modules/index.js', function (data, textStatus, jqxhr) {
+            console.log('index.js 加载成功');
+        });
+    })();
     layui.use(['element','ajaxhtml'], function(){
         var element = layui.element,
             ajaxhtml = layui.ajaxhtml,
@@ -91,7 +102,27 @@
                 return;
             }
         })
-    });
+
+
+//        $.ajax({
+//            url : 'getMenus.htmls',
+//            method : 'get',
+//
+//            // dataType : 'text',
+//            success:function test(data){
+//                //  alert(data);
+//                console.log(data.data);
+//
+//
+//            },
+//            error:function test(data){
+//
+//            }
+//        });
+       return false;
+  });
+
+
 </script>
 </body>
 </html>

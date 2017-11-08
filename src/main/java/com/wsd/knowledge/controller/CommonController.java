@@ -52,6 +52,11 @@ public class CommonController {
      * @param fileKind
      * @return
      */
+    @ApiOperation(value = "获取目录树形结构", notes = "传递必要参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "Object", name = "fileKind", value = "文件"),
+
+    })
     @RequestMapping(value = "getKindByTree", method = RequestMethod.GET)
     public List<FileKind> getKindTree(FileKind fileKind) {
         return commonService.getKindTree(fileKind);

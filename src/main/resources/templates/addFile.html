@@ -72,6 +72,7 @@
 <script src="../layui/layui.js"></script>
 <script>
     //Demo
+
     layui.use('form', function(){
         var form = layui.form;
         //监听提交
@@ -79,6 +80,24 @@
             layer.msg(JSON.stringify(data.field));
             return false;
         });
+        $.ajax({
+            url : 'getMenus',
+            method : 'get',
+
+            // dataType : 'text',
+            success:function test(data){
+                //  alert(data);
+                console.log(data.data);
+                layer.msg("登录成功");
+                window.location.href="login";
+            },
+            error:function test(data){
+                layer.msg("登录失败");
+                window.location.href="login";
+            }
+        });
+        return false;
+
     });
 </script>
 </body>

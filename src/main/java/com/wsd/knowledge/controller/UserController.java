@@ -44,7 +44,7 @@ public class UserController {
 //        if (systemUser != null) {
 //            return new JsonResult(0,0,"登录成功",0);
 //        }
-//        return new JsonResult(2,0,"登录失败",0);
+//       return new JsonResult(2,0,"登录失败",0);
         try {
             UsernamePasswordToken token = new UsernamePasswordToken(username, password);
             SecurityUtils.getSubject().login(token);

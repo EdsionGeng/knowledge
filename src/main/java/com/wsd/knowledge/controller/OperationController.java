@@ -36,7 +36,7 @@ public class OperationController {
      */
     @ApiOperation(value = "查看个人下载文件接口", notes = "传递必要参数")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "页码", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "page", value = "页码", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "limit", value = "每页数量", required = true),
     })

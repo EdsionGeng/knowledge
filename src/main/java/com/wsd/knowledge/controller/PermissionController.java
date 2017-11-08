@@ -22,8 +22,6 @@ public class PermissionController {
 
     @Autowired
     private PermissionService permissionService;
-
-
     /**
      * 添加文件相应权限
      *
@@ -33,11 +31,8 @@ public class PermissionController {
      */
     @RequestMapping("insert/filepermission.htmls")
     public JsonResult insertFilePerMission(Integer[] userids, Integer[] operationStyleId, Integer fileId) {
-
-
         return permissionService.insertUserPermission(userids, operationStyleId, fileId);
     }
-
     /**
      * 点击单个文件查看详情，然后同时查出对此文件相应的操作权限
      *

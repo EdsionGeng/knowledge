@@ -120,7 +120,6 @@ public interface FileMapper {
          public String queryFileByDep(Map<String,Object> map ){
              StringBuffer sql = new StringBuffer();
              sql.append("select o.* from FileDetail  o  where o.fileDisplay=1 ");
-
              if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
                  sql.append(" AND o.departmentName = #{departmentName} ");
              }
