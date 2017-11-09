@@ -47,8 +47,8 @@ public interface OperationMapper {
      * @param fileId
      * @return
      */
-    @Select("select o.*,CASE o.operationStyle WHEN 1 THEN ‘添加文档'WHEN 2 THEN '删除文档' WHEN 3 THEN '更改文档' WHEN 4 THEN '查阅文档' WHEN 5 THEN '下载文档' ELSE ’其他'" +
-            " END AS operation from OperationLog  o  where o.fileId=#{fileId} order by o.operationTime DESC limit #{startSize},#{limit} ")
+    @Select("select o.*,CASE o.operationStyle WHEN 1 THEN '添加文档'  WHEN 2 THEN '删除文档' WHEN 3 THEN '更改文档' WHEN 4 THEN '查阅文档' WHEN 5 THEN '下载文档' ELSE '其他'\n" +
+            " END AS operation from OperationLog  o  where o.fileId = #{fileId} Order by o.operationTime DESC limit #{startSize},#{limit} ")
     List<Map> showAllOperationLog(@Param("fileId") int fileId,@Param("startSize")Integer startSize,@Param("limit")Integer limit);
 
     /**
@@ -59,6 +59,7 @@ public interface OperationMapper {
      */
     @Select("select count(*) from OperationLog where  fileId=#{fileId}")
     Integer countOperationLog(@Param("fileId") int fileId);
+
 
     /**
      * 查询个人历史下载记录
@@ -251,7 +252,7 @@ public interface OperationMapper {
      * @return
      */
     @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=5")
-    Integer counMonthDownloadPcs(@Param("startTime")String startTime,@Param("endTime")String endTime);
+    Integer countMonthDownloadPcs(@Param("startTime")String startTime,@Param("endTime")String endTime);
 
 
     /**
@@ -290,10 +291,10 @@ public interface OperationMapper {
                     "END AS operation from OperationLog  o  where o.fileId=#{fileId}");
 
             if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
-                sql.append(" AND o.departmentName <= #{departmentName} ");
+                sql.append(" AND o.departmentName = #{departmentName} ");
             }
             if (StringUtils.isNotEmpty((String) map.get("operationStyle"))) {
-                sql.append(" AND a.operationStyle = #{operationStyle} ");
+                sql.append(" AND o.operationStyle = #{operationStyle} ");
             }
             if (StringUtils.isNotEmpty((String) map.get("type"))) {
                 if ("asc".equals(map.get("type"))) {
@@ -302,7 +303,7 @@ public interface OperationMapper {
                     sql.append("order by a.entryDate desc");
                 }
             }
-            sql.append(" limit #{startsize},#{limit} ");
+            sql.append(" limit #{startSize},#{limit} ");
             return sql.toString();
         }
 
@@ -314,9 +315,21 @@ public interface OperationMapper {
                 sql.append(" AND o.departmentName <= #{departmentName} ");
             }
             if (StringUtils.isNotEmpty((String) map.get("operationStyle"))) {
-                sql.append(" AND a.operationStyle = #{operationStyle} ");
+                sql.append(" AND o.operationStyle = #{operationStyle} ");
             }
+            sql.append(" limit #{startSize},#{limit} ");
             return sql.toString();
         }
+
+
+
+
+
+
     }
+
+
+
+
+
 }

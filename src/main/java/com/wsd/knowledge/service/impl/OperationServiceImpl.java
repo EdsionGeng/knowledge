@@ -115,8 +115,8 @@ public class OperationServiceImpl implements OperationService {
             dayUpdatePcs = 0;
         }
         Integer dayAddPcs = operationMapper.countDataAddPcs(startTime, endTime);
-        if(dayAddPcs==null){
-            dayAddPcs=0;
+        if (dayAddPcs == null) {
+            dayAddPcs = 0;
         }
         map.put("lookpcs", dayLookPcs);
         map.put("downpcs", dayDownPcs);
@@ -153,8 +153,8 @@ public class OperationServiceImpl implements OperationService {
             dayUpdatePcs = 0;
         }
         Integer dayAddPcs = operationMapper.countWeekAddPcs(startTime, endTime);
-        if(dayAddPcs==null){
-            dayAddPcs=0;
+        if (dayAddPcs == null) {
+            dayAddPcs = 0;
         }
         map.put("lookpcs", dayLookPcs);
         map.put("downpcs", dayDownPcs);
@@ -177,25 +177,25 @@ public class OperationServiceImpl implements OperationService {
         Map<String, Object> map = new HashMap<>();
         String startTime = DateUtil.getMonthFirstDay();
         String endTime = DateUtil.getMonthLastDay();
-        Integer dayLookPcs = operationMapper.countWeekLookPcs(startTime, endTime);
+        Integer dayLookPcs = operationMapper.countMonthLookPcs(startTime, endTime);
         if (dayLookPcs == null) {
             dayLookPcs = 0;
         }
-        Integer dayDownPcs = operationMapper.countWeekDownloadPcs(startTime, endTime);
+        Integer dayDownPcs = operationMapper.countMonthDownloadPcs(startTime, endTime);
         if (dayDownPcs == null) {
             dayDownPcs = 0;
         }
-        Integer dayDeletePcs = operationMapper.countWeekDeletePcs(startTime, endTime);
+        Integer dayDeletePcs = operationMapper.countMonthDeletePcs(startTime, endTime);
         if (dayDeletePcs == null) {
             dayDeletePcs = 0;
         }
-        Integer dayUpdatePcs = operationMapper.countWeekUpdatePcs(startTime, endTime);
+        Integer dayUpdatePcs = operationMapper.countMonthUpdatePcs(startTime, endTime);
         if (dayUpdatePcs == null) {
             dayUpdatePcs = 0;
         }
-        Integer dayAddPcs = operationMapper.countWeekAddPcs(startTime, endTime);
-        if(dayAddPcs==null){
-            dayAddPcs=0;
+        Integer dayAddPcs = operationMapper.countMonthAddPcs(startTime, endTime);
+        if (dayAddPcs == null) {
+            dayAddPcs = 0;
         }
         map.put("lookpcs", dayLookPcs);
         map.put("downpcs", dayDownPcs);
@@ -216,13 +216,34 @@ public class OperationServiceImpl implements OperationService {
      * @return
      */
     @Override
-    public JsonResult showSingleFileLog(Integer fileId, Integer page, Integer limit) {
+    public JsonResult showSingleFileLog(Integer fileId, Integer page, Integer limit, String  operationStyle, String departmentName) {
         if (fileId == null || page == null | limit == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
+        if (operationStyle == null) {
+            operationStyle ="";
+
+        }
+        if (departmentName == null) {
+            departmentName = "";
+        }
         int startSize = (page - 1) * limit;
-        List<Map> map = operationMapper.showAllOperationLog(fileId, startSize, limit);
-        Integer pcs = operationMapper.countOperationLog(fileId);
+        List<Map> map = null;
+        Integer pcs = null;
+        if (operationStyle .equals("") && departmentName.equals("")) {
+            map = operationMapper.showAllOperationLog(fileId, startSize, limit);
+            pcs = operationMapper.countOperationLog(fileId);
+        }
+        else{
+            Map<String,Object> maps=new HashMap<>();
+            maps.put("operationStyle",operationStyle);
+            maps.put("departmentName",departmentName);
+            maps.put("startSize",startSize);
+            maps.put("limit",limit);
+            map=operationMapper.queryLogByIf(maps);
+            pcs=operationMapper.countLogByIf(maps);
+        }
+
         if (map == null || pcs == null) {
             return new JsonResult(2, 0, "无数据", 0);
         }

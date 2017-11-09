@@ -31,6 +31,7 @@ public class FileController {
     /**
      * 查询所有上传文件 组合查询 共用同一个接口
      * 个人
+     *
      * @param departmentName
      * @param fileStyleId
      * @param downType
@@ -49,8 +50,8 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "limit", value = "页面信息数量", required = true)
 
     })
-    @RequestMapping(value="show/allFile",method=RequestMethod.GET)
-    public JsonResult showAllFile(String departmentName, String  fileStyleId, String downType, String fileTimeType, Integer page, Integer limit) {
+    @RequestMapping(value = "show/allFile", method = RequestMethod.GET)
+    public JsonResult showAllFile(String departmentName, String fileStyleId, String downType, String fileTimeType, Integer page, Integer limit) {
         return fileService.showAllFile(departmentName, fileStyleId, downType, fileTimeType, page, limit);
 
     }
@@ -77,8 +78,8 @@ public class FileController {
 
 
     })
-    @RequestMapping(value="insertFile.htmls",method = RequestMethod.GET)
-    public JsonResult insertFile(@RequestParam(value="title") String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize) {
+    @RequestMapping(value = "insertFile.htmls", method = RequestMethod.GET)
+    public JsonResult insertFile(@RequestParam(value = "title") String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize) {
         return fileService.insertFile(title, content, photourl, fileurl, userId, fileStyleId, filesize);
     }
 
@@ -93,9 +94,9 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "id ", value = "文件ID 数组", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户ID", required = true),
     })
-    @RequestMapping(value="deletefile.htmls",method =RequestMethod.DELETE)
-    public JsonResult deleteFile(Integer[]  id,Integer userId) {
-        return fileService.deleteFile(id,userId);
+    @RequestMapping(value = "deletefile.htmls", method = RequestMethod.DELETE)
+    public JsonResult deleteFile(Integer[] id, Integer userId) {
+        return fileService.deleteFile(id, userId);
     }
 
     /**
@@ -110,13 +111,14 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "id", value = "文件ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户ID", required = true),
     })
-    @RequestMapping(value="readfile.htmls",method=RequestMethod.PUT)
+    @RequestMapping(value = "readfile.htmls", method = RequestMethod.PUT)
     public JsonResult readFile(Integer id, Integer userId) {
         return fileService.readFile(id, userId);
     }
 
     /**
      * 点击附件后执行逻辑操作
+     *
      * @param id
      * @param userId
      * @return
@@ -126,10 +128,35 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "id", value = "文件ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户ID", required = true),
     })
-    @RequestMapping(value="download.htmls",method=RequestMethod.PUT)
+    @RequestMapping(value = "download.htmls", method = RequestMethod.PUT)
     public JsonResult downloadFile(Integer id, Integer userId) {
         return fileService.downloadFile(id, userId);
     }
+
+
+    /**
+     * 更改文件
+     *
+     * @param id
+     * @param content
+     * @param fileurl
+     * @param fileStyleId
+     * @param userId
+     * @return
+     */
+    @ApiOperation(value = "更改文件接口", notes = "传递必要参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "id", value = "文件ID", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "content", value = "文档内容", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "fileurl", value = "文件上传路径", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileStyleId", value = "文件类型ID", required = true),
+    })
+    @RequestMapping(value = "updateFile.htmls", method = RequestMethod.PUT)
+    public JsonResult updateFileDetail(Integer id, String content, String fileurl, Integer fileStyleId, Integer userId) {
+
+        return fileService.updateFileDetail(id, content, fileurl, fileStyleId, userId);
+    }
+
 
     /**
      * @param file

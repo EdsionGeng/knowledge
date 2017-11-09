@@ -62,6 +62,6 @@ public interface OperationService {
      * @param fileId
      * @return
      */
-    JsonResult showSingleFileLog(Integer fileId,Integer page,Integer limit);
+    JsonResult showSingleFileLog(Integer fileId,Integer page,Integer limit,String  operationStyle,String departmentName);
 
 }

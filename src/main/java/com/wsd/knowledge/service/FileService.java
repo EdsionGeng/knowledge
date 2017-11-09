@@ -57,4 +57,16 @@ public interface FileService {
      * @return
      */
     JsonResult downloadFile(Integer id, Integer userId);
+
+
+    /**
+     *修改文件
+     * @param id
+     * @param content
+     * @param fileurl
+     * @param fileStyleId
+     * @param userId
+     * @return
+     */
+    JsonResult updateFileDetail(Integer id,String content,String fileurl,Integer fileStyleId, Integer userId);
 }

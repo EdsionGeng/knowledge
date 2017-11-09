@@ -116,6 +116,13 @@ public interface FileMapper {
     @Update("update FileDetail set fileDisplay=0 where id=#{id}")
     Integer updateFileShow(@Param("id")Integer id);
 
+    @Update("update FileDetail set fileStyleId=#{fileStyleId},fileContent=#{fileContent},updatePcs=updatePcs+1 where id=#{id}")
+    Integer updateFileContent(@Param("fileStyleId")Integer fileStyleId,@Param("fileContent")String fileContent,@Param("id")Integer id);
+
+    @Update("update FileDetail set fileStyleId=#{fileStyleId},fileContent=#{fileContent},fileUrl=#{fileUrl},updatePcs=updatePcs+1 where id=#{id}")
+    Integer updateFileContentUrl(@Param("fileStyleId")Integer fileStyleId,@Param("fileContent")String fileContent,@Param("id")Integer id,@Param("fileUrl")String fileUrl);
+
+
     class FileQuery{
          public String queryFileByDep(Map<String,Object> map ){
              StringBuffer sql = new StringBuffer();

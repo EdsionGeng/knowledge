@@ -56,16 +56,16 @@ public class FileServiceImpl implements FileService {
 
         int startSize = (page - 1) * limit;
 
-        if (("").equals(departmentName)) {
+        if (departmentName==null) {
             departmentName = "";
         }
-        if (("").equals(downType)) {
+        if (downType==null) {
             downType = "";
         }
-        if (("").equals(fileTimeType)) {
+        if (fileTimeType==null) {
             fileTimeType = "desc";
         }
-        if (("").equals(fileStyleId)) {
+        if (fileStyleId==null) {
             fileStyleId = "";
         }
         if (departmentName.equals("") && fileStyleId.equals("") && downType.equals("") && fileTimeType.equals("desc")) {
@@ -223,4 +223,45 @@ public class FileServiceImpl implements FileService {
         }
         return new JsonResult(2, 0, "操作失败", 0);
     }
+
+    /**
+     * 修改文件
+     *
+     * @param id
+     * @param content
+     * @param fileurl
+     * @param fileStyleId
+     * @param userId
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public JsonResult updateFileDetail(Integer id, String content, String fileurl, Integer fileStyleId, Integer userId) {
+        if (id == null || content == null || fileurl == null || fileStyleId == null || userId == null) {
+            return new JsonResult(2, 0, "参数为空", 0);
+        }
+        String str = new DateUtil().cacheExist(String.valueOf(userId));
+        if (str.equals("full")) {
+            return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
+        }
+        Integer result = null;
+        if (fileurl.equals("0")) {
+            result = fileMapper.updateFileContent(fileStyleId, content, id);
+        } else {
+            result = fileMapper.updateFileContentUrl(fileStyleId, content, id, fileurl);
+        }
+        if (result != null) {
+            SystemUser systemUser = userRepositoty.findInfo(userId);
+            //添加操作日志
+            OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, id, 3, new DateUtil().getSystemTime());
+            Integer k = operationMapper.insertOperationLog(operationLog);
+            if (k != null) {
+                return new JsonResult(0, 0, "操作成功", 0);
+            }
+
+        }
+             return new JsonResult(2, 0, "操作失败", 0);
+    }
+
+
 }

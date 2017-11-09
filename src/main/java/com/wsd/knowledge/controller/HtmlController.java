@@ -56,11 +56,22 @@ public class HtmlController {
 
     /**
      * 跳转到具体文件的相关操作日志
+     *
      * @return
      */
     @RequestMapping("turn/filelog")
     public String turnFileLog() {
         return "fileOperationLog";
+    }
+
+    /**
+     * 跳转到具体文件的相关操作日志
+     *
+     * @return
+     */
+    @RequestMapping("showFile")
+    public String showAllFile() {
+        return "showAllFile";
     }
 
 }

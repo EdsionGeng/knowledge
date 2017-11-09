@@ -122,14 +122,14 @@ public class OperationController {
      * @param limit
      * @return
      */
-    @ApiOperation(value = "查看个人历史上传文件接口", notes = "传递必要参数")
+    @ApiOperation(value = "查看单个文件操作日志接口", notes = "传递必要参数")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileId", value = "文件ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "page", value = "页码", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "limit", value = "每页数量", required = true),
     })
     @RequestMapping(value = "show/fileLog.htmls", method = RequestMethod.GET)
-    public JsonResult showSingleFileLog(Integer fileId, Integer page, Integer limit) {
-        return operationService.showSingleFileLog(fileId, page, limit);
+    public JsonResult showSingleFileLog(Integer fileId, Integer page, Integer limit,String  operationStyle,String departmentName) {
+        return operationService.showSingleFileLog(fileId, page, limit,operationStyle,departmentName);
     }
 }
