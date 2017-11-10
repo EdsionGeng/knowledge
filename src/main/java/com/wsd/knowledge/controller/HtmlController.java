@@ -49,9 +49,20 @@ public class HtmlController {
      * @return
      */
 
-    @RequestMapping("adminIndex")
+    @RequestMapping("adminindex")
     public String adminIndex() {
         return "admin_index";
+    }
+
+    /**
+     * 个人首页
+     *
+     * @return
+     */
+
+    @RequestMapping("personindex")
+    public String personIndex() {
+        return "person_index";
     }
 
     /**
@@ -65,7 +76,7 @@ public class HtmlController {
     }
 
     /**
-     * 跳转到具体文件的相关操作日志
+     * 跳转到全部文件展示页
      *
      * @return
      */
@@ -74,4 +85,82 @@ public class HtmlController {
         return "showAllFile";
     }
 
+    /**
+     * 跳转个人中心页面
+     *
+     * @return
+     */
+    @RequestMapping("turn/usermsg")
+    public String showUserMsg() {
+        return "mymessage";
+    }
+
+    /**
+     * 跳转管理员下载页面
+     *
+     * @return
+     */
+    @RequestMapping("turn/admindown")
+    public String showAdminDown() {
+        return "admin_download";
+    }
+
+    /**
+     * 跳转管理员下载页面
+     *
+     * @return
+     */
+    @RequestMapping("turn/persondown")
+    public String showPersonDown() {
+        return "user_download";
+    }
+
+    /**
+     * 跳转文档管理页面
+     *
+     * @return
+     */
+    @RequestMapping("turn/docmanage")
+    public String turnDocManage() {
+        return "docmanage";
+    }
+    /**
+     * 跳转文档目录管理页面
+     *
+     * @return
+     */
+    @RequestMapping("turn/doclist")
+    public String turnDocList() {
+        return "doclist";
+    }
+    /**
+     * 跳转消息管理页面
+     *
+     * @return
+     */
+    @RequestMapping("turn/msgmanage")
+    public String turnMsgManage() {
+        return "msgmanage";
+    }
+
+    /**
+     * 跳转管理员历史上传
+     *
+     * @return
+     */
+    @RequestMapping("turn/adminup")
+    public String turnAdminUp() {
+        return "admin_up";
+    }
+
+
+    /**
+     * 跳转个人历史上传
+     *
+     * @return
+     */
+    @RequestMapping("turn/personup")
+    public String turnPersonUp() {
+        return "person_up";
+    }
 }

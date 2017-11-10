@@ -1,6 +1,7 @@
 package com.wsd.knowledge.controller;
 
 import com.wsd.knowledge.service.AdvertisementService;
+import com.wsd.knowledge.service.MyRecAdService;
 import com.wsd.knowledge.util.JsonResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -23,6 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdvertisementController {
     @Autowired
     private AdvertisementService advertisementService;
+
+    @Autowired
+    private MyRecAdService myRecAdService;
 
     /**
      * 添加公告
@@ -62,13 +66,13 @@ public class AdvertisementController {
     }
 
     /**
-     * 批量删除公告
+     * 读取相应的公告公告
      *
      * @param userId
      * @param commonId
      * @return
      */
-    @ApiOperation(value = "删除公告接口", notes = "传递必要参数")
+    @ApiOperation(value = "读取公告接口", notes = "传递必要参数")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "userId", value = "文件ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "commonId", value = "文件ID", required = true)
@@ -77,4 +81,47 @@ public class AdvertisementController {
     public JsonResult readAd(Integer userId, Integer commonId) {
         return advertisementService.readAd(userId, commonId);
     }
+
+
+    /**
+     * 展示个人接收到的公告信息
+     *
+     * @param userId
+     * @param page
+     * @param limit
+     * @return
+     */
+    @RequestMapping("show/userrecad.htmls")
+    public JsonResult showUserRecCommon(Integer userId, Integer page, Integer limit) {
+        return myRecAdService.showAllRecAd(page, limit, userId);
+    }
+
+    /**
+     * 发送公告给相应的人
+     *
+     * @param departmentId
+     * @param commonId
+     * @return
+     */
+    @RequestMapping("send/adtouser.htmls")
+    public JsonResult sendAdToUser(Integer[] departmentId, Integer commonId) {
+        return myRecAdService.sendAdToUser(departmentId, commonId);
+    }
+
+
+    /**
+     * 展示所有公告及组合查询
+     * @param title
+     * @param date1
+     * @param date2
+     * @param page
+     * @param limit
+     * @return
+     */
+    @RequestMapping("show/allad.htmls")
+    public JsonResult showAllAd(String title, String date1, String date2, Integer page, Integer limit) {
+        return advertisementService.showAllAd(title, date1, date2, page, limit);
+    }
+
+
 }

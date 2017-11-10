@@ -1,10 +1,10 @@
 package com.wsd.knowledge.mapper;
 
 import com.wsd.knowledge.entity.CommonAdvertisement;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Update;
+import com.wsd.knowledge.util.StringUtils;
+import org.apache.ibatis.annotations.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author EdsionGeng
@@ -34,7 +34,102 @@ public interface AdvertisementMapper {
     Integer deleteAd(@Param("id") int id);
 
 
-
+    /**
+     * 更新公告已读状态
+     *
+     * @param userId
+     * @param commonId
+     * @return
+     */
     @Update("update UserRecAdvertisement set ifRead =1 where userId=#{userId} and commonId=#{commonId}")
-    Integer updateAdStatus(@Param("userId")Integer userId,@Param("commonId")Integer commonId);
-}
+    Integer updateAdStatus(@Param("userId") Integer userId, @Param("commonId") Integer commonId);
+
+
+    /**
+     * 取刚添加的公告ID
+     *
+     * @param title
+     * @param userId
+     * @return
+     */
+    @Select("select id  from CommonAdvertisement where adTitle=#{title} and userId=#{userId}  order by sendTime Desc limit 1")
+    Integer queryCommonID(@Param("title") String title, @Param("userId") Integer userId);
+
+
+    /**
+     * 展示所有公告
+     *
+     * @param startSize
+     * @param limit
+     * @return
+     */
+    @Select(" select id ,adContent,adTitle,addUser,departmentName,sendObject,sendTime,userId from CommonAdvertisement limit #{startSize},#{limit}")
+    List<Map> showAllCommon(@Param("startSize") Integer startSize, @Param("limit") Integer limit);
+
+    /**
+     * 统计展示所有公告数量
+     *
+     * @param startSize
+     * @param limit
+     * @return
+     */
+    @Select("select count(id) from  CommonAdvertisement limit #{startSize},#{limit}")
+    Integer countAdPcs(@Param("startSize") Integer startSize, @Param("limit") Integer limit);
+
+    /**
+     * 组合查询公告
+     *
+     * @param map
+     * @return
+     */
+    @SelectProvider(type = CommonAd.class, method = "queryAdByIf")
+    List<Map> showAllCommonByIf(Map<String, Object> map);
+
+    /**
+     * 统计组合查询公告数量
+     *
+     * @param map
+     * @return
+     */
+    @SelectProvider(type = CommonAd.class, method = "countAdByIf")
+    Integer countCommonByIf(Map<String, Object> map);
+
+    class CommonAd {
+        public String queryAdByIf(Map<String, Object> map) {
+            StringBuffer sql = new StringBuffer();
+            sql.append("select o.* from CommonAdvertisement o  ");
+            if (StringUtils.isNotEmpty((String) map.get("date1"))) {
+                sql.append(" where o.sendtime >= #{date1} ");
+            }
+            if (StringUtils.isNotEmpty((String) map.get("date2"))) {
+                sql.append(" AND o.sendtime <= #{date2} ");
+            }
+            if (StringUtils.isNotEmpty((String) map.get("title"))) {
+                sql.append(" AND o.adtitle like concat('%',#{title},'%') ");
+            }
+
+            sql.append(" limit #{startSize},#{limit} ");
+            return sql.toString();
+
+        }
+
+        public String countAdByIf(Map<String, Object> map) {
+            StringBuffer sql = new StringBuffer();
+            sql.append("select count(id)  from ((select id from CommonAdvertisement  o   ");
+
+            if (StringUtils.isNotEmpty((String) map.get("date1"))) {
+                sql.append(" where o.sendtime >= #{date1} ");
+            }
+            if (StringUtils.isNotEmpty((String) map.get("date2"))) {
+                sql.append(" AND o.sendtime <= #{date2} ");
+            }
+            if (StringUtils.isNotEmpty((String) map.get("title"))) {
+                sql.append(" AND o.adtitle like concat('%',#{title},'%') ");
+            }
+            sql.append(" limit #{startSize},#{limit}) as s)  ");
+            return sql.toString();
+
+        }
+
+        }
+    }

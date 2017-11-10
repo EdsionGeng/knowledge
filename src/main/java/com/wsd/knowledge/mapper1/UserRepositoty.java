@@ -36,12 +36,21 @@ public interface UserRepositoty {
     @Select("select username,department from SystemUser where id=#{id} ")
     SystemUser findInfo(@Param("id") int id);
 
+
+    /**
+     * 查找同一组别下的人
+     *
+     * @param userGroupId
+     * @return
+     */
+    @Select("select id from SystemUser where UserGroupId=#{UserGroupId}")
+    List<Integer> queryUserIDByGroup(@Param("UserGroupId")Integer userGroupId);
+
     /**
      * 获取部门组织架构树形图
      * @param map
      * @return
      */
-//  @Select("SELECT id,deptno,no,pid,deptno AS name FROM Department_new WHERE 1 = 1 ")
     @SelectProvider(type = DepartmentTree.class, method = "showDepTree")
     List<NewDepartment> findList(Map<String,Object>map);
 

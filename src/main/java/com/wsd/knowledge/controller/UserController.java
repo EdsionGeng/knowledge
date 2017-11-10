@@ -1,9 +1,7 @@
 package com.wsd.knowledge.controller;
 
 
-import com.wsd.knowledge.entity.SystemUser;
 import com.wsd.knowledge.service.UserService;
-import com.wsd.knowledge.util.HashAlorgithum;
 import com.wsd.knowledge.util.JsonResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -13,9 +11,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 
 /**

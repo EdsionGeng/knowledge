@@ -54,7 +54,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public JsonResult showAllFile(String departmentName, String fileStyleId, String downType, String fileTimeType, Integer page, Integer limit) {
 
-        int startSize = (page - 1) * limit;
+
 
         if (departmentName==null) {
             departmentName = "";
@@ -68,6 +68,11 @@ public class FileServiceImpl implements FileService {
         if (fileStyleId==null) {
             fileStyleId = "";
         }
+        if(page==null||limit==null){
+            page=1;
+            limit=20;
+        }
+        int startSize = (page - 1) * limit;
         if (departmentName.equals("") && fileStyleId.equals("") && downType.equals("") && fileTimeType.equals("desc")) {
             List<Map> map = fileMapper.showAllFile(startSize, limit);
             Integer j = fileMapper.countFile(startSize, limit);

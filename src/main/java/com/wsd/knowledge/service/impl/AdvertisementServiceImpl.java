@@ -11,6 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @Author EdsionGeng
  * @Description 公告实现类
@@ -50,7 +54,10 @@ public class AdvertisementServiceImpl implements AdvertisementService {
                 userId, new DateUtil().getSystemTime(), sendDepartmentName);
         if (advertisementMapper.insertAd(commonAdvertisement) != null) {
             //发送公告给相应的人
-            return new JsonResult(0, 0, "添加成功", 0);
+            //返回公告ID
+            Integer commonId = advertisementMapper.queryCommonID(title, userId);
+
+            return new JsonResult(0, commonId, "添加成功", 0);
         }
         return new JsonResult(2, 0, "添加失败", 0);
     }
@@ -81,6 +88,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 
     /**
      * 公告已读状态
+     *
      * @param userId
      * @param commonId
      * @return
@@ -95,5 +103,55 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             return new JsonResult(0, 0, "操作成功", 0);
         }
         return new JsonResult(2, 0, "操作失败", 0);
+    }
+
+    /**
+     * 展示公告和组合查询
+     *
+     * @param title
+     * @param date1
+     * @param date2
+     * @param page
+     * @param limit
+     * @return
+     */
+    @Override
+    public JsonResult showAllAd(String title, String date1, String date2, Integer page, Integer limit) {
+        if (page == null || limit == null) {
+            page = 1;
+            limit = 20;
+        }
+        if (title == null) {
+            title = "";
+        }
+        if (date1 == null) {
+            date1 = "2016-11-01 00:00:00";
+        }
+        if (date2 == null) {
+            date2 = "";
+        }
+        List<Map> map = null;
+        Integer pcs = null;
+        int startSize = (page - 1) * limit;
+        if (title.equals("") && date1.equals("2016-11-01 00:00:00") && date2.equals("")) {
+            //展示所有
+            map = advertisementMapper.showAllCommon(startSize, limit);
+            pcs = advertisementMapper.countAdPcs(startSize, limit);
+        } else {
+            //组合查询
+            Map<String, Object> maps = new HashMap<>();
+            maps.put("title", title);
+            maps.put("date1", date1);
+            maps.put("date2", date2);
+            maps.put("startSize", startSize);
+            maps.put("limit", limit);
+            map = advertisementMapper.showAllCommonByIf(maps);
+            pcs = advertisementMapper.countCommonByIf(maps);
+        }
+        if (map != null && pcs != null) {
+            return new JsonResult(0, map, "查询结果", pcs);
+        }
+
+        return new JsonResult(2, 0, "查无结果", 0);
     }
 }

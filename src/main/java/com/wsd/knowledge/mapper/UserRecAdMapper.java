@@ -24,12 +24,30 @@ public interface UserRecAdMapper {
             "values(#{commonId},#{ifRead},#{recAdTime},#{userId})")
     Integer insertUserRecAd(UserRecAdvertisement userRecAdvertisement);
 
-    @Select("select c.adContent,c.adTitle,u.recAdtime,u.commonId from UserRecAdvertisement u left join CommonAdvertisement c on u.commonId=c.id order by u.recAdtime DESC limit #{startSize},#{limit}")
+    /**
+     * 展示用户收到的公告数量
+     * @param userId
+     * @param startSize
+     * @param limit
+     * @return
+     */
+    @Select("select c.adContent ad ,c.adTitle at,u.recAdtime re,u.commonId from UserRecAdvertisement u left join CommonAdvertisement c on u.commonId=c.id order by u.recAdtime DESC limit #{startSize},#{limit}")
     List<Map>  showUserRecAd(@Param("userId") int userId,@Param("startSize")int startSize,@Param("limit")int limit);
 
+    /**
+     * 统计总数量
+     * @return
+     */
     @Select("select count(*) from UserRecAdvertisement")
     Integer countUserAdPcs();
 
+
+    /**
+     * 更新已读公告的状态
+     * @param commonId
+     * @param userId
+     * @return
+     */
     @Update("update  UserRecAdvertisement set ifRead=1 where userId=#{userId} and commonId=#{commonId} ")
     Integer updateCommonStatus(@Param("commonId")int commonId,@Param("userId")int userId);
 

@@ -35,7 +35,7 @@ public interface MenuMapper {
                 rids = (List<String>) param.get("rids");
             }
             StringBuffer sql = new StringBuffer();
-            sql.append(" SELECT a.id,a.name,a.url as menuurl,a.parentId,a.systemId,a.isButton,a.scriptid FROM Menu a");
+            sql.append(" SELECT a.id,a.name,a.url as menuurl,a.parentId,a.systemId,a.isButton  FROM Menu a");
             sql.append(" LEFT JOIN RoleMenus b ON b.Mid=a.id");
             sql.append(" WHERE a.systemId=#{systemId} AND a.delFlag='0'");
             if (StringUtils.isNotEmpty((String) param.get("pid"))) {

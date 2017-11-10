@@ -1,5 +1,6 @@
 package com.wsd.knowledge.service;
 
+
 import com.wsd.knowledge.util.JsonResult;
 
 /**
@@ -9,5 +10,7 @@ import com.wsd.knowledge.util.JsonResult;
 */
 public interface MyRecAdService {
 
-JsonResult showAllRecAd(Integer page,Integer limit,Integer userId);
+    JsonResult showAllRecAd(Integer page,Integer limit,Integer userId);
+    JsonResult sendAdToUser(Integer[] departmentId,Integer commonId);
+
 }

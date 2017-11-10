@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>消息管理</title>
+
+</head>
+<link rel="stylesheet" href="../layui/css/layui.css" media="all">
+<link rel="stylesheet" href="../css/index.css">
+<body>
+<script src="../layui/layui.js"></script>
+<script src="../js/jquery-1.8.3.min.js"></script>
+<script type="text/html" id="addinduction">
+    <form class="layui-form" action="" style="margin-top:20px;">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><i class="required-color">*</i>姓名：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="title" lay-verify="required" autocomplete="off" placeholder="请输入标题"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label"><i class="required-color">*</i>内容：</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label"><i class="required-color">*</i>发送部门：</label>
+            <div class="layui-input-block">
+                <textarea placeholder="" class="layui-textarea"></textarea>
+            </div>
+        </div>
+
+        <button class="layui-btn layui-btn-mini" style="margin-left: 100px">选择部门</button>
+        <div class="layui-form-item">
+            <button class="layui-btn" lay-submit lay-filter="addentryplan" style="margin-left: 450px ">确认</button>
+        </div>
+    </form>
+</script>
+<script type="text/html" id="chooseDep">
+    <form class="layui-form" action="" style="margin-top:20px;">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><i class="required-color">*</i>姓名：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="title" lay-verify="required" autocomplete="off" placeholder="请输入标题"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label"><i class="required-color">*</i>内容：</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label"><i class="required-color">*</i>发送部门：</label>
+            <div class="layui-input-block">
+                <textarea placeholder="" class="layui-textarea"></textarea>
+            </div>
+        </div>
+
+        <button class="layui-btn layui-btn-mini" style="margin-left: 100px">选择部门</button>
+        <div class="layui-form-item">
+            <button class="layui-btn" lay-submit lay-filter="addentryplan" style="margin-left: 450px ">确认</button>
+        </div>
+    </form>
+</script>
+<div class="layui-btn-add">
+    <button class="layui-btn inducbtnadd" data-type="reload">添加</button>
+</div>
+<div class="layui-btn-add">
+    <button class="layui-btn inducbtnadd" data-type="reload">删除</button>
+</div>
+<div class="layui-form-search">
+    <form class="layui-form">
+        <div class="layui-form-item">
+        <div class="layui-form-item">
+            <button class="layui-btn" lay-submit lay-filter="entrysearch">查询</button>
+        </div>
+        </div>
+    </form>
+</div>
+<div class="layui-table-inductionlist">
+    <table class="layui-hide" id="allmsg" lay-filter="indmanage"></table>
+</div>
+<script>
+    layui.use(['table', 'form', 'laydate', 'laypage', 'layer', 'laytpl'], function () {
+        var table = layui.table,
+            form = layui.form,
+            laydate = layui.laydate,
+            laypage = layui.laypage,
+            laytpl = layui.laytpl,
+            layer = layui.layer;
+        var entrytableins = table.render({
+            elem: '#allmsg',
+            where: {"date1": $("#inducdate1").val(), "date2": $("#inducdate2").val()},
+            url: '../show/allad.htmls',
+            cols: [[
+                {checkbox: true, LAY_CHECKED: true}
+                , {field: 'adTitle', title: '标题', width: 400}
+                , {field: 'adContent', title: '内容', width: 400}
+                , {field: 'sendObject', title: '发送部门', width: 300}
+                , {field: 'addUser', title: '发送人', width: 200,}
+                , {field: 'sendTime', title: '发送时间', width: 300}, {
+                    /* field: 'InState',*/
+                    title: '操作',
+                    width: 200,
+                    fixed: 'right',
+                    align: 'center',
+                    toolbar: '#entryopertion'
+                }
+            ]]
+            , page: true
+            , height: 750,
+            id: 'indmanage'
+        });
+        laypage.render({
+            elem: 'demo1'
+            , count: 10 //数据总数
+            , jump: function (obj) {
+            }
+        });
+        //日期范围
+        //时间选择器
+        laydate.render({
+            elem: '#date1'
+            , type: 'datetime'
+        });
+        laydate.render({
+            elem: '#date2'
+            , type: 'datetime'
+        });
+        //添加弹窗初始化
+        $('.inducbtnadd').on('click', function () {
+            var addindform = $('#addinduction').html();
+            layer.open({
+                type: 1,
+                title: '添加公告',
+                content: addindform,
+                area: ['900px', '550px']
+            })
+
+
+        })
+
+        //添加弹窗初始化
+        $('.layui-btn-mini').on('click', function () {
+            var addindform = $('#chooseDep').html();
+            layer.open({
+                type: 1,
+                title: '选择部门',
+                content: addindform,
+                area: ['700px', '600px']
+            })
+
+
+        })
+
+
+        // 监听搜索按钮提交
+        form.on('submit(entrysearch)', function (data) {
+            entrytableins.reload({
+                where: data.field
+            });
+            console.log(data.field);
+            return false;
+        })
+        form.render();
+    });
+</script>
+
+</body>
+</html>

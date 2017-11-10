@@ -49,7 +49,7 @@ public class MenuServiceImpl implements MenuService {
             for (Menu menu2 : menus) {//取子菜单
                 if (menu.getId().compareTo(menu2.getParentId().intValue()) == 0) {
                     if (menu.getChildren() == null) {
-                        menu.setChildren(new ArrayList<Menu>());
+                        menu.setChildren(new ArrayList<>());
                     }
                     menu.getChildren().add(menu2);
                 }

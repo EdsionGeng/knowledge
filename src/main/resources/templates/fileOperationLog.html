@@ -44,13 +44,12 @@
         var table = layui.table,
             form = layui.form,
             laypage = layui.laypage;
-        laytpl = layui.laytpl,
+            laytpl = layui.laytpl,
             layer = layui.layer;
-
 
         var entrytableins = table.render({
             elem: '#file_operationlog',
-//            where: {"date1": $("#inducdate1").val(), "date2": $("#inducdate2").val()},
+            // where: {"date1": $("#inducdate1").val(), "date2": $("#inducdate2").val()},
             url: '../show/fileLog.htmls?fileId=1',
             cols: [[
                 {field: 'departmentName', title: '操作部门', width: 200}
@@ -73,34 +72,32 @@
         form.on('submit(entrysearch)', function (data) {
             entrytableins.reload({
                 where: data.field
-
             });
             console.log(data.field);
 
             return false;
         })
-
         form.render();
-        //监听单元格事件
-        table.on('tool(indmanage)', function (obj) {
-            var data = obj.data;
-            if (obj.event === 'setSign') {
-                $(".layui-body-container").load("demo/recorddetails.html?type=month&id=" + obj.data.id, function () {
-                    var url = "report/selectReportDetail";
-                    var data = {
-                        "empid": obj.data.empid
-                    };
-
-                    var data = {
-                        "empid": obj.data.empid
-                    }
-                    console.log(data);
-                    $.post(url, data, function (result) {
-                        console.log(result);
-                    });
-                });
-            }
-        });
+//        //监听单元格事件
+//        table.on('tool(indmanage)', function (obj) {
+//            var data = obj.data;
+//            if (obj.event === 'setSign') {
+//                $(".layui-body-container").load("demo/recorddetails.html?type=month&id=" + obj.data.id, function () {
+//                    var url = "report/selectReportDetail";
+//                    var data = {
+//                        "empid": obj.data.empid
+//                    };
+//
+//                    var data = {
+//                        "empid": obj.data.empid
+//                    }
+//                    console.log(data);
+//                    $.post(url, data, function (result) {
+//                        console.log(result);
+//                    });
+//                });
+//            }
+//        });
 
     });
 </script>

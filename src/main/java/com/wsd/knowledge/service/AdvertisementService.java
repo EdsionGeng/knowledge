@@ -33,4 +33,15 @@ public interface AdvertisementService {
      * @return
      */
     JsonResult readAd(Integer  userId,Integer commonId);
+
+    /**
+     * 展示所有公告 加组合查询
+     * @param title
+     * @param date1
+     * @param date2
+     * @param page
+     * @param limit
+     * @return
+     */
+    JsonResult showAllAd(String title,String date1,String date2,Integer page,Integer limit);
 }

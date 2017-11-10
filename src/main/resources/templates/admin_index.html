@@ -1,23 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <title>管理员首页</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="layui/css/layui.css"  media="all">
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
     <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 </head>
 <body>
-
 
 
 <div class="layui-tab" style="margin-top: 100px">
     <ul class="layui-tab-title">
         <li class="layui-this">今日</li>
         <li>本周</li>
-        <li>本年</li>
+        <li>本月</li>
     </ul>
 
 </div>
@@ -26,36 +25,36 @@
 
 
 </div>
-
 <script src="../layui/layui.js" charset="utf-8"></script>
+<script src="../js/thirdParty/echarts.min.js" charset="utf-8"></script>
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script>
-    layui.use(['element','table', 'ajaxhtml', 'laydate'], function(){
+    layui.use(['element', 'table', 'ajaxhtml', 'laydate'], function () {
         var $ = layui.jquery
-            ,element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+            , element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
 
         //触发事件
         var active = {
-            tabAdd: function(){
+            tabAdd: function () {
                 //新增一个Tab项
                 element.tabAdd('demo', {
-                    title: '新选项'+ (Math.random()*1000|0) //用于演示
-                    ,content: '内容'+ (Math.random()*1000|0)
-                    ,id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
+                    title: '新选项' + (Math.random() * 1000 | 0) //用于演示
+                    , content: '内容' + (Math.random() * 1000 | 0)
+                    , id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
                 })
             }
-            ,tabDelete: function(othis){
+            , tabDelete: function (othis) {
                 //删除指定Tab项
                 element.tabDelete('demo', '44'); //删除：“商品管理”
                 othis.addClass('layui-btn-disabled');
             }
-            ,tabChange: function(){
+            , tabChange: function () {
                 //切换到指定Tab项
                 element.tabChange('demo', '22'); //切换到：用户管理
             }
         };
 
-        $('.site-demo-active').on('click', function(){
+        $('.site-demo-active').on('click', function () {
             var othis = $(this), type = othis.data('type');
             active[type] ? active[type].call(this, othis) : '';
         });
@@ -63,121 +62,119 @@
         //Hash地址的定位
         var layid = location.hash.replace(/^#test=/, '');
         element.tabChange('test', layid);
-        element.on('tab(test)', function(elem){
-            location.hash = 'test='+ $(this).attr('lay-id');
+        element.on('tab(test)', function (elem) {
+            location.hash = 'test=' + $(this).attr('lay-id');
         });
     });
 
 
-        var table = layui.table,
-            ajaxhtml = layui.ajaxhtml,
-            menusikp = layui.menuskip,
-            homechart = layui.homechart,
-            laydate = layui.laydate;
+    var table = layui.table,
+        ajaxhtml = layui.ajaxhtml,
+        menusikp = layui.menuskip,
+        homechart = layui.homechart,
+        laydate = layui.laydate;
 
 
+    // 待处理卡片点击事件
+    $(document).on('click', '.card-tag-left', function () {
+        var $this = $(this),
+            itemtext = $this.data().item,
+            url = $this.data().url;
+        // 获取当前导航选中的菜单
+        menusikp.pageskip(itemtext);
+        // 获取url,加载对应页面
+        if (url !== "" && url !== undefined) {
+            nav($this.attr('type'));
+            ajaxhtml.pageLoad(url);
+        } else {
+            return;
+        }
+    });
 
-        // 待处理卡片点击事件
-        $(document).on('click', '.card-tag-left', function () {
-            var $this = $(this),
-                itemtext = $this.data().item,
-                url = $this.data().url;
-            // 获取当前导航选中的菜单
-            menusikp.pageskip(itemtext);
-            // 获取url,加载对应页面
-            if (url !== "" && url !== undefined) {
-                nav($this.attr('type'));
-                ajaxhtml.pageLoad(url);
-            } else {
-                return;
-            }
-        });
-
-        $(document).on('click', '.card-tag-right', function () {
-            var $this = $(this),
-                itemtext = $this.data().item,
-                url = $this.data().url;
-            menusikp.pageskip(itemtext);
-            // 获取url,加载对应页面
-            if (url !== "" && url !== undefined) {
-                nav($this.attr('type'));
-                ajaxhtml.pageLoad(url);
-            } else {
-                return;
-            }
-        });
-
+    $(document).on('click', '.card-tag-right', function () {
+        var $this = $(this),
+            itemtext = $this.data().item,
+            url = $this.data().url;
+        menusikp.pageskip(itemtext);
+        // 获取url,加载对应页面
+        if (url !== "" && url !== undefined) {
+            nav($this.attr('type'));
+            ajaxhtml.pageLoad(url);
+        } else {
+            return;
+        }
+    })
 
 
-        // echarts图表初始化
-        var workerchangeChart = echarts.init(document.getElementById('changechart'));
-        workerchangeChart.setOption({
-            color: ['#009688'],
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-                }
-            },
-            title: {
-                text: '员工异动数据统计'
-            },
-            xAxis: {
-                data: ["入职", "转正", "调岗", "调级", "调薪", "离职"],
-                name: '类型'
-            },
-            yAxis: {
-                name: '人数'
-            },
-            series: [{
-                name: '人数',
-                type: 'bar',
-                barWidth: '50%',
-                data: []
-            }]
-        })
+//
+//            // echarts图表初始化
+//            var workerchangeChart = echarts.init(document.getElementById('changechart'));
+//            workerchangeChart.setOption({
+//                color: ['#009688'],
+//                tooltip: {
+//                    trigger: 'axis',
+//                    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+//                        type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+//                    }
+//                },
+//                title: {
+//                    text: '员工异动数据统计'
+//                },
+//                xAxis: {
+//                    data: ["入职", "转正", "调岗", "调级", "调薪", "离职"],
+//                    name: '类型'
+//                },
+//                yAxis: {
+//                    name: '人数'
+//                },
+//                series: [{
+//                    name: '人数',
+//                    type: 'bar',
+//                    barWidth: '50%',
+//                    data: []
+//                }]
+//          })
 
-        // 异步加载数据
+            // 异步加载数据
 
-        function loadchartdata(params, url) {
-            $.get('indexDate/change', params, function (result) {
-                var data = result.data;
-                var data2 = [];
-                data2.push({
-                    value: data.entryNum,
-                    name: '入职'
-                })
-                data2.push({
-                    value: data.formallyNum,
-                    name: '转正'
-                })
-                data2.push({
-                    value: data.changeNum,
-                    name: '调岗'
-                })
-                data2.push({
-                    value: data.changeNum2,
-                    name: '调级'
-                })
-                data2.push({
-                    value: data.changeNum3,
-                    name: '调薪'
-                })
-                data2.push({
-                    value: data.leaveNum,
-                    name: '离职'
-                })
-                workerchangeChart.setOption({
-                    series: [{
-                        name: '人数',
-                        data: data2
-                    }]
-                })
-            });
+//            function loadchartdata(params, url) {
+//                $.get('indexDate/change', params, function (result) {
+//                    var data = result.data;
+//                    var data2 = [];
+//                    data2.push({
+//                        value: data.entryNum,
+//                        name: '入职'
+//                    })
+//                    data2.push({
+//                        value: data.formallyNum,
+//                        name: '转正'
+//                    })
+//                    data2.push({
+//                        value: data.changeNum,
+//                        name: '调岗'
+//                    })
+//                    data2.push({
+//                        value: data.changeNum2,
+//                        name: '调级'
+//                    })
+//                    data2.push({
+//                        value: data.changeNum3,
+//                        name: '调薪'
+//                    })
+//                    data2.push({
+//                        value: data.leaveNum,
+//                        name: '离职'
+//                    })
+//                    workerchangeChart.setOption({
+//                        series: [{
+//                            name: '人数',
+//                            data: data2
+//                        }]
+//                   })
+//           });
 
-    };
-
-
+    }
+    ;
 
 </script>
 
