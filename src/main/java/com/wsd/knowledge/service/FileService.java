@@ -32,7 +32,7 @@ public interface FileService {
      * @param filesize
      * @return
      */
-    JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize);
+    JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize,String describe);
 
     /**
      * 批量删除文件
@@ -69,4 +69,13 @@ public interface FileService {
      * @return
      */
     JsonResult updateFileDetail(Integer id,String content,String fileurl,Integer fileStyleId, Integer userId);
+
+    /**
+     * 展示个人能看到的所有文件
+     * @param userId
+     * @param page
+     * @param limit
+     * @return
+     */
+    JsonResult showUserLookFile(Integer userId,  Integer page, Integer limit);
 }

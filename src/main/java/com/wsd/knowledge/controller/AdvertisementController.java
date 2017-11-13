@@ -111,6 +111,7 @@ public class AdvertisementController {
 
     /**
      * 展示所有公告及组合查询
+     *
      * @param title
      * @param date1
      * @param date2
@@ -123,5 +124,15 @@ public class AdvertisementController {
         return advertisementService.showAllAd(title, date1, date2, page, limit);
     }
 
+
+    /**
+     * 统计某一公告已读未读人数
+     * @param commonId
+     * @return
+     */
+    @RequestMapping("show/adpcs.htmls")
+    public JsonResult showAdPcs(Integer commonId) {
+        return advertisementService.showAdPcs(commonId);
+    }
 
 }

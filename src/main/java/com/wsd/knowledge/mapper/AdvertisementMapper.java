@@ -3,6 +3,7 @@ package com.wsd.knowledge.mapper;
 import com.wsd.knowledge.entity.CommonAdvertisement;
 import com.wsd.knowledge.util.StringUtils;
 import org.apache.ibatis.annotations.*;
+
 import java.util.List;
 import java.util.Map;
 
@@ -94,6 +95,22 @@ public interface AdvertisementMapper {
     @SelectProvider(type = CommonAd.class, method = "countAdByIf")
     Integer countCommonByIf(Map<String, Object> map);
 
+    /**
+     * 统计一条广告发送的总人数
+     * @param commonId
+     * @return
+     */
+    @Select("select count(id) from UserRecAdvertisement where commonId=#{commonId}")
+    Integer countAdRead(@Param("commonId") Integer commonId);
+
+    /**
+     * 统计一条广告发送的已读人数
+     * @param commonId
+     * @return
+     */
+    @Select("select count(id) from UserRecAdvertisement where commonId=#{commonId} and ifRead=1")
+    Integer countAdNoRead(@Param("commonId") Integer commonId);
+
     class CommonAd {
         public String queryAdByIf(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
@@ -131,5 +148,5 @@ public interface AdvertisementMapper {
 
         }
 
-        }
     }
+}

@@ -13,13 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
-
 /**
  * @Author EdsionGeng
  * @Description 设计用户模块界面交互层
  * @Date:9:53 2017/10/31
  */
-
 @RestController
 @EnableAutoConfiguration
 @Api(description = "用户类接口", value = "用户类接口")

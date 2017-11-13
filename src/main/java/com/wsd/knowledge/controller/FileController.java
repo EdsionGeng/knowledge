@@ -79,8 +79,8 @@ public class FileController {
 
     })
     @RequestMapping(value = "insertFile.htmls", method = RequestMethod.GET)
-    public JsonResult insertFile(@RequestParam(value = "title") String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize) {
-        return fileService.insertFile(title, content, photourl, fileurl, userId, fileStyleId, filesize);
+    public JsonResult insertFile(@RequestParam(value = "title") String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize,String describe) {
+        return fileService.insertFile(title, content, photourl, fileurl, userId, fileStyleId, filesize,describe);
     }
 
     /**
@@ -153,10 +153,25 @@ public class FileController {
     })
     @RequestMapping(value = "updateFile.htmls", method = RequestMethod.PUT)
     public JsonResult updateFileDetail(Integer id, String content, String fileurl, Integer fileStyleId, Integer userId) {
-
         return fileService.updateFileDetail(id, content, fileurl, fileStyleId, userId);
     }
-
+    /**
+     *个人全部文件显示页面
+     * @param userId
+     * @param page
+     * @param limit
+     * @return
+     */
+    @ApiOperation(value = "个人全部文件显示接口", notes = "传递必要参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "Intege", name = "userId", value = "用户ID", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Intege", name = "page", value = "页数", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "limit", value = "每页数量", required = true),
+    })
+    @RequestMapping("show/userlookfile")
+    public JsonResult showUserLookFile(Integer userId,  Integer page, Integer limit) {
+        return fileService.showUserLookFile(userId,page,limit);
+    }
 
     /**
      * @param file

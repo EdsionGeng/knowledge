@@ -1,10 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>用户首页</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
 </head>
+<script src="../layui/layui.js"></script>
+<script src="../js/jquery-1.8.3.min.js"></script>
 <body>
+<input type="hidden" id="userId" th:value="${session.LOGIN_USER_ID}">
 
+我的消息
+<button class="layui-btn layui-btn-normal layui-btn-small" style="margin-left: 1600px"><i >查看更多>></i></button>
+<hr class="layui-bg-green">
+
+<div class="layui-table-inductionlist">
+    <table class="layui-hide" id="allmsg" lay-filter="fileManage"></table>
+</div>
+
+最新上传
+<button class="layui-btn layui-btn-normal layui-btn-small" style="margin-left: 1600px"><i >查看更多>></i></button>
+<hr class="layui-bg-green">
+<div class="layui-table-inductionlist">
+    <table class="layui-hide" id="allup" lay-filter="upFile"   style=" "></table>
+</div>
+
+<script>
+    var userId = $("#userId").val();
+    layui.use(['table', 'laypage', 'laytpl'], function () {
+        var table = layui.table,
+            laypage = layui.laypage,
+            laytpl = layui.laytpl;
+        var entrytableins = table.render({
+            elem: '#allup',
+            url: '../show/userlookfile?userId=' + userId+"&page=1&limit=1",
+            cols: [[
+                {field: 'title', title: '文章标题', event: 'openFile', width: 600}
+                , {field: 'addFileTime', title: '上传时间', width: 600}
+
+            ]]
+//            , page:1
+
+//            , height: 350,
+//            limit:2,
+//            id: 'allup'
+        });
+//        laypage.render({
+//            count: 10 //数据总数
+//            , jump: function (obj) {
+//            }
+//        });
+        var entrytableins = table.render({
+            elem: '#allmsg',
+            url: '../show/userrecad.htmls?userId=' + userId+"&page=1&limit=1",
+            cols: [[
+                {field: 'at', title: '公告标题', event: 'setSign', width: 600}
+                , {field: 're', title: '上传时间', width: 600}
+            ]]
+//               , page: 1 //页码的参数名称，默认：page
+//                ,limit: 1 //每页数据量的参数名，默认：limit
+////            , page: true
+//           , height: 350,
+        });
+//        laypage.render({
+//            elem: 'demo1'
+//            , count: 10 //数据总数
+//            , jump: function (obj) {
+//                console.log(obj)
+//            }
+//        });
+    });
+
+
+</script>
 </body>
 </html>

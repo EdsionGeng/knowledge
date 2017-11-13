@@ -7,6 +7,7 @@ import com.wsd.knowledge.mapper1.UserRepositoty;
 import com.wsd.knowledge.service.AdvertisementService;
 import com.wsd.knowledge.util.DateUtil;
 import com.wsd.knowledge.util.JsonResult;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -151,7 +152,29 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         if (map != null && pcs != null) {
             return new JsonResult(0, map, "查询结果", pcs);
         }
-
         return new JsonResult(2, 0, "查无结果", 0);
+    }
+
+    /**
+     * 展示某一公告已读未读人数
+     *
+     * @param commonId
+     * @return
+     */
+    @Override
+    public JsonResult showAdPcs(Integer commonId) {
+        if (commonId == null) {
+            return new JsonResult(2, 0, "参数为空", 0);
+        }
+        Integer pcs = advertisementMapper.countAdRead(commonId);//总数
+        if (pcs == null) {
+            pcs = 0;
+        }
+        Integer isRead = advertisementMapper.countAdNoRead(commonId);//已读数量
+        if (isRead == null) {
+            isRead = 0;
+        }
+        Integer noRead = pcs - isRead;//未读数量
+        return new JsonResult(0,isRead,"",noRead);
     }
 }

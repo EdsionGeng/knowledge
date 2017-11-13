@@ -31,7 +31,7 @@ public interface UserRecAdMapper {
      * @param limit
      * @return
      */
-    @Select("select c.adContent ad ,c.adTitle at,u.recAdtime re,u.commonId from UserRecAdvertisement u left join CommonAdvertisement c on u.commonId=c.id order by u.recAdtime DESC limit #{startSize},#{limit}")
+    @Select("select c.adContent ad ,c.adTitle at,c.addUser addUser,u.recAdtime re,u.commonId from UserRecAdvertisement u left join CommonAdvertisement c on u.commonId=c.id order by u.recAdtime DESC limit #{startSize},#{limit}")
     List<Map>  showUserRecAd(@Param("userId") int userId,@Param("startSize")int startSize,@Param("limit")int limit);
 
     /**

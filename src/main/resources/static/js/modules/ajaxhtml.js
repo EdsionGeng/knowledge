@@ -4,7 +4,7 @@ layui.define([
     var $ = layui.jquery;
     var obj = {
         pageLoad:function(url){
-            $layui_body_container = $('admin-container')
+            $layui_body_container = $('layui-body-container')
             $layui_body_container.html("");
             if (url === "" || undefined) return;
             //显示加载loading动画

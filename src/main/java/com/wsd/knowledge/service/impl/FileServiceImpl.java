@@ -55,22 +55,21 @@ public class FileServiceImpl implements FileService {
     public JsonResult showAllFile(String departmentName, String fileStyleId, String downType, String fileTimeType, Integer page, Integer limit) {
 
 
-
-        if (departmentName==null) {
+        if (departmentName == null) {
             departmentName = "";
         }
-        if (downType==null) {
+        if (downType == null) {
             downType = "";
         }
-        if (fileTimeType==null) {
+        if (fileTimeType == null) {
             fileTimeType = "desc";
         }
-        if (fileStyleId==null) {
+        if (fileStyleId == null) {
             fileStyleId = "";
         }
-        if(page==null||limit==null){
-            page=1;
-            limit=20;
+        if (page == null || limit == null) {
+            page = 1;
+            limit = 20;
         }
         int startSize = (page - 1) * limit;
         if (departmentName.equals("") && fileStyleId.equals("") && downType.equals("") && fileTimeType.equals("desc")) {
@@ -111,7 +110,7 @@ public class FileServiceImpl implements FileService {
      */
     @Override
     @Transactional(readOnly = false)
-    public JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize) {
+    public JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize, String describe) {
 
         String str = new DateUtil().cacheExist(String.valueOf(userId));
         if (str.equals("full")) {
@@ -122,24 +121,7 @@ public class FileServiceImpl implements FileService {
         FileKind fileKind = fileKindMapper.selectFileKind(fileStyleId);
         //生成实体类
         FileDetail fileDetail = new FileDetail(systemUser.getDepartment(), systemUser.getUsername(), userId, fileStyleId, fileNo, title
-                , fileKind.getFileKindName(), content, fileurl, photourl, 0, 0, 0, filesize, 1, new DateUtil().getSystemTime());
-        Integer j = null;
-//        this.departmentName = departmentName;
-//        this.username=username;
-//        this.fileStyleId = fileStyleId;
-//        this.userId = userId;
-//        this.fileNo = fileNo;
-//        this.title = title;
-//        this.fileStyle = fileStyle;
-//        this.fileContent = fileContent;
-//        this.fileUrl = fileUrl;
-//        this.photoUrl = photoUrl;
-//        this.lookPcs = lookPcs;
-//        this.downloadPcs = downloadPcs;
-//        this.updatePcs = updatePcs;
-//        this.fileSize = fileSize;
-//        this.fileDisplay = fileDisplay;
-//        this.addFileTime = addFileTime;
+                , fileKind.getFileKindName(), content, fileurl, photourl, 0, 0, 0, filesize, 1, describe, new DateUtil().getSystemTime());
         if (fileMapper.insertFileDetail(fileDetail) != null) {
             //添加文件成功 ，获得此文件ID返回前台，执行权限添加操作
             Integer fileId = fileMapper.selectIdByIf(fileNo);
@@ -265,7 +247,21 @@ public class FileServiceImpl implements FileService {
             }
 
         }
-             return new JsonResult(2, 0, "操作失败", 0);
+        return new JsonResult(2, 0, "操作失败", 0);
+    }
+
+    @Override
+    public JsonResult showUserLookFile(Integer userId, Integer page, Integer limit) {
+        if (page == null || limit == null || userId == null) {
+            return new JsonResult(2, 0, "参数为空", 0);
+        }
+        int startSize = (page - 1) * limit;
+        List<Map> map=fileMapper.showUserLookFile(userId,startSize,limit);
+        Integer count=fileMapper.countUserLookFile(userId,startSize,limit);
+        if(map!=null){
+            return  new JsonResult(0,map,"查询结果",count);
+        }
+        return new JsonResult(2,0,"查无结果",0);
     }
 
 

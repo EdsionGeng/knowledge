@@ -11,11 +11,11 @@ import java.io.Serializable;
 //@Entity
 public class FileDetail implements Serializable {
 
-   // @Id
+    // @Id
     //@GeneratedValue
     private int id;
 
-   // @Column(name = "departmentName", nullable = false, length = 32, columnDefinition = " '部门名字'")
+    // @Column(name = "departmentName", nullable = false, length = 32, columnDefinition = " '部门名字'")
     private String departmentName;//上传部门
 
     // @Column(name = "userId", nullable = false, columnDefinition = " '用户ID'")
@@ -23,31 +23,31 @@ public class FileDetail implements Serializable {
 
     //@Column(name = "username", nullable = false, length = 32, columnDefinition = " '用户名字'")
     private String username;//上传用户ID
-   //@Column(name = "fileNo", nullable = false, length = 32, columnDefinition = " '文件编号'")
+    //@Column(name = "fileNo", nullable = false, length = 32, columnDefinition = " '文件编号'")
     private String fileNo;//文件编号
 
-   // @Column(name = "title", nullable = false, length = 96, columnDefinition = " '文件标题'")
+    // @Column(name = "title", nullable = false, length = 96, columnDefinition = " '文件标题'")
     private String title;//文件标题
 
-   // @Column(name = "fileStyle", nullable = false, length = 32, columnDefinition = " '文件类型'")
+    // @Column(name = "fileStyle", nullable = false, length = 32, columnDefinition = " '文件类型'")
     private String fileStyle;//文件类型
 
-   // @Column(name = "fileContent", nullable = false, length = 4896, columnDefinition = " '文件内容'")
+    // @Column(name = "fileContent", nullable = false, length = 4896, columnDefinition = " '文件内容'")
     private String fileContent;//文件内容
 
-   // @Column(name = "fileSize", nullable = false, length = 64, columnDefinition = " '文件大小'")
+    // @Column(name = "fileSize", nullable = false, length = 64, columnDefinition = " '文件大小'")
     private String fileSize;//文件大小
 
-  //  @Column(name = "fileUrl", length = 688, columnDefinition = " '附件URL'")
+    //  @Column(name = "fileUrl", length = 688, columnDefinition = " '附件URL'")
     private String fileUrl;//附件URL
 
-   // @Column(name = "fileStyleId", nullable = false, columnDefinition = " '文件类型层级ID'")
+    // @Column(name = "fileStyleId", nullable = false, columnDefinition = " '文件类型层级ID'")
     private int fileStyleId;
 
-   // @Column(name = "photoUrl", nullable = false, length = 64, columnDefinition = " '封面图片URL'")
+    // @Column(name = "photoUrl", nullable = false, length = 64, columnDefinition = " '封面图片URL'")
     private String photoUrl;//封面图片URL
 
-   // @Column(name = "addFileTime", nullable = false, columnDefinition = " '添加文件时间 yyyy-MM-dd hh:mm格式'")
+    // @Column(name = "addFileTime", nullable = false, columnDefinition = " '添加文件时间 yyyy-MM-dd hh:mm格式'")
     private String addFileTime;//添加文件时间
 
     //@Column(name = "lookPcs", nullable = false, columnDefinition = " '文件查看次数'")
@@ -60,6 +60,8 @@ public class FileDetail implements Serializable {
     private int updatePcs;//文件下载次数
     //@Column(name = "fileDisplay", columnDefinition = " '文件是否显示 0 不显示 1显示'")
     private int fileDisplay;//文件是否显示 0 不显示 1显示
+    //附件描述
+    private String enclosureInfo;
 
     public String getUsername() {
         return username;
@@ -197,7 +199,13 @@ public class FileDetail implements Serializable {
         this.downloadPcs = downloadPcs;
     }
 
-    public FileDetail(String departmentName, String username, int userId, int fileStyleId, String fileNo, String title, String fileStyle, String fileContent, String fileUrl, String photoUrl, int lookPcs, int downloadPcs, int updatePcs, String fileSize, int fileDisplay, String addFileTime) {
+    public String getEnclosureInfo() {
+        return enclosureInfo;
+    }
+    public void setEnclosureInfo(String enclosureInfo) {
+        this.enclosureInfo = enclosureInfo;
+    }
+    public FileDetail(String departmentName, String username, int userId, int fileStyleId, String fileNo, String title, String fileStyle, String fileContent, String fileUrl, String photoUrl, int lookPcs, int downloadPcs, int updatePcs, String fileSize, int fileDisplay,String enclosureInfo, String addFileTime) {
         this.departmentName = departmentName;
         this.username = username;
         this.fileStyleId = fileStyleId;
@@ -213,9 +221,9 @@ public class FileDetail implements Serializable {
         this.updatePcs = updatePcs;
         this.fileSize = fileSize;
         this.fileDisplay = fileDisplay;
+        this.enclosureInfo=enclosureInfo;
         this.addFileTime = addFileTime;
     }
-
     public FileDetail() {
     }
 }

@@ -44,4 +44,12 @@ public interface AdvertisementService {
      * @return
      */
     JsonResult showAllAd(String title,String date1,String date2,Integer page,Integer limit);
+
+
+    /**
+     * 查看某一公告已读人数，未读人数
+     * @param commonId
+     * @return
+     */
+    JsonResult showAdPcs(Integer commonId);
 }

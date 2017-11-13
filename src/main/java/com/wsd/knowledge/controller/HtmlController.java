@@ -75,7 +75,7 @@ public class HtmlController {
         return "fileOperationLog";
     }
 
-    /**
+      /**
      * 跳转到全部文件展示页
      *
      * @return
@@ -83,6 +83,15 @@ public class HtmlController {
     @RequestMapping("showFile")
     public String showAllFile() {
         return "showAllFile";
+    }
+    /**
+     * 跳转到全部文件展示页
+     *
+     * @return
+     */
+    @RequestMapping("showUserFile")
+    public String showUserFile() {
+        return "showUserFile";
     }
 
     /**
@@ -163,4 +172,16 @@ public class HtmlController {
     public String turnPersonUp() {
         return "person_up";
     }
+
+    /**
+     * 跳到单个 文件详情
+     * @return
+     */
+    @RequestMapping("singlefile")
+    public String turnSingleFile() {
+        return "singlefile";
+    }
+
+
+
 }

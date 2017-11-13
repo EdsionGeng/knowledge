@@ -38,14 +38,12 @@ public class CommonController {
     @ApiOperation(value = "获取部门树形结构", notes = "传递必要参数")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "Object", name = "department", value = "文件ID"),
-
     })
     @RequestMapping(value = "getListByTree", method = RequestMethod.GET)
 
     public List<NewDepartment> getListByTree(NewDepartment department) {
         return commonService.getListByTree(department);
     }
-
 
     /**
      * 文件目录树形结构
