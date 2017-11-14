@@ -28,4 +28,12 @@ public interface CommonService {
      * @return
      */
     List<FileKind> getKindTree(FileKind fileKind);
+
+    /**
+     * 添加目录
+     * @param parentid
+     * @param docName
+     * @return
+     */
+    JsonResult insertRule(Integer parentid,String docName);
 }

@@ -63,7 +63,6 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         return new JsonResult(2, 0, "添加失败", 0);
     }
 
-
     /**
      * 删除公告操作 业务逻辑处理
      *
@@ -80,8 +79,11 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         int lengths = id.length;
         for (int i = 0; i < lengths; i++) {
             j = advertisementMapper.deleteAd(id[i]);
+               advertisementMapper.deleteRecAd(id[i]);
+            System.out.println(id[i]);
         }
-        if (j != null) {
+        if (j != 0) {
+
             return new JsonResult(0, 0, "操作成功", 0);
         }
         return new JsonResult(2, 0, "操作失败", 0);
@@ -100,7 +102,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         if (userId == null || commonId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
-        if (advertisementMapper.updateAdStatus(userId, commonId) != null) {
+        if (advertisementMapper.updateAdStatus(userId, commonId) != 0) {
             return new JsonResult(0, 0, "操作成功", 0);
         }
         return new JsonResult(2, 0, "操作失败", 0);

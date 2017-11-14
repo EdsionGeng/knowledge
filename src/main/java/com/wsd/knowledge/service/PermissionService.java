@@ -11,11 +11,11 @@ public interface PermissionService {
     /**
      * 添加权限文件操作权限
      * @param userids
-     * @param operationStyleIds
+     * @param operationStyleId
      * @param fileId
      * @return
      */
-    JsonResult insertUserPermission(Integer[] userids, Integer[] operationStyleIds, Integer fileId);
+    JsonResult insertUserPermission(Integer[] userids, Integer operationStyleId, Integer fileId);
 
 
     /**
@@ -25,4 +25,24 @@ public interface PermissionService {
      * @return
      */
     JsonResult showFilePermission(Integer userId,Integer fileId);
+
+
+    /**
+     *添加修改文件权限
+     * @param userids
+     * @param operationStyleId
+     * @param fileId
+     * @return
+     */
+    JsonResult updateFilePerMission(Integer[] userids, Integer operationStyleId, Integer fileId);
+
+
+    /**
+     * 添加删除文件权限
+     * @param userids
+     * @param operationStyleId
+     * @param fileId
+     * @return
+     */
+    JsonResult deleteFilePerMission(Integer[] userids, Integer operationStyleId, Integer fileId);
 }

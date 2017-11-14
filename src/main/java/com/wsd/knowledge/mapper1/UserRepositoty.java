@@ -6,7 +6,6 @@ import com.wsd.knowledge.util.StringUtils;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
-
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +18,6 @@ import java.util.Map;
 public interface UserRepositoty {
     /**
      * 登录
-     *
      * @param name
      * @param password
      * @return
@@ -36,7 +34,6 @@ public interface UserRepositoty {
     @Select("select username,department from SystemUser where id=#{id} ")
     SystemUser findInfo(@Param("id") int id);
 
-
     /**
      * 查找同一组别下的人
      *
@@ -45,6 +42,7 @@ public interface UserRepositoty {
      */
     @Select("select id from SystemUser where UserGroupId=#{UserGroupId}")
     List<Integer> queryUserIDByGroup(@Param("UserGroupId")Integer userGroupId);
+
 
     /**
      * 获取部门组织架构树形图

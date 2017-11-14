@@ -152,12 +152,17 @@ public class FileServiceImpl implements FileService {
             OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, id[i], 2, new DateUtil().getSystemTime());
             operationMapper.insertOperationLog(operationLog);//添加操作日志
         }
-        if (j != null) {
+        if (j != 0) {
             return new JsonResult(0, 0, "操作成功", 0);
         }
         return new JsonResult(2, 0, "操作失败", 0);
     }
-
+    /**
+     * 查看文件
+     * @param fileId
+     * @param userId
+     * @return
+     */
     @Override
     @Transactional(readOnly = false)
     public JsonResult readFile(Integer fileId, Integer userId) {
@@ -175,7 +180,7 @@ public class FileServiceImpl implements FileService {
                 return new JsonResult(0, 0, "已查阅过日志", 0);
             }
         }
-        if (j != null) {
+        if (j != 0) {
             return new JsonResult(0, 0, "操作成功", 0);
         }
         return new JsonResult(2, 0, "操作失败", 0);
@@ -205,7 +210,7 @@ public class FileServiceImpl implements FileService {
                 return new JsonResult(0, 0, "已下载过日志", 0);
             }
         }
-        if (j != null) {
+        if (j != 0) {
             return new JsonResult(0, 0, "操作成功", 0);
         }
         return new JsonResult(2, 0, "操作失败", 0);
@@ -237,32 +242,39 @@ public class FileServiceImpl implements FileService {
         } else {
             result = fileMapper.updateFileContentUrl(fileStyleId, content, id, fileurl);
         }
-        if (result != null) {
+        if (result !=0) {
             SystemUser systemUser = userRepositoty.findInfo(userId);
             //添加操作日志
             OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, id, 3, new DateUtil().getSystemTime());
             Integer k = operationMapper.insertOperationLog(operationLog);
-            if (k != null) {
+            if (k != 0) {
                 return new JsonResult(0, 0, "操作成功", 0);
             }
-
         }
         return new JsonResult(2, 0, "操作失败", 0);
     }
 
+
+    /**
+     * 查看个人能查看的文件
+     *
+     * @param userId
+     * @param page
+     * @param limit
+     * @return
+     */
     @Override
     public JsonResult showUserLookFile(Integer userId, Integer page, Integer limit) {
         if (page == null || limit == null || userId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         int startSize = (page - 1) * limit;
-        List<Map> map=fileMapper.showUserLookFile(userId,startSize,limit);
-        Integer count=fileMapper.countUserLookFile(userId,startSize,limit);
-        if(map!=null){
-            return  new JsonResult(0,map,"查询结果",count);
+        List<Map> map = fileMapper.showUserLookFile(userId, startSize, limit);
+        Integer count = fileMapper.countUserLookFile(userId, startSize, limit);
+        if (map != null) {
+            return new JsonResult(0, map, "查询结果", count);
         }
-        return new JsonResult(2,0,"查无结果",0);
+        return new JsonResult(2, 0, "查无结果", 0);
     }
-
 
 }

@@ -5,7 +5,7 @@ import java.io.Serializable;
 *@Description 用户操作文件相应权限实体类
 *@Date:13:13 2017/11/1
 */
-//
+
 public class UserPermission implements Serializable {
     //@Id
     //@GeneratedValue
@@ -85,12 +85,10 @@ public class UserPermission implements Serializable {
         this.addPermissionTime = addPermissionTime;
     }
 
-    public UserPermission(int fileId, int userId, int readFile, int deleteFile, int updateFile, String addPermissionTime) {
+    public UserPermission(int fileId, int userId, int readFile,  String addPermissionTime) {
         this.fileId = fileId;
         this.userId = userId;
         this.readFile = readFile;
-        this.deleteFile = deleteFile;
-        this.updateFile = updateFile;
         this.addPermissionTime = addPermissionTime;
     }
     public UserPermission() {

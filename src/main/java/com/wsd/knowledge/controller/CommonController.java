@@ -1,8 +1,8 @@
 package com.wsd.knowledge.controller;
-
 import com.wsd.knowledge.entity.FileKind;
 import com.wsd.knowledge.entity.NewDepartment;
 import com.wsd.knowledge.service.CommonService;
+import com.wsd.knowledge.util.JsonResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -11,11 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
-
 /**
  * @Author EdsionGeng
  * @Description 公共模块视图交互层
@@ -25,10 +22,8 @@ import java.util.List;
 @RestController
 @EnableAutoConfiguration
 public class CommonController {
-
     @Autowired
     private CommonService commonService;
-
     /**
      * 获取部门树形
      *
@@ -44,7 +39,6 @@ public class CommonController {
     public List<NewDepartment> getListByTree(NewDepartment department) {
         return commonService.getListByTree(department);
     }
-
     /**
      * 文件目录树形结构
      * @param fileKind
@@ -52,12 +46,29 @@ public class CommonController {
      */
     @ApiOperation(value = "获取目录树形结构", notes = "传递必要参数")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "Object", name = "fileKind", value = "文件"),
-
+            @ApiImplicitParam(paramType = "query", dataType = "Object", name = "fileKind", value = "文件")
     })
     @RequestMapping(value = "getKindByTree", method = RequestMethod.GET)
     public List<FileKind> getKindTree(FileKind fileKind) {
         return commonService.getKindTree(fileKind);
+    }
+
+
+
+    /**
+     * 添加目录
+     * @param parentId
+     * @param docName
+     * @return
+     */
+    @ApiOperation(value = "获取目录树形结构", notes = "传递必要参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "parentId", value = "父ID"),
+            @ApiImplicitParam(paramType = "query", dataType = " String", name = "docName", value = "目录名称")
+    })
+    @RequestMapping(value = "insert/rule.htmls", method = RequestMethod.POST)
+    public JsonResult insertRule(Integer parentId,String docName) {
+        return commonService.insertRule(parentId,docName);
     }
 
 

@@ -4,6 +4,7 @@ import com.wsd.knowledge.entity.UserPermission;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * @Author EdsionGeng
@@ -17,11 +18,29 @@ public interface UserPermissionMapper {
      * @param userPermission
      * @return
      */
-    @Insert("insert into UserPermission (addPermissionTime,deleteFile,readFile,updateFile,fileId,userId) " +
-            "values(#{addPermissionTime},#{deleteFile},#{readFile},#{updateFile},#{fileId},#{userId})")
+    @Insert("insert into UserPermission (fileId,userId,readFile,addPermissionTime) " +
+            "values(#{fileId},#{userId},#{readFile},#{addPermissionTime})")
     Integer insertUserPermission(UserPermission userPermission);
 
+    /**
+     * 更改是否可以修改文件权限
+     * @param userId
+     * @param fileId
+     * @param operationStyleId
+     * @return
+     */
+    @Update("update UserPermission set updateFile=#{operationStyleId} where userId=#{userId} and fileId=#{fileId}")
+    Integer  addUpdatePermission(@Param("userId")Integer userId,@Param("operationStyleId")Integer operationStyleId,@Param("fileId")Integer fileId);
 
+    /**
+     * 更改是否可以修改文件权限
+     * @param userId
+     * @param fileId
+     * @param operationStyleId
+     * @return
+     */
+    @Update("update UserPermission set deleteFile=#{operationStyleId} where userId=#{userId} and fileId=#{fileId}")
+    Integer  addDeletePermission(@Param("userId")Integer userId,@Param("operationStyleId")Integer operationStyleId,@Param("fileId")Integer fileId);
     /**
      * 查看对单个文件操作权限
      * @param userId

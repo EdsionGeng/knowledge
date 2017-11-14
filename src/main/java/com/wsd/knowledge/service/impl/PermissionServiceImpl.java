@@ -23,14 +23,18 @@ public class PermissionServiceImpl implements PermissionService {
      * 添加文件人员相对应的权限
      *
      * @param userids
-     * @param operationStyleIds
+     * @param operationStyleId
      * @param fileId
      * @return
      */
     @Override
-    public JsonResult insertUserPermission(Integer[] userids, Integer[] operationStyleIds, Integer fileId) {
-        if (userids == null || operationStyleIds == null||fileId==null) {
+    public JsonResult insertUserPermission(Integer[] userids, Integer operationStyleId, Integer fileId) {
+        if (userids == null || operationStyleId == null || fileId == null) {
             return new JsonResult(2, 0, "缺少参数", 0);
+        }
+        String strs = new DateUtil().cacheExist(String.valueOf(fileId));
+        if (strs.equals("full")) {
+            return new JsonResult(2, 0, "网络延时，稍后加载", 0);
         }
         int lengths = userids.length;
         Integer j = null;
@@ -39,10 +43,10 @@ public class PermissionServiceImpl implements PermissionService {
             if (str.equals("full")) {
                 return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
             }
-            UserPermission userPermission = new UserPermission(fileId, userids[i], operationStyleIds[0], operationStyleIds[1], operationStyleIds[2], new DateUtil().getSystemTime());
+            UserPermission userPermission = new UserPermission(fileId, userids[i], operationStyleId, new DateUtil().getSystemTime());
             j = userPermissionMapper.insertUserPermission(userPermission);
         }
-        if (j != null) {
+        if (j != 0) {
             return new JsonResult(0, 0, "添加成功", 0);
         }
 
@@ -59,12 +63,60 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public JsonResult showFilePermission(Integer userId, Integer fileId) {
         if (userId == null || fileId == null) {
-            return new JsonResult(2, 0, "异常1", 0);
+            return new JsonResult(2, 0, "异常", 0);
         }
         UserPermission userPermission = userPermissionMapper.queryFilePermission(userId, fileId);
         if (userPermission != null) {
             return new JsonResult(0, userPermission, "查询成功", 0);
         }
         return new JsonResult(0, 0, "查询失败", 0);
+    }
+
+    /**
+     * 添加修改文件权限
+     *
+     * @param userids
+     * @param operationStyleId
+     * @param fileId
+     * @return
+     */
+    @Override
+    public JsonResult updateFilePerMission(Integer[] userids, Integer operationStyleId, Integer fileId) {
+        if (userids == null || operationStyleId == null || fileId == null) {
+            return new JsonResult(2, 0, "参数为空", 0);
+        }
+        Integer result = null;
+        int length = userids.length;
+        for (int i = 0; i < length; i++) {
+            result = userPermissionMapper.addUpdatePermission(userids[i], operationStyleId, fileId);
+        }
+        if (result != 0) {
+            return new JsonResult(0, 0, "操作成功", 0);
+        }
+        return new JsonResult(2, 0, "操作失败", 0);
+    }
+    /**
+     * 添加删除文件权限
+     *
+     * @param userids
+     * @param operationStyleId
+     * @param fileId
+     * @return
+     */
+    @Override
+    public JsonResult deleteFilePerMission(Integer[] userids, Integer operationStyleId, Integer fileId) {
+        if (userids == null || operationStyleId == null || fileId == null) {
+            return new JsonResult(2, 0, "参数为空", 0);
+        }
+        Integer result = null;
+        int length = userids.length;
+        for (int i = 0; i < length; i++) {
+            result = userPermissionMapper.addDeletePermission(userids[i], operationStyleId, fileId);
+        }
+        if (result != 0) {
+            return new JsonResult(0, 0, "操作成功", 0);
+        }
+        return new JsonResult(2, 0, "操作失败", 0);
+
     }
 }

@@ -10,11 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.*;
 import java.util.Date;
-import java.util.Random;
-
 /**
  * @Author EdsionGeng
  * @Description 文件界面交互层
@@ -26,7 +23,6 @@ import java.util.Random;
 public class FileController {
     @Autowired
     private FileService fileService;
-
 
     /**
      * 查询所有上传文件 组合查询 共用同一个接口
@@ -53,7 +49,6 @@ public class FileController {
     @RequestMapping(value = "show/allFile", method = RequestMethod.GET)
     public JsonResult showAllFile(String departmentName, String fileStyleId, String downType, String fileTimeType, Integer page, Integer limit) {
         return fileService.showAllFile(departmentName, fileStyleId, downType, fileTimeType, page, limit);
-
     }
 
     /**
@@ -75,12 +70,10 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileStyleId", value = "文件类型ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "filesize", value = "文件大小", required = true)
-
-
     })
-    @RequestMapping(value = "insertFile.htmls", method = RequestMethod.GET)
-    public JsonResult insertFile(@RequestParam(value = "title") String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize,String describe) {
-        return fileService.insertFile(title, content, photourl, fileurl, userId, fileStyleId, filesize,describe);
+    @RequestMapping(value = "insertFile.htmls", method = RequestMethod.POST)
+    public JsonResult insertFile(@RequestParam(value = "title") String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize, String describe) {
+        return fileService.insertFile(title, content, photourl, fileurl, userId, fileStyleId, filesize, describe);
     }
 
     /**
@@ -133,7 +126,6 @@ public class FileController {
         return fileService.downloadFile(id, userId);
     }
 
-
     /**
      * 更改文件
      *
@@ -155,8 +147,10 @@ public class FileController {
     public JsonResult updateFileDetail(Integer id, String content, String fileurl, Integer fileStyleId, Integer userId) {
         return fileService.updateFileDetail(id, content, fileurl, fileStyleId, userId);
     }
+
     /**
-     *个人全部文件显示页面
+     * 个人全部文件显示页面
+     *
      * @param userId
      * @param page
      * @param limit
@@ -168,9 +162,9 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "Intege", name = "page", value = "页数", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "limit", value = "每页数量", required = true),
     })
-    @RequestMapping("show/userlookfile")
-    public JsonResult showUserLookFile(Integer userId,  Integer page, Integer limit) {
-        return fileService.showUserLookFile(userId,page,limit);
+    @RequestMapping(value = "show/userlookfile", method = RequestMethod.GET)
+    public JsonResult showUserLookFile(Integer userId, Integer page, Integer limit) {
+        return fileService.showUserLookFile(userId, page, limit);
     }
 
     /**
@@ -188,12 +182,12 @@ public class FileController {
                 // 还有关于文件格式限制、文件大小限制，详见：中配置。
                 //重新生成文件名，避免乱码问题
                 String filename = file.getOriginalFilename();
-                String fName = null;
-                if (filename.indexOf(".") >= 0) {
-                    fName = filename.substring(filename.lastIndexOf("."), filename.length());
-                }
-                String path = String.valueOf(new Random().nextInt(100)).concat((fName));//拼接新文件名
-                resumeurl = String.valueOf(new Date().getTime()).concat(path);
+//                String fName = null;
+//                if (filename.indexOf(".") >= 0) {
+//                    fName = filename.substring(filename.lastIndexOf("."), filename.length());
+//               }
+                //拼接新文件名
+                resumeurl = String.valueOf(new Date().getTime()).concat(filename);
                 BufferedOutputStream out = new BufferedOutputStream(
                         new FileOutputStream("static//" + new File(resumeurl)));
                 out.write(file.getBytes());
@@ -207,9 +201,9 @@ public class FileController {
                 return new JsonResult(2, 0, "上传失败," + e.getMessage(), 0);
             }
             //resumeService.updateUrl(phone, resumeurl);
-            return new JsonResult(2, resumeurl, "上传成功", 0);
+            return new JsonResult(0, resumeurl, "上传成功", 0);
         } else {
-            return new JsonResult(2, "", "上传失败，因为文件是空的.", 0);
+            return new JsonResult(2, 0, "上传失败，因为文件是空的.", 0);
         }
     }
 

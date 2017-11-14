@@ -6,9 +6,12 @@ import com.wsd.knowledge.entity.NewDepartment;
 import com.wsd.knowledge.mapper.CommonMapper;
 import com.wsd.knowledge.mapper1.UserRepositoty;
 import com.wsd.knowledge.service.CommonService;
+import com.wsd.knowledge.util.DateUtil;
+import com.wsd.knowledge.util.JsonResult;
 import com.wsd.knowledge.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +31,7 @@ public class CommonServiceImpl implements CommonService {
 
     /**
      * 部门树形结构
+     *
      * @param department
      * @return
      */
@@ -40,6 +44,7 @@ public class CommonServiceImpl implements CommonService {
 
     /**
      * 文档目录树形结构
+     *
      * @param fileKind
      * @return
      */
@@ -49,8 +54,28 @@ public class CommonServiceImpl implements CommonService {
         map.put("pid", fileKind.getFileParentId());
         return bulidFileTree(commonMapper.findKindList(map), String.valueOf(fileKind.getFileParentId()));
     }
+
+    /**
+     * 添加子目录
+     * @param parentid
+     * @param docName
+     * @return
+     */
+    @Override
+    public JsonResult insertRule(Integer parentid, String docName) {
+        if (parentid == null || docName == null) {
+            return new JsonResult(2, 0, "参数为空", 0);
+        }
+        Integer j = commonMapper.insertDocRule(parentid, docName, new DateUtil().getSystemTime());
+        if (j != 0) {
+            return new JsonResult(0, 0, "操作成功", 0);
+        }
+        return new JsonResult(2, 0, "操作失败", 0);
+    }
+
     /**
      * 部门树形操作
+     *
      * @param treeNodes
      * @return
      */

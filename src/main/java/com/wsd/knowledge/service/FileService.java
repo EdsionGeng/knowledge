@@ -78,4 +78,6 @@ public interface FileService {
      * @return
      */
     JsonResult showUserLookFile(Integer userId,  Integer page, Integer limit);
+
+
 }

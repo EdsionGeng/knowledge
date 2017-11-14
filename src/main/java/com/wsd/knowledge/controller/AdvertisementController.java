@@ -52,17 +52,16 @@ public class AdvertisementController {
     /**
      * 批量删除公告
      *
-     * @param id
+     * @param ids
      * @return
      */
     @ApiOperation(value = "删除公告接口", notes = "传递必要参数")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "id", value = "文件ID", required = true)
-
+            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "ids", value = "公告ID", required = true)
     })
-    @RequestMapping(value = "deleteAd.htmls", method = RequestMethod.DELETE)
-    public JsonResult deleteAd(Integer[] id) {
-        return advertisementService.deleteAd(id);
+    @RequestMapping(value = "deleteAd.htmls", method = RequestMethod.POST)
+    public JsonResult deleteAd(Integer[] ids) {
+        return advertisementService.deleteAd(ids);
     }
 
     /**
@@ -91,7 +90,13 @@ public class AdvertisementController {
      * @param limit
      * @return
      */
-    @RequestMapping("show/userrecad.htmls")
+    @ApiOperation(value = "个人消息接口", notes = "传递必要参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "userId", value = "文件ID", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "page", value = "页码数", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "limit", value = "页面数量", required = true)
+    })
+    @RequestMapping(value = "show/userrecad.htmls", method = RequestMethod.GET)
     public JsonResult showUserRecCommon(Integer userId, Integer page, Integer limit) {
         return myRecAdService.showAllRecAd(page, limit, userId);
     }
@@ -103,11 +108,10 @@ public class AdvertisementController {
      * @param commonId
      * @return
      */
-    @RequestMapping("send/adtouser.htmls")
+    @RequestMapping(value = "send/adtouser.htmls", method = RequestMethod.POST)
     public JsonResult sendAdToUser(Integer[] departmentId, Integer commonId) {
         return myRecAdService.sendAdToUser(departmentId, commonId);
     }
-
 
     /**
      * 展示所有公告及组合查询
@@ -119,18 +123,18 @@ public class AdvertisementController {
      * @param limit
      * @return
      */
-    @RequestMapping("show/allad.htmls")
+    @RequestMapping(value = "show/allad.htmls", method = RequestMethod.GET)
     public JsonResult showAllAd(String title, String date1, String date2, Integer page, Integer limit) {
         return advertisementService.showAllAd(title, date1, date2, page, limit);
     }
 
-
     /**
      * 统计某一公告已读未读人数
+     *
      * @param commonId
      * @return
      */
-    @RequestMapping("show/adpcs.htmls")
+    @RequestMapping(value = "show/adpcs.htmls", method = RequestMethod.GET)
     public JsonResult showAdPcs(Integer commonId) {
         return advertisementService.showAdPcs(commonId);
     }

@@ -104,14 +104,37 @@ public interface FileMapper {
     @Update("update FileDetail set fileStyleId=#{fileStyleId},fileContent=#{fileContent},updatePcs=updatePcs+1 where id=#{id}")
     Integer updateFileContent(@Param("fileStyleId") Integer fileStyleId, @Param("fileContent") String fileContent, @Param("id") Integer id);
 
+    /**
+     *更新文件
+     * @param fileStyleId
+     * @param fileContent
+     * @param id
+     * @param fileUrl
+     * @return
+     */
     @Update("update FileDetail set fileStyleId=#{fileStyleId},fileContent=#{fileContent},fileUrl=#{fileUrl},updatePcs=updatePcs+1 where id=#{id}")
     Integer updateFileContentUrl(@Param("fileStyleId") Integer fileStyleId, @Param("fileContent") String fileContent, @Param("id") Integer id, @Param("fileUrl") String fileUrl);
 
+    /**
+     * 查看用户能看的全部文件
+     * @param userId
+     * @param startSize
+     * @param limit
+     * @return
+     */
     @Select("select f.* from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId} order by f.addFileTime Desc limit #{startSize},#{limit} ")
     List<Map> showUserLookFile(@Param("userId")Integer userId,@Param("startSize")Integer startSize,@Param("limit")Integer limit);
 
+    /**
+     * 统计用户能看的全部文件数量
+     * @param userId
+     * @param startSize
+     * @param limit
+     * @return
+     */
     @Select("select count(*)   from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and  f.fileDisplay=1 and u.userId=#{userId} order by f.addFileTime Desc ")
     Integer  countUserLookFile(@Param("userId")Integer userId,@Param("startSize")Integer startSize,@Param("limit")Integer limit);
+
 
     class FileQuery {
         public String queryFileByDep(Map<String, Object> map) {
@@ -133,7 +156,6 @@ public interface FileMapper {
             sql.append(" limit #{startSize},#{limit} ");
             return sql.toString();
         }
-
         public String countFilePcs(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
             sql.append(" select  count(id ) from  FileDetail  o  where o.fileDisplay=1 ");
@@ -144,7 +166,6 @@ public interface FileMapper {
             if (StringUtils.isNotEmpty((String) map.get("operationStyle"))) {
                 sql.append(" AND o.fileStyleId = #{fileStyleId} ");
             }
-
             return sql.toString();
         }
     }

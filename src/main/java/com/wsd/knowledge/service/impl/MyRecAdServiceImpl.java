@@ -73,11 +73,9 @@ public class MyRecAdServiceImpl implements MyRecAdService {
                 result = userRecAdMapper.insertUserRecAd(userRecAdvertisement);
             }
         }
-        if (result != null) {
+        if (result !=0) {
             return  new JsonResult(0,0,"添加成功",0);
         }
         return new JsonResult(2,0,"添加失败",0);
     }
-
-
 }

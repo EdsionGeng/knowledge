@@ -181,7 +181,4 @@ public class HtmlController {
     public String turnSingleFile() {
         return "singlefile";
     }
-
-
-
 }

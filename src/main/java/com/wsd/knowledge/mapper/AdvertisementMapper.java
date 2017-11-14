@@ -36,6 +36,15 @@ public interface AdvertisementMapper {
 
 
     /**
+     * 删除接收的公告
+     *
+     * @param id
+     * @return
+     */
+    @Delete("delete from UserRecAdvertisement where commonId=#{id}")
+    Integer deleteRecAd(@Param("id") int id);
+
+    /**
      * 更新公告已读状态
      *
      * @param userId
@@ -97,6 +106,7 @@ public interface AdvertisementMapper {
 
     /**
      * 统计一条广告发送的总人数
+     *
      * @param commonId
      * @return
      */
@@ -105,6 +115,7 @@ public interface AdvertisementMapper {
 
     /**
      * 统计一条广告发送的已读人数
+     *
      * @param commonId
      * @return
      */

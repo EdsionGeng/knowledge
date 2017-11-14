@@ -27,8 +27,10 @@
 <script>
     layui.use(['table', 'laypage', 'layer', 'laytpl'], function () {
         var table = layui.table,
-            laypage = layui.laypage;
-        laytpl = layui.laytpl, layer = layui.layer;
+            $=layui.$,
+            laypage = layui.laypage,
+            laytpl = layui.laytpl,
+            layer = layui.layer;
         var userId = $("#userId").val();
         var entrytableins = table.render({
             elem: '#mymsg',
@@ -39,7 +41,7 @@
             ]]
             , page: true
             , height: 750,
-            id: 'indmanage'
+            id: 'mymsg'
         });
         laypage.render({
             count: 10 //数据总数
@@ -49,24 +51,26 @@
         });
         table.on('tool(mymessage)', function (obj) {
             var data = obj.data;
+            console.log(data);
+             var addindform=fullbaseinfo.innerHTML();
             if (obj.event === 'setSign') {
                 layer.open({
+                    type: 1,
+                    title: '公告详情',
+                    content: addindform,
+                    area: ['600px', '400px'],
                     formType: 2
                     , title: ' [' + data.at + '] '
                     , time: '[' + data.re + ']'
                     , content: '[' + data.content + ']'
                     , username: '[' + data.addUser + ']'
-
                 }, function (value, index) {
                     layer.close(index);
                     //这里一般是发送修改的Ajax请求
                     //同步更新表格和缓存对应的值
-                    obj.update({
-                        sign: value
-                    });
                 });
             }
-        })
+            });
     });
 </script>
 </body>
