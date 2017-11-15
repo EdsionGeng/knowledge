@@ -32,7 +32,7 @@ public interface AdvertisementMapper {
      * @return
      */
     @Delete("delete from CommonAdvertisement where id=#{id}")
-    Integer deleteAd(@Param("id") int id);
+    Integer deleteAd(@Param("id") String  id);
 
 
     /**
@@ -42,7 +42,7 @@ public interface AdvertisementMapper {
      * @return
      */
     @Delete("delete from UserRecAdvertisement where commonId=#{id}")
-    Integer deleteRecAd(@Param("id") int id);
+    Integer deleteRecAd(@Param("id") String id);
 
     /**
      * 更新公告已读状态
@@ -79,12 +79,11 @@ public interface AdvertisementMapper {
     /**
      * 统计展示所有公告数量
      *
-     * @param startSize
-     * @param limit
+     *
      * @return
      */
-    @Select("select count(id) from  CommonAdvertisement limit #{startSize},#{limit}")
-    Integer countAdPcs(@Param("startSize") Integer startSize, @Param("limit") Integer limit);
+    @Select("select count(id) from  CommonAdvertisement ")
+    Integer countAdPcs();
 
     /**
      * 组合查询公告
@@ -143,7 +142,7 @@ public interface AdvertisementMapper {
 
         public String countAdByIf(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select count(id)  from ((select id from CommonAdvertisement  o   ");
+            sql.append("select count(id)  from CommonAdvertisement  o   ");
 
             if (StringUtils.isNotEmpty((String) map.get("date1"))) {
                 sql.append(" where o.sendtime >= #{date1} ");
@@ -154,7 +153,7 @@ public interface AdvertisementMapper {
             if (StringUtils.isNotEmpty((String) map.get("title"))) {
                 sql.append(" AND o.adtitle like concat('%',#{title},'%') ");
             }
-            sql.append(" limit #{startSize},#{limit}) as s)  ");
+
             return sql.toString();
 
         }

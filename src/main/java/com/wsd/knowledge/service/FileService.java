@@ -10,16 +10,17 @@ import com.wsd.knowledge.util.JsonResult;
 public interface FileService {
 
     /**
-     * 查询所有文件业务逻辑接口
+     * 查询所有文件，组合查询
      * @param departmentName
      * @param fileStyleId
-     * @param downType
-     * @param fileTimeType
+     * @param title
+     * @param startDate
+     * @param endDate
      * @param page
      * @param limit
      * @return
      */
-    JsonResult showAllFile(String departmentName, String fileStyleId, String downType, String fileTimeType, Integer page, Integer limit);
+    JsonResult showAllFile(String departmentName, String   fileStyleId, String title,String startDate, String endDate,   Integer page, Integer limit);
 
     /**
      * 添加文件
@@ -36,10 +37,10 @@ public interface FileService {
 
     /**
      * 批量删除文件
-     * @param id
+     * @param ids
      * @return
      */
-    JsonResult deleteFile(Integer[] id,Integer  userId);
+    JsonResult deleteFile(String  ids,Integer  userId);
 
 
     /**

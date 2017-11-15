@@ -91,7 +91,7 @@ public interface FileMapper {
      * @return
      */
     @Update("update FileDetail set fileDisplay=0 where id=#{id}")
-    Integer updateFileShow(@Param("id") Integer id);
+    Integer updateFileShow(@Param("id") String  id);
 
 
     /**
@@ -128,43 +128,49 @@ public interface FileMapper {
     /**
      * 统计用户能看的全部文件数量
      * @param userId
-     * @param startSize
-     * @param limit
+     *
      * @return
      */
     @Select("select count(*)   from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and  f.fileDisplay=1 and u.userId=#{userId} order by f.addFileTime Desc ")
-    Integer  countUserLookFile(@Param("userId")Integer userId,@Param("startSize")Integer startSize,@Param("limit")Integer limit);
+    Integer  countUserLookFile(@Param("userId")Integer userId);
 
 
     class FileQuery {
         public String queryFileByDep(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select o.* from FileDetail  o  where o.fileDisplay=1 ");
+//            map.put("title",title);
+//            map.put("startDate",startDate);
+//            map.put("endDate",endDate);
+            sql.append("select o.* from FileDetail  o  where o.fileDisplay=1 and o.addFileTime >= #{startDate} ");
+            if (StringUtils.isNotEmpty((String) map.get("endDate"))) {
+                sql.append(" AND o.addFileTime = #{endDate} ");
+            }
             if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
                 sql.append(" AND o.departmentName = #{departmentName} ");
             }
-            if (StringUtils.isNotEmpty((String) map.get("operationStyle"))) {
-                sql.append(" AND a.fileStyleId = #{fileStyleId} ");
+            if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
+                sql.append(" AND o.fileStyleId = #{fileStyleId} ");
             }
-            if (StringUtils.isNotEmpty((String) map.get("type"))) {
-                if ("asc".equals(map.get("type"))) {
-                    sql.append("order by o.addFileTime asc");
-                } else if ("desc".equals(map.get("type"))) {
-                    sql.append("order by o.addFileTime desc");
-                }
+            if (StringUtils.isNotEmpty((String) map.get("title"))) {
+                sql.append(" AND o.title like concat('%',#{title},'%')");
             }
             sql.append(" limit #{startSize},#{limit} ");
             return sql.toString();
         }
         public String countFilePcs(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append(" select  count(id ) from  FileDetail  o  where o.fileDisplay=1 ");
-
-            if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
-                sql.append(" AND o.departmentName = #{departmentName} ");
+            sql.append(" select  count(id ) from  FileDetail  o  where o.fileDisplay=1 and o.addFileTime >= #{startDate}");
+            if (StringUtils.isNotEmpty((String) map.get("endDate"))) {
+                sql.append(" AND o.addFileTime = #{endDate} ");
             }
-            if (StringUtils.isNotEmpty((String) map.get("operationStyle"))) {
+            if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
+                sql.append(" AND o.departmentName = #{departmentName}");
+            }
+            if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
                 sql.append(" AND o.fileStyleId = #{fileStyleId} ");
+            }
+            if (StringUtils.isNotEmpty((String) map.get("title"))) {
+                sql.append(" AND o.title like concat('%',#{title},'%')");
             }
             return sql.toString();
         }

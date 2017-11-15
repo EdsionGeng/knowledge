@@ -6,20 +6,18 @@
     <link rel="stylesheet" href="../layui/css/layui.css">
 </head>
 <script src="../js/jquery-1.8.3.min.js"></script>
-<body><div>
-
-
+<body>
+<div>
     <div class="layui-row">
         <div class="layui-col-xs6">
             <div class="grid-demo grid-demo-bg1"></div>
             <button class="layui-btn layui-btn-normal">修改文件</button>
         </div>
         <div class="layui-col-xs6">
-
             <button class="layui-btn layui-btn-normal">删除文件</button>
         </div>
     </div>
-
+</div>
 <script>
     var content = /content=(\u4E00-\u9FA5a-zA-Z]+)/gi.exec(decodeURIComponent(window.location.href));
     console.log(content);

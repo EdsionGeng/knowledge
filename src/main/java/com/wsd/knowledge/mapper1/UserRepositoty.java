@@ -61,7 +61,5 @@ public interface UserRepositoty {
             }
             return sql.toString();
         }
-
     }
-
 }

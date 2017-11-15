@@ -59,8 +59,8 @@ public class AdvertisementController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "ids", value = "公告ID", required = true)
     })
-    @RequestMapping(value = "deleteAd.htmls", method = RequestMethod.POST)
-    public JsonResult deleteAd(Integer[] ids) {
+    @RequestMapping(value = "deleteAd.htmls", method = RequestMethod.GET)
+    public JsonResult deleteAd(String  ids) {
         return advertisementService.deleteAd(ids);
     }
 
@@ -108,6 +108,11 @@ public class AdvertisementController {
      * @param commonId
      * @return
      */
+    @ApiOperation(value = "发送公告", notes = "传递必要参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "departmentId", value = "部门ID", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "commonId", value = "公告ID", required = true)
+    })
     @RequestMapping(value = "send/adtouser.htmls", method = RequestMethod.POST)
     public JsonResult sendAdToUser(Integer[] departmentId, Integer commonId) {
         return myRecAdService.sendAdToUser(departmentId, commonId);
@@ -123,6 +128,14 @@ public class AdvertisementController {
      * @param limit
      * @return
      */
+    @ApiOperation(value = "展示公告页面", notes = "传递必要参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "String ", name = "title", value = "标题"),
+            @ApiImplicitParam(paramType = "query", dataType = "String ", name = "date1", value = "开始时间"),
+            @ApiImplicitParam(paramType = "query", dataType = "String ", name = "date2", value = "结束时间"),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "page", value = "页码数", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "limit", value = "页面数量", required = true),
+    })
     @RequestMapping(value = "show/allad.htmls", method = RequestMethod.GET)
     public JsonResult showAllAd(String title, String date1, String date2, Integer page, Integer limit) {
         return advertisementService.showAllAd(title, date1, date2, page, limit);
@@ -130,10 +143,13 @@ public class AdvertisementController {
 
     /**
      * 统计某一公告已读未读人数
-     *
      * @param commonId
      * @return
      */
+    @ApiOperation(value = "某公告具体信息", notes = "传递必要参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "commonId", value = "公告ID")
+    })
     @RequestMapping(value = "show/adpcs.htmls", method = RequestMethod.GET)
     public JsonResult showAdPcs(Integer commonId) {
         return advertisementService.showAdPcs(commonId);

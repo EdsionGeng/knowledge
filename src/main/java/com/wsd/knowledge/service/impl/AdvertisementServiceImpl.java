@@ -66,22 +66,21 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     /**
      * 删除公告操作 业务逻辑处理
      *
-     * @param id
+     * @param ids
      * @return
      */
     @Override
     @Transactional(readOnly = false)
-    public JsonResult deleteAd(Integer[] id) {
-        if (id == null) {
+    public JsonResult deleteAd(String ids) {
+        if (ids == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         Integer j = null;
-        int lengths = id.length;
-        for (int i = 0; i < lengths; i++) {
-            j = advertisementMapper.deleteAd(id[i]);
-               advertisementMapper.deleteRecAd(id[i]);
-            System.out.println(id[i]);
+        for (String id : ids.split(",")) {
+            j=advertisementMapper.deleteAd(id);
+            advertisementMapper.deleteRecAd(id);
         }
+
         if (j != 0) {
 
             return new JsonResult(0, 0, "操作成功", 0);
@@ -139,7 +138,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         if (title.equals("") && date1.equals("2016-11-01 00:00:00") && date2.equals("")) {
             //展示所有
             map = advertisementMapper.showAllCommon(startSize, limit);
-            pcs = advertisementMapper.countAdPcs(startSize, limit);
+            pcs = advertisementMapper.countAdPcs();
         } else {
             //组合查询
             Map<String, Object> maps = new HashMap<>();

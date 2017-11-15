@@ -12,6 +12,7 @@ import com.wsd.knowledge.service.FileService;
 import com.wsd.knowledge.util.DateUtil;
 import com.wsd.knowledge.util.JsonResult;
 import com.wsd.knowledge.util.StringUtils;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,38 +42,42 @@ public class FileServiceImpl implements FileService {
     private OperationMapper operationMapper;
 
     /**
-     * 根据参数判断是组合查询还是全部查询
-     *
+     * 组合查询和全部查询
      * @param departmentName
      * @param fileStyleId
-     * @param downType
-     * @param fileTimeType
+     * @param title
+     * @param startDate
+     * @param endDate
      * @param page
      * @param limit
      * @return
      */
     @Override
-    public JsonResult showAllFile(String departmentName, String fileStyleId, String downType, String fileTimeType, Integer page, Integer limit) {
+    public JsonResult showAllFile(String departmentName, String   fileStyleId, String title,String startDate, String endDate,  Integer page, Integer limit) {
 
 
         if (departmentName == null) {
             departmentName = "";
         }
-        if (downType == null) {
-            downType = "";
-        }
-        if (fileTimeType == null) {
-            fileTimeType = "desc";
-        }
+
         if (fileStyleId == null) {
             fileStyleId = "";
+        }
+        if(title==null){
+            title="";
+        }
+        if(startDate==null){
+            startDate="2017-11-01 13:30";
+        }
+        if(endDate==null){
+            endDate="";
         }
         if (page == null || limit == null) {
             page = 1;
             limit = 20;
         }
         int startSize = (page - 1) * limit;
-        if (departmentName.equals("") && fileStyleId.equals("") && downType.equals("") && fileTimeType.equals("desc")) {
+        if (departmentName.equals("") && fileStyleId.equals("") &&title.equals("")&&startDate.equals("2017-11-01 13:30")&&endDate.equals("") ) {
             List<Map> map = fileMapper.showAllFile(startSize, limit);
             Integer j = fileMapper.countFile(startSize, limit);
             if (j == null) {
@@ -84,8 +89,9 @@ public class FileServiceImpl implements FileService {
             Map<String, Object> map = new HashMap<>();
             map.put("departmentName", departmentName);
             map.put("fileStyleId", fileStyleId);
-            map.put("downType", downType);
-            map.put("fileTimeType", fileTimeType);
+            map.put("title",title);
+            map.put("startDate",startDate);
+            map.put("endDate",endDate);
             map.put("startSize", startSize);
             map.put("limit", limit);
             List<Map> maps = fileMapper.queryFileByIf(map);
@@ -134,31 +140,39 @@ public class FileServiceImpl implements FileService {
 
     /**
      * 批量删除文件
-     *
-     * @param id
+     * @param ids
+     * @param userId
      * @return
      */
     @Override
     @Transactional(readOnly = false)
-    public JsonResult deleteFile(Integer[] id, Integer userId) {
-        if (id == null || userId == null) {
+    public JsonResult deleteFile(String  ids, Integer userId) {
+        if (ids == null || userId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         SystemUser systemUser = userRepositoty.findInfo(userId);
         Integer j = null;
-        int lengths = id.length;
-        for (int i = 0; i < lengths; i++) {
-            j = fileMapper.updateFileShow(id[i]);//更改文件属性
-            OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, id[i], 2, new DateUtil().getSystemTime());
+        for (String id : ids.split(",")) {
+            j = fileMapper.updateFileShow(id);
+            Integer iid= Integer.parseInt(id);
+            OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, iid, 2, new DateUtil().getSystemTime());
             operationMapper.insertOperationLog(operationLog);//添加操作日志
         }
+
+//        for (int i = 0; i < lengths; i++) {
+//            j = fileMapper.updateFileShow(id[i]);//更改文件属性
+//            OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, id[i], 2, new DateUtil().getSystemTime());
+//            operationMapper.insertOperationLog(operationLog);//添加操作日志
+//        }
         if (j != 0) {
             return new JsonResult(0, 0, "操作成功", 0);
         }
         return new JsonResult(2, 0, "操作失败", 0);
     }
+
     /**
      * 查看文件
+     *
      * @param fileId
      * @param userId
      * @return
@@ -183,7 +197,7 @@ public class FileServiceImpl implements FileService {
         if (j != 0) {
             return new JsonResult(0, 0, "操作成功", 0);
         }
-        return new JsonResult(2, 0, "操作失败", 0);
+            return new JsonResult(2, 0, "操作失败", 0);
     }
 
     /**
@@ -242,7 +256,7 @@ public class FileServiceImpl implements FileService {
         } else {
             result = fileMapper.updateFileContentUrl(fileStyleId, content, id, fileurl);
         }
-        if (result !=0) {
+        if (result != 0) {
             SystemUser systemUser = userRepositoty.findInfo(userId);
             //添加操作日志
             OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, id, 3, new DateUtil().getSystemTime());
@@ -270,7 +284,7 @@ public class FileServiceImpl implements FileService {
         }
         int startSize = (page - 1) * limit;
         List<Map> map = fileMapper.showUserLookFile(userId, startSize, limit);
-        Integer count = fileMapper.countUserLookFile(userId, startSize, limit);
+        Integer count = fileMapper.countUserLookFile(userId);
         if (map != null) {
             return new JsonResult(0, map, "查询结果", count);
         }

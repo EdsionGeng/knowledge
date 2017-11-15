@@ -189,8 +189,9 @@
                 data=checkStatus.data ;
                 console.log(checkStatus);
                 if (data.length == 0) {
-                    layer.msg('勾选选项不能为空！')
+                    layer.msg('请选择需要删除的公告记录！')
                 } else {
+                    layer.msg('是否确定删除！')
                     var ids = '';
                     $.each(data, function (idx, obj) {
                         if (idx > 0) {
@@ -202,7 +203,7 @@
                     $.ajax({
                         url: '../deleteAd.htmls',
                         method: 'post',
-                        data: {"ids": ids,},
+                        data: {"ids": ids},
                         dataType: 'json',
                         success: function (result) {
                             if (result.code === 0) {

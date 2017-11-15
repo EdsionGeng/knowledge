@@ -33,7 +33,7 @@
     </form>
 </div>
 <div class="layui-table-inductionlist">
-    <table class="layui-hide" id="file_operationlog" lay-filter="indmanage"></table>
+    <table class="layui-hide" id="file_operationlog" lay-filter="file_operationlog"></table>
 </div>
 
 <script src="../layui/layui.js"></script>
@@ -46,23 +46,22 @@
             laypage = layui.laypage;
             laytpl = layui.laytpl,
             layer = layui.layer;
-
         var entrytableins = table.render({
             elem: '#file_operationlog',
             // where: {"date1": $("#inducdate1").val(), "date2": $("#inducdate2").val()},
-            url: '../show/fileLog.htmls?fileId=1',
+            url: '../show/fileLog.htmls?fileId='+fileId,
             cols: [[
-                {field: 'departmentName', title: '操作部门', width: 200}
+                  {field: 'departmentName', title: '操作部门', width: 200}
                 , {field: 'username', title: '姓名', width: 200}
                 , {field: 'operationTime', title: '操作时间', width: 200}
                 , {field: 'operation', title: '文档类型', width: 200}
             ]]
             , page: true
             , height: 750,
-            id: 'indmanage'
+            id: 'file_operationlog'
         });
         laypage.render({
-            elem: 'demo1'
+            elem: 'file_operationlog'
             , count: 10 //数据总数
             , jump: function (obj) {
                 console.log(obj)
@@ -74,7 +73,6 @@
                 where: data.field
             });
             console.log(data.field);
-
             return false;
         })
         form.render();

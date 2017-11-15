@@ -21,10 +21,10 @@ public interface AdvertisementService {
 
     /**
      * 删除公告
-     * @param id
+     * @param ids
      * @return
      */
-    JsonResult deleteAd(Integer[] id);
+    JsonResult deleteAd(String  ids);
 
     /**
      * 读取公告

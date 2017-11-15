@@ -12,10 +12,10 @@
         <div class="layui-form-item">
             <label class="layui-form-label">部门:</label>
             <div class="layui-input-inline">
-                <select name="dept" id="departsearch" lay-filter="departsearch"   >
+                <select name="dept" id="departsearch" lay-filter="departsearch">
                 </select>
             </div>
-            <label class="layui-form-label" >类型:</label>
+            <label class="layui-form-label">类型:</label>
             <div class="layui-input-inline">
                 <select name="operationStyle" id="operationStyle">
                     <option value="0">请选择</option>
@@ -23,8 +23,8 @@
                 </select>
             </div>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button class="layui-btn" lay-submit lay-filter="entrysearch">查询</button>
-            </div>
+            <button class="layui-btn" lay-submit lay-filter="entrysearch">查询</button>
+        </div>
 
     </form>
 </div>
@@ -35,9 +35,9 @@
 <script type="text/html" id="checkrolemenu2">
     <div class="addreform">
         <form class="layui-form" style="width: 400px;margin: 0 auto;">
-            <div id="accessTree2" class="ztree" style="float: left;width: 200px;min-height: 270px;border-right: 1px solid grey"></div>
+            <div id="accessTree2" class="ztree"
+                 style="float: left;width: 200px;min-height: 270px;border-right: 1px solid grey"></div>
             <div id="depmsg" style="float: left;margin-left: 10px;">
-
             </div>
         </form>
     </div>
@@ -65,7 +65,7 @@
             ]]
             , page: true
             , height: 750,
-            id: 'indmanage'
+            id: 'fileManage'
         });
         laypage.render({
             elem: 'demo1'
@@ -97,37 +97,24 @@
 //                           treeObj = $.fn.zTree.init($(" "), setting, data);
 //                       }
 //                        });
-               });
-                form.on('select(departsearch)',function (data) {
-                    $.ajax (
-                        {
-                            async: false,//是否异步
-                            cache: false,//是否使用缓存
-                            type: 'POST',//请求方式：post
-                            dataType: 'json',//数据传输格式：json
-                            url: 'getListByTree',//请求的action路径
+        });
+        form.on('select(departsearch)', function (data) {
+            $.ajax(
+                {
+                    async: false,//是否异步
+                    cache: false,//是否使用缓存
+                    type: 'POST',//请求方式：post
+                    dataType: 'json',//数据传输格式：json
+                    url: 'getListByTree',//请求的action路径
 
-                            success: function(data) {
-                                treedata = data;
-                                //把后台封装好的简单Json格式赋给treeNodes
-                                treeObj = $.fn.zTree.init($(" "), setting, data);
-                            }
-                        });
+                    success: function (data) {
+                        treedata = data;
+                        //把后台封装好的简单Json格式赋给treeNodes
+                        treeObj = $.fn.zTree.init($(" "), setting, data);
+                    }
                 });
-//
-//                $.ajax({
-//                    async: false,//是否异步
-//                    cache: false,//是否使用缓存
-//                    type: 'POST',//请求方式：post
-//                    dataType: 'json',//数据传输格式：json
-//                    url: 'getListByTree',//请求的action路径
-//                    success: function (data) {
-//                        treedata = data;
-//                        //把后台封装好的简单Json格式赋给treeNodes
-//                        treeObj = $.fn.zTree.init($(" "), setting, data);
-//                    }
-//                });
-        // 监听搜索按钮提交
+        });
+
         form.on('submit(entrysearch)', function (data) {
             entrytableins.reload({
                 where: data.field
