@@ -1,5 +1,6 @@
 package com.wsd.knowledge.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.wsd.knowledge.service.FileService;
 import com.wsd.knowledge.util.JsonResult;
 import io.swagger.annotations.Api;
@@ -10,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.*;
 import java.util.Date;
+
 /**
  * @Author EdsionGeng
  * @Description 文件界面交互层
@@ -28,10 +31,7 @@ public class FileController {
      * 查询所有上传文件 组合查询 共用同一个接口
      * 个人
      *
-     * @param departmentName
-     * @param fileStyleId
-     * @param page
-     * @param limit
+     * @param object
      * @return
      */
     @ApiOperation(value = "查询所有文件接口", notes = "传递必要参数")
@@ -45,18 +45,23 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "limit", value = "页面信息数量", required = true)
     })
     @RequestMapping(value = "show/allFile", method = RequestMethod.GET)
-    public JsonResult showAllFile(String departmentName, String   fileStyleId,String title,String startDate,String endDate ,Integer page, Integer limit) {
-        return fileService.showAllFile(departmentName, fileStyleId,title,startDate,endDate,  page, limit);
+    public JsonResult showAllFile(@RequestBody String object) {
+
+        JSONObject jsonObject = JSONObject.parseObject(object);
+        String title = String.valueOf(jsonObject.get("title"));
+        String startDate = String.valueOf(jsonObject.get("startDate"));
+        String endDate = String.valueOf(jsonObject.get("endDate"));
+        String departmentName = String.valueOf(jsonObject.get("departmentName"));
+        String fileStyleId = String.valueOf(jsonObject.get("fileStyleId"));
+        Integer page = Integer.parseInt(String.valueOf(jsonObject.get("page")));
+        Integer limit = Integer.parseInt(String.valueOf(jsonObject.get("limit")));
+        return fileService.showAllFile(departmentName, fileStyleId, title, startDate, endDate, page, limit);
     }
 
     /**
      * 用户添加文件
      *
-     * @param title
-     * @param content
-     * @param photourl
-     * @param fileurl
-     * @param userId
+     * @param object
      * @return
      */
     @ApiOperation(value = "添加文件接口", notes = "传递必要参数")
@@ -70,32 +75,42 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "filesize", value = "文件大小", required = true)
     })
     @RequestMapping(value = "insertFile.htmls", method = RequestMethod.POST)
-    public JsonResult insertFile( String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize, String describe) {
+    public JsonResult insertFile(@RequestBody String object) {
+        JSONObject jsonObject = JSONObject.parseObject(object);
+        String title = String.valueOf(jsonObject.get("title"));
+        String content = String.valueOf(jsonObject.get("content"));
+        String photourl = String.valueOf(jsonObject.get("photourl"));
+        String filesize = String.valueOf(jsonObject.get("filesize"));
+        String fileurl = String.valueOf(jsonObject.get("fileurl"));
+        String describe = String.valueOf(jsonObject.get("describe"));
+        Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
+        Integer fileStyleId = Integer.parseInt(String.valueOf(jsonObject.get("fileStyleId")));
         return fileService.insertFile(title, content, photourl, fileurl, userId, fileStyleId, filesize, describe);
     }
 
     /**
      * 批量删除文件
      *
-     * @param ids
-     * @param userId
+     * @param object
      * @return
      */
     @ApiOperation(value = "删除文件接口", notes = "传递必要参数")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "ids ", value = "文件ID 数组", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileids ", value = "文件ID 数组", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户ID", required = true),
     })
-    @RequestMapping(value = "deletefile.htmls", method = RequestMethod.GET)
-    public JsonResult deleteFile(String  ids , Integer userId) {
+    @RequestMapping(value = "deletefile.htmls", method = RequestMethod.POST)
+    public JsonResult deleteFile(@RequestBody String object) {
+        JSONObject jsonObject = JSONObject.parseObject(object);
+        String ids = String.valueOf(jsonObject.get("fileids"));
+        Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
         return fileService.deleteFile(ids, userId);
     }
 
     /**
      * 查阅文件执行相应操作
      *
-     * @param fileId
-     * @param userId
+     * @param object
      * @return
      */
     @ApiOperation(value = "阅读文件接口", notes = "传递必要参数")
@@ -103,56 +118,62 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "id", value = "文件ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户ID", required = true),
     })
-    @RequestMapping(value = "readfile.htmls", method = RequestMethod.PUT)
-    public JsonResult readFile(Integer fileId, Integer userId) {
+    @RequestMapping(value = "readfile.htmls", method = RequestMethod.POST)
+    public JsonResult readFile(@RequestBody String object) {
+        JSONObject jsonObject = JSONObject.parseObject(object);
+
+        Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
+        Integer fileId = Integer.parseInt(String.valueOf(jsonObject.get("fileId")));
         return fileService.readFile(fileId, userId);
     }
 
-    /**
-     * 点击附件后执行逻辑操作
-     *
-     * @param fileId
-     * @param userId
-     * @return
-     */
-    @ApiOperation(value = "下载文件接口", notes = "传递必要参数")
-    @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "id", value = "文件ID", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户ID", required = true),
-    })
-    @RequestMapping(value = "download.htmls", method = RequestMethod.PUT)
-    public JsonResult downloadFile(Integer fileId, Integer userId) {
-        return fileService.downloadFile(fileId, userId);
-    }
+//    /**
+//     * 点击附件后执行逻辑操作
+//     *
+//     * @param fileId
+//     * @param userId
+//     * @return
+//     */
+//    @ApiOperation(value = "下载文件接口", notes = "传递必要参数")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "id", value = "文件ID", required = true),
+//            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户ID", required = true),
+//    })
+//    @RequestMapping(value = "download.htmls", method = RequestMethod.PUT)
+//    public JsonResult downloadFile(Integer fileId, Integer userId) {
+//        return fileService.downloadFile(fileId, userId);
+//    }
 
     /**
      * 更改文件
      *
-     * @param id
-     * @param content
-     * @param fileurl
-     * @param fileStyleId
-     * @param userId
+     * @param object
      * @return
      */
     @ApiOperation(value = "更改文件接口", notes = "传递必要参数")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "id", value = "文件ID", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "filed", value = "文件ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "content", value = "文档内容", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "fileurl", value = "文件上传路径", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileStyleId", value = "文件类型ID", required = true),
     })
-    @RequestMapping(value = "updateFile.htmls", method = RequestMethod.PUT)
-    public JsonResult updateFileDetail(Integer id, String content, String fileurl, Integer fileStyleId, Integer userId) {
-        return fileService.updateFileDetail(id, content, fileurl, fileStyleId, userId);
+    @RequestMapping(value = "updateFile.htmls", method = RequestMethod.POST)
+    public JsonResult updateFileDetail(@RequestBody String object) {
+
+        JSONObject jsonObject = JSONObject.parseObject(object);
+
+        Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
+        Integer fileId = Integer.parseInt(String.valueOf(jsonObject.get("fileId")));
+        Integer fileStyleId = Integer.parseInt(String.valueOf(jsonObject.get("fileStyleId")));
+        String content = String.valueOf(jsonObject.get("content"));
+        String fileurl = String.valueOf(jsonObject.get("fileurl"));
+        return fileService.updateFileDetail(fileId, content, fileurl, fileStyleId, userId);
     }
 
     /**
      * 个人全部文件显示页面
      *
-     * @param userId
-     * @param page
-     * @param limit
+     * @param object
      * @return
      */
     @ApiOperation(value = "个人全部文件显示接口", notes = "传递必要参数")
@@ -162,7 +183,11 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "limit", value = "每页数量", required = true),
     })
     @RequestMapping(value = "show/userlookfile", method = RequestMethod.GET)
-    public JsonResult showUserLookFile(Integer userId, Integer page, Integer limit) {
+    public JsonResult showUserLookFile(@RequestBody String object) {
+        JSONObject jsonObject = JSONObject.parseObject(object);
+        Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
+        Integer page = Integer.parseInt(String.valueOf(jsonObject.get("page")));
+        Integer limit = Integer.parseInt(String.valueOf(jsonObject.get("limit")));
         return fileService.showUserLookFile(userId, page, limit);
     }
 
@@ -199,11 +224,12 @@ public class FileController {
                 e.printStackTrace();
                 return new JsonResult(2, 0, "上传失败," + e.getMessage(), 0);
             }
-            //resumeService.updateUrl(phone, resumeurl);
+
             return new JsonResult(0, resumeurl, "上传成功", 0);
         } else {
             return new JsonResult(2, 0, "上传失败，因为文件是空的.", 0);
         }
     }
+
 
 }

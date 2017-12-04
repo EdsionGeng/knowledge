@@ -3,7 +3,6 @@ package com.wsd.knowledge.mapper1;
 import com.wsd.knowledge.entity.Menu;
 import com.wsd.knowledge.util.StringUtils;
 import org.apache.ibatis.annotations.SelectProvider;
-
 import java.util.List;
 import java.util.Map;
 /**

@@ -24,7 +24,8 @@ import java.util.Set;
  * shiro身份校验核心类
  */
 
-public class MyShiroRealm extends AuthorizingRealm {
+public class
+MyShiroRealm extends AuthorizingRealm {
 
     private org.slf4j.Logger logger = LoggerFactory.getLogger(MyShiroRealm.class);
 
@@ -48,6 +49,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         // Map<String, Object> objectMap = new HashMap<String, Object>();
         // 从数据库获取对应用户名密码的用户
         SystemUser systemUser = userService.login(name, pawDES);
+
         if (systemUser == null) {
             throw new AccountException("帐号或密码不正确！");
         } /*else if ("1".equals(objectMap.get("status"))) {
@@ -98,7 +100,6 @@ public class MyShiroRealm extends AuthorizingRealm {
 //		for(Permission permission : permissionList){
 //		permissionSet.add(permission.getName());
 //		}
-
         Set<String> permissionSet = new HashSet<String>();
         permissionSet.add("权限添加:权限删除");
         permissionSet.add("uadd22");

@@ -2,6 +2,8 @@ package com.wsd.knowledge.service;
 
 import com.wsd.knowledge.util.JsonResult;
 
+import java.util.List;
+
 /**
  * @Author EdsionGeng
  * @Description 添加文件对应人相应权限 业务逻辑层接口
@@ -15,7 +17,7 @@ public interface PermissionService {
      * @param fileId
      * @return
      */
-    JsonResult insertUserPermission(Integer[] userids, Integer operationStyleId, Integer fileId);
+    JsonResult insertUserPermission(List<Integer> userids, Integer operationStyleId, Integer fileId);
 
 
     /**
@@ -34,7 +36,7 @@ public interface PermissionService {
      * @param fileId
      * @return
      */
-    JsonResult updateFilePerMission(Integer[] userids, Integer operationStyleId, Integer fileId);
+    JsonResult updateFilePerMission(List<Integer> userids, Integer operationStyleId, Integer fileId);
 
 
     /**
@@ -44,5 +46,5 @@ public interface PermissionService {
      * @param fileId
      * @return
      */
-    JsonResult deleteFilePerMission(Integer[] userids, Integer operationStyleId, Integer fileId);
+    JsonResult deleteFilePerMission(List<Integer> userids, Integer operationStyleId, Integer fileId);
 }

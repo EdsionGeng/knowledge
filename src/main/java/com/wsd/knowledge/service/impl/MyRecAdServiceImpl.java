@@ -53,7 +53,7 @@ public class MyRecAdServiceImpl implements MyRecAdService {
      */
     @Override
     @Transactional(readOnly = false)
-    public JsonResult sendAdToUser(Integer[] departmentId, Integer commonId) {
+    public JsonResult sendAdToUser(List<Integer> departmentId, Integer commonId) {
         if (commonId == null || departmentId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
@@ -62,9 +62,9 @@ public class MyRecAdServiceImpl implements MyRecAdService {
             return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
         }
         Integer result = null;
-        int length = departmentId.length;
+        int length = departmentId.size();
         for (int i = 0; i < length; i++) {
-            List<Integer> list = userRepositoty.queryUserIDByGroup(departmentId[i]);
+            List<Integer> list = userRepositoty.queryUserIDByGroup((departmentId.get(i)));
             //查找部门下面人员ID
 
             for (int j = 0, len = list.size(); i < len; i++) {

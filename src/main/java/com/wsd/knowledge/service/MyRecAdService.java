@@ -2,6 +2,8 @@ package com.wsd.knowledge.service;
 
 import com.wsd.knowledge.util.JsonResult;
 
+import java.util.List;
+
 /**
  * @Author EdsionGeng
  * @Description 个人接收公告业务逻辑层接口
@@ -26,6 +28,6 @@ public interface MyRecAdService {
      * @param commonId
      * @return
      */
-    JsonResult sendAdToUser(Integer[] departmentId, Integer commonId);
+    JsonResult sendAdToUser(List<Integer> departmentId, Integer commonId);
 
 }
