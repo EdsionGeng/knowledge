@@ -1,5 +1,6 @@
 package com.wsd.knowledge.service.impl;
 
+import com.wsd.knowledge.entity.RdPage;
 import com.wsd.knowledge.mapper.OperationMapper;
 import com.wsd.knowledge.service.OperationService;
 import com.wsd.knowledge.util.DateUtil;
@@ -69,22 +70,27 @@ public class OperationServiceImpl implements OperationService {
      * 用户历史上传业务逻辑层处理
      *
      * @param userId
-     * @param page
-     * @param limit
+     * @param current
+     * @param pageSize
      * @return
      */
     @Override
-    public JsonResult showUserUp(Integer userId, Integer page, Integer limit) {
-        if (page == null || limit == null) {
+    public JsonResult showUserUp(Integer userId, Integer current, Integer pageSize) {
+        if (current == null || pageSize == null||userId==null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
-        int startSize = (page - 1) * limit;
-        List<Map> map = operationMapper.showUserUpFile(userId, startSize, limit);
-        Integer j = operationMapper.countAllFilePcs(userId, startSize, limit);
-        if (j != null) {
-            return new JsonResult(0, map, "查询结果", j);
+        int startSize = (current - 1) * pageSize;
+        List<Map> map = operationMapper.showUserUpFile(userId, startSize, pageSize);
+        Integer sum = operationMapper.countAllFilePcs(userId, startSize, pageSize);
+        if (sum != null) {
+            RdPage page =new RdPage();
+            page.setTotal(sum);
+            page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
+            page.setCurrent(current);
+            page.setPageSize(pageSize);
+            return new JsonResult(0, map, "查询结果", page);
         }
-        return new JsonResult(2, 0, "查询失败", 0);
+        return new JsonResult(0, 0, "无数据", 0);
 
     }
 

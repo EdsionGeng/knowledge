@@ -1,6 +1,7 @@
 package com.wsd.knowledge.service.impl;
 
 
+import com.wsd.knowledge.entity.RdPage;
 import com.wsd.knowledge.entity.UserRecAdvertisement;
 import com.wsd.knowledge.mapper.UserRecAdMapper;
 import com.wsd.knowledge.mapper1.UserRepositoty;
@@ -10,8 +11,6 @@ import com.wsd.knowledge.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -29,19 +28,25 @@ public class MyRecAdServiceImpl implements MyRecAdService {
     /**
      * 展示个人接收所有公告数
      *
-     * @param page
-     * @param limit
+     * @param current
+     * @param pageSize
      * @param userId
      * @return
      */
     @Override
-    public JsonResult showAllRecAd(Integer page, Integer limit, Integer userId) {
-        if (userId == null || page == null || limit == null) {
+    public JsonResult showAllRecAd(Integer current, Integer pageSize, Integer userId) {
+        if (userId == null || current == null || pageSize == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
-        int startSize = (page - 1) * limit;
-        List<Map> map = userRecAdMapper.showUserRecAd(userId, startSize, limit);
-        return new JsonResult(0, map, "查询结果", userRecAdMapper.countUserAdPcs());
+        int startSize = (current - 1) * pageSize;
+        List<Map> map = userRecAdMapper.showUserRecAd(userId, startSize, pageSize);
+        RdPage page =new RdPage();
+        Integer sum=userRecAdMapper.countUserAdPcs();
+        page.setTotal(sum);
+        page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
+        page.setCurrent(current);
+        page.setPageSize(pageSize);
+        return new JsonResult(0, map, "查询结果",page );
     }
 
 

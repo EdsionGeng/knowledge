@@ -1,9 +1,6 @@
 package com.wsd.knowledge.service.impl;
 
-import com.wsd.knowledge.entity.FileDetail;
-import com.wsd.knowledge.entity.FileKind;
-import com.wsd.knowledge.entity.OperationLog;
-import com.wsd.knowledge.entity.SystemUser;
+import com.wsd.knowledge.entity.*;
 import com.wsd.knowledge.mapper.FileKindMapper;
 import com.wsd.knowledge.mapper.FileMapper;
 import com.wsd.knowledge.mapper.OperationMapper;
@@ -48,12 +45,12 @@ public class FileServiceImpl implements FileService {
      * @param title
      * @param startDate
      * @param endDate
-     * @param page
-     * @param limit
+     * @param current
+     * @param pageSize
      * @return
      */
     @Override
-    public JsonResult showAllFile(String departmentName, String   fileStyleId, String title,String startDate, String endDate,  Integer page, Integer limit) {
+    public JsonResult showAllFile(String departmentName, String   fileStyleId, String title,String startDate, String endDate,  Integer current, Integer pageSize) {
 
 
         if (departmentName == null) {
@@ -72,18 +69,24 @@ public class FileServiceImpl implements FileService {
         if(endDate==null){
             endDate="";
         }
-        if (page == null || limit == null) {
-            page = 1;
-            limit = 20;
+        if (current == null || pageSize == null) {
+           current = 1;
+            pageSize = 20;
         }
-        int startSize = (page - 1) * limit;
+        int startSize = (current - 1) * pageSize;
         if (departmentName.equals("") && fileStyleId.equals("") &&title.equals("")&&startDate.equals("2017-11-01 13:30")&&endDate.equals("") ) {
-            List<Map> map = fileMapper.showAllFile(startSize, limit);
-            Integer j = fileMapper.countFile(startSize, limit);
-            if (j == null) {
-                j = 0;
+            List<Map> map = fileMapper.showAllFile(startSize, pageSize);
+            Integer sum = fileMapper.countFile();
+
+            if (sum == null) {
+               sum = 0;
             }
-            return new JsonResult(0, map, "查询结果", j);
+            RdPage page =new RdPage();
+            page.setTotal(sum);
+            page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
+            page.setCurrent(current);
+            page.setPageSize(pageSize);
+            return new JsonResult(0, map, "查询结果", page);
 
         } else {
             Map<String, Object> map = new HashMap<>();
@@ -93,13 +96,25 @@ public class FileServiceImpl implements FileService {
             map.put("startDate",startDate);
             map.put("endDate",endDate);
             map.put("startSize", startSize);
-            map.put("limit", limit);
+            map.put("limit", pageSize);
+
+            Map<String, Object> mapss = new HashMap<>();
+            map.put("departmentName", departmentName);
+            map.put("fileStyleId", fileStyleId);
+            map.put("title",title);
+            map.put("startDate",startDate);
+            map.put("endDate",endDate);
             List<Map> maps = fileMapper.queryFileByIf(map);
-            Integer j = fileMapper.countFilePcs(map);
-            if (j == null) {
-                j = 0;
+            Integer sum = fileMapper.countFilePcs(mapss);
+            if (sum == null) {
+                sum = 0;
             }
-            return new JsonResult(0, maps, "查询结果", j);
+            RdPage page =new RdPage();
+            page.setTotal(sum);
+            page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
+            page.setCurrent(current);
+            page.setPageSize(pageSize);
+            return new JsonResult(0, maps, "查询结果", page);
         }
 
     }
@@ -273,20 +288,25 @@ public class FileServiceImpl implements FileService {
      * 查看个人能查看的文件
      *
      * @param userId
-     * @param page
-     * @param limit
+     * @param current
+     * @param pageSize
      * @return
      */
     @Override
-    public JsonResult showUserLookFile(Integer userId, Integer page, Integer limit) {
-        if (page == null || limit == null || userId == null) {
+    public JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize) {
+        if (current == null || pageSize == null || userId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
-        int startSize = (page - 1) * limit;
-        List<Map> map = fileMapper.showUserLookFile(userId, startSize, limit);
-        Integer count = fileMapper.countUserLookFile(userId);
+        int startSize = (current - 1) * pageSize;
+        List<Map> map = fileMapper.showUserLookFile(userId, startSize, pageSize);
+        Integer sum = fileMapper.countUserLookFile(userId);
         if (map != null) {
-            return new JsonResult(0, map, "查询结果", count);
+            RdPage page =new RdPage();
+            page.setTotal(sum);
+            page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
+            page.setCurrent(current);
+            page.setPageSize(pageSize);
+            return new JsonResult(0, map, "查询结果", page);
         }
         return new JsonResult(2, 0, "查无结果", 0);
     }

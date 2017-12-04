@@ -57,8 +57,8 @@ public interface FileMapper {
      *
      * @return
      */
-    @Select("select count(id) from ((select id from FileDetail where fileDisplay=1 limit #{startSize},#{limit})as s)")
-    Integer countFile(@Param("startSize") Integer startSize, @Param("limit") Integer limit);
+    @Select("select count(id) from  FileDetail where fileDisplay=1 ")
+    Integer countFile();
 
     /**
      * 组合查询文件结果

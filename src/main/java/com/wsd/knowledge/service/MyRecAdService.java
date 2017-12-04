@@ -14,12 +14,12 @@ public interface MyRecAdService {
     /**
      * 展示个人消息
      *
-     * @param page
-     * @param limit
+     * @param current
+     * @param pageSize
      * @param userId
      * @return
      */
-    JsonResult showAllRecAd(Integer page, Integer limit, Integer userId);
+    JsonResult showAllRecAd(Integer current, Integer pageSize, Integer userId);
 
     /**
      * 发送公告给相应的人

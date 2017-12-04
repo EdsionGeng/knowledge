@@ -41,8 +41,8 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "title", value = "文件标题"),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "startDate", value = "开始时间"),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "endDate", value = "结束时间"),
-            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "page", value = "页码", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "limit", value = "页面信息数量", required = true)
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "current", value = "页码", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "pageSize", value = "页面信息数量", required = true)
     })
     @RequestMapping(value = "show/allFile", method = RequestMethod.GET)
     public JsonResult showAllFile(@RequestBody String object) {
@@ -53,9 +53,9 @@ public class FileController {
         String endDate = String.valueOf(jsonObject.get("endDate"));
         String departmentName = String.valueOf(jsonObject.get("departmentName"));
         String fileStyleId = String.valueOf(jsonObject.get("fileStyleId"));
-        Integer page = Integer.parseInt(String.valueOf(jsonObject.get("page")));
-        Integer limit = Integer.parseInt(String.valueOf(jsonObject.get("limit")));
-        return fileService.showAllFile(departmentName, fileStyleId, title, startDate, endDate, page, limit);
+        Integer current = Integer.parseInt(String.valueOf(jsonObject.get("current")));
+        Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
+        return fileService.showAllFile(departmentName, fileStyleId, title, startDate, endDate, current, pageSize);
     }
 
     /**
@@ -179,16 +179,16 @@ public class FileController {
     @ApiOperation(value = "个人全部文件显示接口", notes = "传递必要参数")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "Intege", name = "userId", value = "用户ID", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "Intege", name = "page", value = "页数", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "limit", value = "每页数量", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Intege", name = "current", value = "页数", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "pageSize", value = "每页数量", required = true),
     })
     @RequestMapping(value = "show/userlookfile", method = RequestMethod.GET)
     public JsonResult showUserLookFile(@RequestBody String object) {
         JSONObject jsonObject = JSONObject.parseObject(object);
         Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
-        Integer page = Integer.parseInt(String.valueOf(jsonObject.get("page")));
-        Integer limit = Integer.parseInt(String.valueOf(jsonObject.get("limit")));
-        return fileService.showUserLookFile(userId, page, limit);
+        Integer current = Integer.parseInt(String.valueOf(jsonObject.get("current")));
+        Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
+        return fileService.showUserLookFile(userId, current, pageSize);
     }
 
     /**

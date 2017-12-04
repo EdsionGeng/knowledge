@@ -74,11 +74,11 @@ public interface FileService {
     /**
      * 展示个人能看到的所有文件
      * @param userId
-     * @param page
-     * @param limit
+     * @param current
+     * @param pageSize
      * @return
      */
-    JsonResult showUserLookFile(Integer userId,  Integer page, Integer limit);
+    JsonResult showUserLookFile(Integer userId,  Integer current, Integer pageSize);
 
 
 }

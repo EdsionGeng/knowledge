@@ -73,16 +73,16 @@ public class OperationController {
     @ApiOperation(value = "查看个人历史上传文件接口", notes = "传递必要参数")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户ID", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "page", value = "页码", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "limit", value = "每页数量", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "current", value = "页码", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "pageSize", value = "每页数量", required = true),
     })
     @RequestMapping(value = "show/allupload.htmls", method = RequestMethod.GET)
     public JsonResult showAllUpload(@RequestBody String object) {
         JSONObject jsonObject = JSONObject.parseObject(object);
         Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
-        Integer page = Integer.parseInt(String.valueOf(jsonObject.get("page")));
-        Integer limit = Integer.parseInt(String.valueOf(jsonObject.get("limit")));
-        return operationService.showUserUp(userId, page, limit);
+        Integer current = Integer.parseInt(String.valueOf(jsonObject.get("current")));
+        Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
+        return operationService.showUserUp(userId, current, pageSize);
     }
 
     /**

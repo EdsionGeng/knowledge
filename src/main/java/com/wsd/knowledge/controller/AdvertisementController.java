@@ -103,16 +103,16 @@ public class AdvertisementController {
     @ApiOperation(value = "个人消息接口", notes = "传递必要参数")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "userId", value = "文件ID", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "page", value = "页码数", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "limit", value = "页面数量", required = true)
+            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "current", value = "页码数", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "pageSize", value = "页面数量", required = true)
     })
     @RequestMapping(value = "show/userrecad.htmls", method = RequestMethod.POST)
-    public JsonResult showUserRecCommon(@RequestBody String object) {
+    public JsonResult showUserRecCommon( @RequestBody String object) {
         jsonObject = JSONObject.parseObject(object);
         Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
-        Integer page = Integer.parseInt(String.valueOf(jsonObject.get("page")));
-        Integer limit = Integer.parseInt(String.valueOf(jsonObject.get("limit")));
-        return myRecAdService.showAllRecAd(page, limit, userId);
+        Integer current= Integer.parseInt(String.valueOf(jsonObject.get("current")));
+        Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
+        return myRecAdService.showAllRecAd(current, pageSize, userId);
     }
 
     /**

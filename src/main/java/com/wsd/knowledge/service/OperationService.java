@@ -33,11 +33,11 @@ public interface OperationService {
      * 用户历史上传
      *
      * @param userId
-     * @param page
-     * @param limit
+     * @param current
+     * @param pageSize
      * @return
      */
-    JsonResult showUserUp(Integer userId, Integer page, Integer limit);
+    JsonResult showUserUp(Integer userId, Integer current, Integer pageSize);
 
     /**
      * 展示当天数据

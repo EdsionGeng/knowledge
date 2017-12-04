@@ -1,4 +1,6 @@
 package com.wsd.knowledge.util;
+import com.wsd.knowledge.entity.RdPage;
+
 import java.io.Serializable;
 
 public  class JsonResult implements Serializable {
@@ -11,7 +13,7 @@ public  class JsonResult implements Serializable {
     private Object data;//接收返回的数�?
     private String msg;//定义提示 信息
     private int count;//返回记录总条数
-
+    private RdPage rdPage;
     public static final int SUCCESS = 0;
     public static final int ERROR = 1;
 
@@ -59,6 +61,14 @@ public  class JsonResult implements Serializable {
         return ERROR;
     }
 
+    public RdPage getRdPage() {
+        return rdPage;
+    }
+
+    public void setRdPage(RdPage rdPage) {
+        this.rdPage = rdPage;
+    }
+
     public JsonResult() {
         super();
         // TODO Auto-generated constructor stub
@@ -77,7 +87,13 @@ public  class JsonResult implements Serializable {
         this.count = count;
         this.data = data;
     }
-
+    public JsonResult(int code, Object data, String msg, RdPage rdPage) {
+        super();
+        this.code = code;
+        this.msg = msg;
+        this.rdPage = rdPage;
+        this.data = data;
+    }
     public JsonResult(Throwable e) {
         code = ERROR;
         msg = e.getMessage();
