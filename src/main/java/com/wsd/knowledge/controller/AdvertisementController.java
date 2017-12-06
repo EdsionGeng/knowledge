@@ -149,17 +149,17 @@ public class AdvertisementController {
             @ApiImplicitParam(paramType = "query", dataType = "String ", name = "title", value = "标题"),
             @ApiImplicitParam(paramType = "query", dataType = "String ", name = "date1", value = "开始时间"),
             @ApiImplicitParam(paramType = "query", dataType = "String ", name = "date2", value = "结束时间"),
-            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "page", value = "页码数", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "limit", value = "页面数量", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "current", value = "页码数", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "pageSize", value = "页面数量", required = true),
     })
-    @RequestMapping(value = "show/allad.htmls", method = RequestMethod.GET)
+    @RequestMapping(value = "show/allad.htmls", method = RequestMethod.POST)
     public JsonResult showAllAd(@RequestBody String object) {
         jsonObject = JSONObject.parseObject(object);
         String title = String.valueOf(jsonObject.get("title"));
         String date1 = String.valueOf(jsonObject.get("date1"));
         String date2 = String.valueOf(jsonObject.get("date2"));
-        Integer page = Integer.parseInt(String.valueOf(jsonObject.get("page")));
-        Integer limit = Integer.parseInt(String.valueOf(jsonObject.get("limit")));
+        Integer page = Integer.parseInt(String.valueOf(jsonObject.get("current")));
+        Integer limit = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
         return advertisementService.showAllAd(title, date1, date2, page, limit);
     }
 
@@ -174,11 +174,13 @@ public class AdvertisementController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "commonId", value = "公告ID")
     })
     @RequestMapping(value = "show/adpcs.htmls", method = RequestMethod.GET)
-    public JsonResult showAdPcs(@RequestBody String object) {
-
+    public JsonResult showAdPcs( String object) {
         jsonObject = JSONObject.parseObject(object);
         Integer commonId = Integer.parseInt(String.valueOf(jsonObject.get("commonId")));
         return advertisementService.showAdPcs(commonId);
     }
+
+
+
 
 }

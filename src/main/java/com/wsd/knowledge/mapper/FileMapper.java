@@ -143,7 +143,7 @@ public interface FileMapper {
 //            map.put("endDate",endDate);
             sql.append("select o.* from FileDetail  o  where o.fileDisplay=1 and o.addFileTime >= #{startDate} ");
             if (StringUtils.isNotEmpty((String) map.get("endDate"))) {
-                sql.append(" AND o.addFileTime = #{endDate} ");
+                sql.append(" AND o.addFileTime <= #{endDate} ");
             }
             if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
                 sql.append(" AND o.departmentName = #{departmentName} ");

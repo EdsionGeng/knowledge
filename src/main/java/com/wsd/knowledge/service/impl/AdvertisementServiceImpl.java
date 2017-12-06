@@ -1,6 +1,7 @@
 package com.wsd.knowledge.service.impl;
 
 import com.wsd.knowledge.entity.CommonAdvertisement;
+import com.wsd.knowledge.entity.RdPage;
 import com.wsd.knowledge.entity.SystemUser;
 import com.wsd.knowledge.mapper.AdvertisementMapper;
 import com.wsd.knowledge.mapper1.UserRepositoty;
@@ -113,32 +114,37 @@ public class AdvertisementServiceImpl implements AdvertisementService {
      * @param title
      * @param date1
      * @param date2
-     * @param page
-     * @param limit
+     * @param current
+     * @param pageSize
      * @return
      */
     @Override
-    public JsonResult showAllAd(String title, String date1, String date2, Integer page, Integer limit) {
-        if (page == null || limit == null) {
-            page = 1;
-            limit = 20;
+    public JsonResult showAllAd(String title, String date1, String date2, Integer current, Integer pageSize) {
+        if (current == null || pageSize == null) {
+            current = 1;
+            pageSize = 20;
         }
-        if (title == null) {
-            title = "";
+        if (title ==" ") {
+            title = " ";
         }
-        if (date1 == null) {
+        if (date1 == "null") {
             date1 = "2016-11-01 00:00:00";
         }
-        if (date2 == null) {
-            date2 = "";
+        if (date2 == "") {
+            date2 = " ";
         }
         List<Map> map = null;
-        Integer pcs = null;
-        int startSize = (page - 1) * limit;
-        if (title.equals("") && date1.equals("2016-11-01 00:00:00") && date2.equals("")) {
+        Integer sum = null;
+        RdPage rdPage =new RdPage();
+        int startSize = (current - 1) * pageSize;
+        if (title=="null"  && date2=="null") {
             //展示所有
-            map = advertisementMapper.showAllCommon(startSize, limit);
-            pcs = advertisementMapper.countAdPcs();
+            map = advertisementMapper.showAllCommon(startSize, pageSize);
+            sum = advertisementMapper.countAdPcs();
+            rdPage.setTotal(sum);
+            rdPage.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
+            rdPage.setCurrent(current);
+            rdPage.setPageSize(pageSize);
         } else {
             //组合查询
             Map<String, Object> maps = new HashMap<>();
@@ -146,12 +152,16 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             maps.put("date1", date1);
             maps.put("date2", date2);
             maps.put("startSize", startSize);
-            maps.put("limit", limit);
+            maps.put("limit", pageSize);
             map = advertisementMapper.showAllCommonByIf(maps);
-            pcs = advertisementMapper.countCommonByIf(maps);
+            sum = advertisementMapper.countCommonByIf(maps);
+            rdPage.setTotal(sum);
+            rdPage.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
+            rdPage.setCurrent(current);
+            rdPage.setPageSize(pageSize);
         }
-        if (map != null && pcs != null) {
-            return new JsonResult(0, map, "查询结果", pcs);
+        if (map != null && sum != null) {
+            return new JsonResult(0, map, "查询结果", rdPage);
         }
         return new JsonResult(2, 0, "查无结果", 0);
     }
@@ -176,6 +186,6 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             isRead = 0;
         }
         Integer noRead = pcs - isRead;//未读数量
-        return new JsonResult(0,isRead,"",noRead);
+        return new JsonResult(0,isRead,"查询结果",noRead);
     }
 }

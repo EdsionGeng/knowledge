@@ -50,7 +50,6 @@ public class DateUtil {
         if (1 == dayWeek) {
             cal.add(Calendar.DAY_OF_MONTH, -1);
         }
-        System.out.println("要计算日期为:" + sdf.format(cal.getTime())); // 输出要计算日期
         // 设置一个星期的第一天，按中国的习惯一个星期的第一天是星期一
         cal.setFirstDayOfWeek(Calendar.MONDAY);
         // 获得当前日期是一个星期的第几天

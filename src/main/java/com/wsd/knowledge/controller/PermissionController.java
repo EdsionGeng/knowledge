@@ -59,10 +59,11 @@ public class PermissionController {
      * @return
      */
     @RequestMapping(value = "update/permission.htmls", method = RequestMethod.POST)
+    @ApiOperation(value = "添加可以修改文件权限的人", notes = "传递必要参数")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "String ", name = "fileId", value = "文件Id"),
             @ApiImplicitParam(paramType = "query", dataType = "String ", name = "userids", value = "人员id拼接的字符串"),
-            @ApiImplicitParam(paramType = "query", dataType = "String ", name = "date2", value = "操作类型Id 1可以修改 0 不能修改")
+            @ApiImplicitParam(paramType = "query", dataType = "String ", name = "operationStyleId", value = "操作类型Id 1可以修改 0 不能修改")
     })
     public JsonResult updateFilePerMission(@RequestBody String object) {
         jsonObject = JSONObject.parseObject(object);
@@ -83,6 +84,7 @@ public class PermissionController {
      * @return
      */
     @RequestMapping(value = "dalete/permission.htmls", method = RequestMethod.POST)
+    @ApiOperation(value = "添加删除文件权限的人", notes = "传递必要参数")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "String ", name = "fileId", value = "文件Id"),
             @ApiImplicitParam(paramType = "query", dataType = "String ", name = "userids", value = "人员id拼接的字符串"),
@@ -110,7 +112,8 @@ public class PermissionController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileId", value = "文件ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户ID", required = true),
     })
-    @RequestMapping(value = "show/usermission.htmls", method = RequestMethod.GET)
+    @RequestMapping(value = "show/usermission.htmls", method = RequestMethod.POST
+    )
     public JsonResult showFilePermission(@RequestBody String object) {
         jsonObject = JSONObject.parseObject(object);
         Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));

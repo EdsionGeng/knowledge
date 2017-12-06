@@ -40,6 +40,7 @@ public class FileServiceImpl implements FileService {
 
     /**
      * 组合查询和全部查询
+     *
      * @param departmentName
      * @param fileStyleId
      * @param title
@@ -50,38 +51,37 @@ public class FileServiceImpl implements FileService {
      * @return
      */
     @Override
-    public JsonResult showAllFile(String departmentName, String   fileStyleId, String title,String startDate, String endDate,  Integer current, Integer pageSize) {
+    public JsonResult showAllFile(String departmentName, String fileStyleId, String title, String startDate, String endDate, Integer current, Integer pageSize) {
 
 
-        if (departmentName == null) {
+        if (departmentName == "null") {
             departmentName = "";
         }
 
-        if (fileStyleId == null) {
+        if (fileStyleId == "null") {
             fileStyleId = "";
         }
-        if(title==null){
-            title="";
+        if (title == "null") {
+            title = "";
         }
-        if(startDate==null){
-            startDate="2017-11-01 13:30";
+        if (startDate == "null") {
+            startDate = "2017-11-01 13:30";
         }
-        if(endDate==null){
-            endDate="";
+        if (endDate == "null") {
+            endDate = "";
         }
         if (current == null || pageSize == null) {
-           current = 1;
+            current = 1;
             pageSize = 20;
         }
         int startSize = (current - 1) * pageSize;
-        if (departmentName.equals("") && fileStyleId.equals("") &&title.equals("")&&startDate.equals("2017-11-01 13:30")&&endDate.equals("") ) {
+        if (departmentName.equals("") && fileStyleId.equals("") && title.equals("") && startDate.equals("2017-11-01 13:30") && endDate.equals("")) {
             List<Map> map = fileMapper.showAllFile(startSize, pageSize);
             Integer sum = fileMapper.countFile();
-
             if (sum == null) {
-               sum = 0;
+                sum = 0;
             }
-            RdPage page =new RdPage();
+            RdPage page = new RdPage();
             page.setTotal(sum);
             page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
             page.setCurrent(current);
@@ -92,24 +92,23 @@ public class FileServiceImpl implements FileService {
             Map<String, Object> map = new HashMap<>();
             map.put("departmentName", departmentName);
             map.put("fileStyleId", fileStyleId);
-            map.put("title",title);
-            map.put("startDate",startDate);
-            map.put("endDate",endDate);
+            map.put("title", title);
+            map.put("startDate", startDate);
+            map.put("endDate", endDate);
             map.put("startSize", startSize);
             map.put("limit", pageSize);
-
             Map<String, Object> mapss = new HashMap<>();
-            map.put("departmentName", departmentName);
-            map.put("fileStyleId", fileStyleId);
-            map.put("title",title);
-            map.put("startDate",startDate);
-            map.put("endDate",endDate);
+            mapss.put("departmentName", departmentName);
+            mapss.put("fileStyleId", fileStyleId);
+            mapss.put("title", title);
+            mapss.put("startDate", startDate);
+            mapss.put("endDate", endDate);
             List<Map> maps = fileMapper.queryFileByIf(map);
             Integer sum = fileMapper.countFilePcs(mapss);
             if (sum == null) {
                 sum = 0;
             }
-            RdPage page =new RdPage();
+            RdPage page = new RdPage();
             page.setTotal(sum);
             page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
             page.setCurrent(current);
@@ -155,21 +154,22 @@ public class FileServiceImpl implements FileService {
 
     /**
      * 批量删除文件
+     *
      * @param ids
      * @param userId
      * @return
      */
     @Override
     @Transactional(readOnly = false)
-    public JsonResult deleteFile(String  ids, Integer userId) {
-        if (ids == null || userId == null) {
+    public JsonResult deleteFile(String ids, Integer userId) {
+        if (ids == "null" || userId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         SystemUser systemUser = userRepositoty.findInfo(userId);
         Integer j = null;
         for (String id : ids.split(",")) {
             j = fileMapper.updateFileShow(id);
-            Integer iid= Integer.parseInt(id);
+            Integer iid = Integer.parseInt(id);
             OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, iid, 2, new DateUtil().getSystemTime());
             operationMapper.insertOperationLog(operationLog);//添加操作日志
         }
@@ -199,7 +199,7 @@ public class FileServiceImpl implements FileService {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         Integer j = null;
-        if (fileMapper.lookPcs(fileId) != null) {
+        if (fileMapper.lookPcs(fileId) != 0) {
             SystemUser systemUser = userRepositoty.findInfo(userId);
             //添加操作日志
             if (operationMapper.queryLookLog(userId, fileId) == null) {
@@ -212,7 +212,7 @@ public class FileServiceImpl implements FileService {
         if (j != 0) {
             return new JsonResult(0, 0, "操作成功", 0);
         }
-            return new JsonResult(2, 0, "操作失败", 0);
+        return new JsonResult(2, 0, "操作失败", 0);
     }
 
     /**
@@ -229,7 +229,7 @@ public class FileServiceImpl implements FileService {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         Integer j = null;
-        if (fileMapper.updateDownPcs(id) != null) {
+        if (fileMapper.updateDownPcs(id) != 0) {
             if (operationMapper.queryDownLog(userId, id) == null) {
                 SystemUser systemUser = userRepositoty.findInfo(userId);
                 //添加操作日志
@@ -258,7 +258,7 @@ public class FileServiceImpl implements FileService {
     @Override
     @Transactional(readOnly = false)
     public JsonResult updateFileDetail(Integer id, String content, String fileurl, Integer fileStyleId, Integer userId) {
-        if (id == null || content == null || fileurl == null || fileStyleId == null || userId == null) {
+        if (id == null || content == "null" || fileurl == "null" || fileStyleId == null || userId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         String str = new DateUtil().cacheExist(String.valueOf(userId));
@@ -301,7 +301,7 @@ public class FileServiceImpl implements FileService {
         List<Map> map = fileMapper.showUserLookFile(userId, startSize, pageSize);
         Integer sum = fileMapper.countUserLookFile(userId);
         if (map != null) {
-            RdPage page =new RdPage();
+            RdPage page = new RdPage();
             page.setTotal(sum);
             page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
             page.setCurrent(current);

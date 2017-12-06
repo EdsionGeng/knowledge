@@ -181,7 +181,7 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "Intege", name = "current", value = "页数", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "pageSize", value = "每页数量", required = true),
     })
-    @RequestMapping(value = "show/userlookfile", method = RequestMethod.GET)
+    @RequestMapping(value = "show/userlookfile", method = RequestMethod.POST)
     public JsonResult showUserLookFile(@RequestBody String object) {
         JSONObject jsonObject = JSONObject.parseObject(object);
         Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
