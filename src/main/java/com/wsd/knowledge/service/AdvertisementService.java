@@ -39,11 +39,11 @@ public interface AdvertisementService {
      * @param title
      * @param date1
      * @param date2
-     * @param page
-     * @param limit
+     * @param current
+     * @param pageSize
      * @return
      */
-    JsonResult showAllAd(String title,String date1,String date2,Integer page,Integer limit);
+    JsonResult showAllAd(String title,String date1,String date2,Integer current,Integer pageSize);
 
 
     /**

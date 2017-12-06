@@ -140,8 +140,10 @@ public class OperationServiceImpl implements OperationService {
     @Override
     public JsonResult showWeekData() {
         Map<String, Object> map = new HashMap<>();
-        String startTime = DateUtil.getWeekStartDate();
-        String endTime = DateUtil.getWeekSunday();
+        String startTime = DateUtil.mondayToSunday().get("beginDate");
+        System.out.print(startTime);
+        String endTime = DateUtil.mondayToSunday().get("endDate");
+        System.out.print(endTime);
         Integer dayLookPcs = operationMapper.countWeekLookPcs(startTime, endTime);
         if (dayLookPcs == null) {
             dayLookPcs = 0;

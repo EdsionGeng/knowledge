@@ -44,9 +44,8 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "current", value = "页码", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "pageSize", value = "页面信息数量", required = true)
     })
-    @RequestMapping(value = "show/allFile", method = RequestMethod.GET)
+    @RequestMapping(value = "show/allFile", method = RequestMethod.POST)
     public JsonResult showAllFile(@RequestBody String object) {
-
         JSONObject jsonObject = JSONObject.parseObject(object);
         String title = String.valueOf(jsonObject.get("title"));
         String startDate = String.valueOf(jsonObject.get("startDate"));
