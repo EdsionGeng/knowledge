@@ -45,6 +45,14 @@ public interface UserRepositoty {
 
 
     /**
+     * 查找同一组别下的人
+     *
+     * @param userGroupId
+     * @return
+     */
+    @Select("select id,username,department,usergroup from SystemUser where UserGroupId=#{UserGroupId}")
+    List<Map> queryByGroupId(@Param("UserGroupId")Integer userGroupId);
+    /**
      * 获取部门组织架构树形图
      * @param map
      * @return

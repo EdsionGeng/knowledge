@@ -43,8 +43,8 @@ public class AdvertisementServiceImpl implements AdvertisementService {
      */
     @Override
     @Transactional(readOnly = false)
-    public JsonResult insertCommonAd(String title, String content, String sendDepartmentName, Integer userId) {
-        if (title == null || content == null || sendDepartmentName == null || userId == null) {
+    public JsonResult insertCommonAd(String title, String content, String sendDepartmentName, Integer userId,String adStyle) {
+        if (title .equals("") || content .equals("")|| sendDepartmentName .equals("")|| userId == null||adStyle.equals("")) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         String str = new DateUtil().cacheExist(String.valueOf(userId));
@@ -53,8 +53,8 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         }
         SystemUser systemUser = userRepositoty.findInfo(userId);
         CommonAdvertisement commonAdvertisement = new CommonAdvertisement(title, content, systemUser.getDepartment(), systemUser.getUsername(),
-                userId, new DateUtil().getSystemTime(), sendDepartmentName);
-        if (advertisementMapper.insertAd(commonAdvertisement) != null) {
+                userId, new DateUtil().getSystemTime(), sendDepartmentName,adStyle);
+        if (advertisementMapper.insertAd(commonAdvertisement) != 0) {
             //发送公告给相应的人
             //返回公告ID
             Integer commonId = advertisementMapper.queryCommonID(title, userId);
@@ -119,25 +119,28 @@ public class AdvertisementServiceImpl implements AdvertisementService {
      * @return
      */
     @Override
-    public JsonResult showAllAd(String title, String date1, String date2, Integer current, Integer pageSize) {
+    public JsonResult showAllAd(String title, String date1, String date2,String adStyle, Integer current, Integer pageSize) {
         if (current == null || pageSize == null) {
             current = 1;
             pageSize = 20;
         }
-        if (title ==" ") {
-            title = " ";
+        if (title.equals("")) {
+            title = "";
         }
         if (date1 == "null") {
             date1 = "2016-11-01 00:00:00";
         }
-        if (date2 == "") {
-            date2 = " ";
+        if (date2 =="null") {
+            date2 = "";
+        }
+        if(adStyle.equals("")){
+            adStyle="";
         }
         List<Map> map = null;
         Integer sum = null;
         RdPage rdPage =new RdPage();
         int startSize = (current - 1) * pageSize;
-        if (title=="null"  && date2=="null") {
+        if (title.equals("")  && date2.equals("")&&adStyle.equals("")) {
             //展示所有
             map = advertisementMapper.showAllCommon(startSize, pageSize);
             sum = advertisementMapper.countAdPcs();
@@ -151,6 +154,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             maps.put("title", title);
             maps.put("date1", date1);
             maps.put("date2", date2);
+            maps.put("adStyle", adStyle);
             maps.put("startSize", startSize);
             maps.put("limit", pageSize);
             map = advertisementMapper.showAllCommonByIf(maps);
@@ -186,6 +190,10 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             isRead = 0;
         }
         Integer noRead = pcs - isRead;//未读数量
-        return new JsonResult(0,isRead,"查询结果",noRead);
+
+        Map<String,Object> map=new HashMap<>();
+        map.put("isRead",isRead);
+        map.put("noRead",noRead);
+        return new JsonResult(0,map,"查询结果",0);
     }
 }

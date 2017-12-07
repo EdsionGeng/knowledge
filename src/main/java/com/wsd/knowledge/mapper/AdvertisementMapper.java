@@ -21,8 +21,8 @@ public interface AdvertisementMapper {
      * @param commonAdvertisement
      * @return
      */
-    @Insert("insert into CommonAdvertisement(adContent,adTitle,addUser,departmentName,sendObject,sendTime,userId) " +
-            "values(#{adContent},#{adTitle},#{addUser},#{departmentName},#{sendObject},#{sendTime},#{userId})")
+    @Insert("insert into CommonAdvertisement(adContent,adTitle,addUser,departmentName,sendObject,sendTime,userId,adStyle) " +
+            "values(#{adContent},#{adTitle},#{addUser},#{departmentName},#{sendObject},#{sendTime},#{userId},#{adStyle})")
     Integer insertAd(CommonAdvertisement commonAdvertisement);
 
     /**
@@ -32,7 +32,7 @@ public interface AdvertisementMapper {
      * @return
      */
     @Delete("delete from CommonAdvertisement where id=#{id}")
-    Integer deleteAd(@Param("id") String  id);
+    Integer deleteAd(@Param("id") String id);
 
 
     /**
@@ -78,7 +78,6 @@ public interface AdvertisementMapper {
 
     /**
      * 统计展示所有公告数量
-     *
      *
      * @return
      */
@@ -134,7 +133,9 @@ public interface AdvertisementMapper {
             if (StringUtils.isNotEmpty((String) map.get("title"))) {
                 sql.append(" AND o.adtitle like concat('%',#{title},'%') ");
             }
-
+            if (StringUtils.isNotEmpty((String) map.get("adStyle"))) {
+                sql.append(" AND o.adStyle like concat('%',#{adStyle},'%') ");
+            }
             sql.append(" limit #{startSize},#{limit} ");
             return sql.toString();
 
@@ -153,10 +154,10 @@ public interface AdvertisementMapper {
             if (StringUtils.isNotEmpty((String) map.get("title"))) {
                 sql.append(" AND o.adtitle like concat('%',#{title},'%') ");
             }
-
+            if (StringUtils.isNotEmpty((String) map.get("adStyle"))) {
+                sql.append(" AND o.adStyle like concat('%',#{adStyle},'%') ");
+            }
             return sql.toString();
-
         }
-
     }
 }

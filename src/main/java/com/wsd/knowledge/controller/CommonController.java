@@ -36,11 +36,11 @@ public class CommonController {
      */
     @ApiOperation(value = "获取部门树形结构", notes = "传递必要参数")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "Object", name = "department", value = "文件ID"),
+            @ApiImplicitParam(paramType = "query", dataType = "Object", name = "department", value = "部门实体类"),
     })
-    @RequestMapping(value = "getListByTree", method = RequestMethod.GET)
+    @RequestMapping(value = "getListByTree", method = RequestMethod.POST)
 
-    public List<NewDepartment> getListByTree(NewDepartment department) {
+    public List<NewDepartment> getListByTree(@RequestBody NewDepartment department) {
         return commonService.getListByTree(department);
     }
 
@@ -54,8 +54,8 @@ public class CommonController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "Object", name = "fileKind", value = "文件")
     })
-    @RequestMapping(value = "getKindByTree", method = RequestMethod.GET)
-    public List<FileKind> getKindTree(FileKind fileKind) {
+    @RequestMapping(value = "getKindByTree", method = RequestMethod.POST)
+    public List<FileKind> getKindTree(@RequestBody FileKind fileKind) {
         return commonService.getKindTree(fileKind);
     }
 

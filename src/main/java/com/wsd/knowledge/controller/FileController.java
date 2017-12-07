@@ -95,20 +95,19 @@ public class FileController {
      */
     @ApiOperation(value = "删除文件接口", notes = "传递必要参数")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileids ", value = "文件ID 数组", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileds ", value = "文件ID 数组", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户ID", required = true),
     })
     @RequestMapping(value = "deletefile.htmls", method = RequestMethod.POST)
     public JsonResult deleteFile(@RequestBody String object) {
         JSONObject jsonObject = JSONObject.parseObject(object);
-        String ids = String.valueOf(jsonObject.get("fileids"));
+        String ids = String.valueOf(jsonObject.get("fileIds"));
         Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
         return fileService.deleteFile(ids, userId);
     }
 
     /**
      * 查阅文件执行相应操作
-     *
      * @param object
      * @return
      */

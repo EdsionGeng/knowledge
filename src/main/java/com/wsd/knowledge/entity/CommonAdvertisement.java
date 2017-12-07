@@ -33,6 +33,9 @@ public class CommonAdvertisement implements Serializable {
    // @Column(name = "sendObject",  length=96,columnDefinition=" '发送具体对象'")
     private String sendObject;//发送具体对象
 
+    //公告类型
+    private String adStyle;
+
     public String getDepartmentName() {
         return departmentName;
     }
@@ -69,6 +72,14 @@ public class CommonAdvertisement implements Serializable {
         return adContent;
     }
 
+    public String getAdStyle() {
+        return adStyle;
+    }
+
+    public void setAdStyle(String adStyle) {
+        this.adStyle = adStyle;
+    }
+
     public void setAdContent(String adContent) {
         this.adContent = adContent;
     }
@@ -97,7 +108,7 @@ public class CommonAdvertisement implements Serializable {
         this.sendObject = sendObject;
     }
 
-    public CommonAdvertisement(String adTitle, String adContent, String departmentName, String addUser, int userId, String sendTime, String sendObject) {
+    public CommonAdvertisement(String adTitle, String adContent, String departmentName, String addUser, int userId, String sendTime, String sendObject,String adStyle) {
         this.adTitle = adTitle;
         this.adContent = adContent;
         this.departmentName = departmentName;
@@ -105,6 +116,7 @@ public class CommonAdvertisement implements Serializable {
         this.userId = userId;
         this.sendTime = sendTime;
         this.sendObject = sendObject;
+        this.adStyle=adStyle;
     }
 
     public CommonAdvertisement() {

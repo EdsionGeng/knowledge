@@ -52,9 +52,10 @@ public class AdvertisementController {
         jsonObject = JSONObject.parseObject(object);
         String title = String.valueOf(jsonObject.get("title"));
         String content = String.valueOf(jsonObject.get("content"));
+        String adStyle = String.valueOf(jsonObject.get("adStyle"));
         String sendDepartmentName = String.valueOf(jsonObject.get("sendDepartmentName"));
         Integer userId = Integer.parseInt(String.valueOf((jsonObject.get("userId"))));
-        return advertisementService.insertCommonAd(title, content, sendDepartmentName, userId);
+        return advertisementService.insertCommonAd(title, content, sendDepartmentName, userId,adStyle);
     }
 
     /**
@@ -158,9 +159,10 @@ public class AdvertisementController {
         String title = String.valueOf(jsonObject.get("title"));
         String date1 = String.valueOf(jsonObject.get("date1"));
         String date2 = String.valueOf(jsonObject.get("date2"));
+        String adStyle= String.valueOf(jsonObject.get("adStyle"));
         Integer page = Integer.parseInt(String.valueOf(jsonObject.get("current")));
-        Integer limit = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
-        return advertisementService.showAllAd(title, date1, date2, page, limit);
+        Integer limit= Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
+        return advertisementService.showAllAd(title, date1, date2,adStyle, page, limit);
     }
 
     /**
@@ -173,12 +175,14 @@ public class AdvertisementController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "commonId", value = "公告ID")
     })
-    @RequestMapping(value = "show/adpcs.htmls", method = RequestMethod.GET)
-    public JsonResult showAdPcs( String object) {
+    @RequestMapping(value = "show/adpcs.htmls", method = RequestMethod.POST)
+    public JsonResult showAdPcs( @RequestBody String object) {
         jsonObject = JSONObject.parseObject(object);
         Integer commonId = Integer.parseInt(String.valueOf(jsonObject.get("commonId")));
         return advertisementService.showAdPcs(commonId);
     }
+
+
 
 
 
