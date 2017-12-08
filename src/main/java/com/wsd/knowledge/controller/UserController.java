@@ -29,7 +29,8 @@ import javax.servlet.http.HttpServletResponse;
 public class UserController {
     @Autowired
     private UserService userService;
-    JSONObject jsonObject=null;
+    JSONObject jsonObject = null;
+
     @ApiOperation(value = "用户登录接口", notes = "传递用户名和密码")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "username", value = "姓名", required = true),
@@ -44,15 +45,15 @@ public class UserController {
 //            return new JsonResult(0,0,"登录成功",0);
 //        }
 //       return new JsonResult(2,0,"登录失败",0);
-         jsonObject = JSONObject.parseObject(object);
+        jsonObject = JSONObject.parseObject(object);
 
-        String  username=String.valueOf(jsonObject.get("username"));
-        String  password=String.valueOf(jsonObject.get("password"));
+        String username = String.valueOf(jsonObject.get("username"));
+        String password = String.valueOf(jsonObject.get("password"));
         try {
             UsernamePasswordToken token = new UsernamePasswordToken(username, password);
             System.out.println(token);
             SecurityUtils.getSubject().login(token);
-           // RememberMe这个参数设置为true后，在登陆的时候就会在客户端设置remenberme的相应cookie
+            // RememberMe这个参数设置为true后，在登陆的时候就会在客户端设置remenberme的相应cookie
             token.setRememberMe(true);
             //存入Session
 //            req.getSession().setAttribute("username", username);
@@ -62,4 +63,15 @@ public class UserController {
             return new JsonResult(2, 0, "登录失败", 0);
         }
     }
+
+    @ApiOperation(value = "查找人员接口", notes = "传递部门")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "userGroupId", value = "部门", required = true)
+    })
+    @RequestMapping(value = "queryuser.htmls", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult queryUserByGroup(@RequestBody String object) {
+        return userService.queryByGroupId(object);
+    }
+
 }

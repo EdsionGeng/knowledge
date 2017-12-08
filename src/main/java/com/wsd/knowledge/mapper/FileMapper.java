@@ -134,6 +134,32 @@ public interface FileMapper {
     @Select("select count(*)   from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and  f.fileDisplay=1 and u.userId=#{userId} order by f.addFileTime Desc ")
     Integer  countUserLookFile(@Param("userId")Integer userId);
 
+    /**
+     * 全局搜索结果
+     * @param userId
+     * @param searchContent
+     * @param startSize
+     * @param limit
+     * @return
+     */
+    @Select("select f.* from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId}   and  f.departmentName " +
+            "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%') order by f.addFileTime Desc limit #{startSize},#{limit} ")
+    List<Map> showSearchFile(@Param("userId")Integer userId, @Param("searchContent")String searchContent,@Param("startSize")Integer startSize,@Param("limit")Integer limit);
+
+    /**
+     * 全局搜索结果数量
+     * @param userId
+     * @param searchContent
+     * @return
+     */
+    @Select("select count(*) from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId}   and (  f.departmentName " +
+            "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%'))  ")
+    Integer countSearchFile(@Param("userId")Integer userId, @Param("searchContent")String searchContent);
+
+    @Update(" update  FileDetail set fileStyleId = #{fileStyleId},fileStyle=#{fileStyle} where id=#{id}")
+    Integer updateFileStyle(@Param("id")Integer id,@Param("fileStyleId")Integer fileStyleId,@Param("fileStyle")String fileStyle);
+
+
 
     class FileQuery {
         public String queryFileByDep(Map<String, Object> map) {

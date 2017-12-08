@@ -188,6 +188,39 @@ public class FileController {
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
         return fileService.showUserLookFile(userId, current, pageSize);
     }
+    /**
+     * 个人全部文件显示页面
+     *
+     * @param object
+     * @return
+     */
+    @ApiOperation(value = "个人全部文件显示接口", notes = "传递必要参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户ID", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = " Integer", name = "current", value = "当前页", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "pageSize", value = "页码", required = true),
+    })
+    @RequestMapping(value = "show/searchresult", method = RequestMethod.POST)
+    public JsonResult showSearchFile(@RequestBody String object) {
+        return fileService.showSearchFile(object);
+    }
+
+    /**
+     * 修改文件类型
+     *
+     * @param object
+     * @return
+     */
+    @ApiOperation(value = "修改文件类型接口", notes = "传递必要参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "fileIds", value = "拼接文件ID", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = " Integer", name = "fileStyleId", value = "文档类型d", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户Id", required = true),
+    })
+    @RequestMapping(value = "update/filestyle", method = RequestMethod.POST)
+    public JsonResult updateFileStyle(@RequestBody String object) {
+        return fileService.updateFileStyle(object);
+    }
 
     /**
      * @param file

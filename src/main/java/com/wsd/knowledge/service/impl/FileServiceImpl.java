@@ -1,5 +1,6 @@
 package com.wsd.knowledge.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.wsd.knowledge.entity.*;
 import com.wsd.knowledge.mapper.FileKindMapper;
 import com.wsd.knowledge.mapper.FileMapper;
@@ -37,6 +38,8 @@ public class FileServiceImpl implements FileService {
     private FileKindMapper fileKindMapper;
     @Autowired
     private OperationMapper operationMapper;
+
+    RdPage page = null;
 
     /**
      * 组合查询和全部查询
@@ -136,7 +139,7 @@ public class FileServiceImpl implements FileService {
         if (str.equals("full")) {
             return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
         }
-        String fileNo = String.valueOf(new Date().getTime()).concat("000010");
+        String fileNo = String.valueOf(new Date().getTime()).concat("888888");
         SystemUser systemUser = userRepositoty.findInfo(userId);
         FileKind fileKind = fileKindMapper.selectFileKind(fileStyleId);
         //生成实体类
@@ -169,8 +172,8 @@ public class FileServiceImpl implements FileService {
         Integer j = null;
         for (String id : ids.split(",")) {
             j = fileMapper.updateFileShow(id);
-            Integer iid = Integer.parseInt(id);
-            OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, iid, 2, new DateUtil().getSystemTime());
+
+            OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, Integer.parseInt(id), 2, new DateUtil().getSystemTime());
             operationMapper.insertOperationLog(operationLog);//添加操作日志
         }
 
@@ -258,7 +261,7 @@ public class FileServiceImpl implements FileService {
     @Override
     @Transactional(readOnly = false)
     public JsonResult updateFileDetail(Integer id, String content, String fileurl, Integer fileStyleId, Integer userId) {
-        if (id == null || content == "null" || fileurl == "null" || fileStyleId == null || userId == null) {
+        if (id == null || content.equals("") || fileurl.equals("") || fileStyleId == null || userId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         String str = new DateUtil().cacheExist(String.valueOf(userId));
@@ -301,7 +304,6 @@ public class FileServiceImpl implements FileService {
         List<Map> map = fileMapper.showUserLookFile(userId, startSize, pageSize);
         Integer sum = fileMapper.countUserLookFile(userId);
         if (map != null) {
-            RdPage page = new RdPage();
             page.setTotal(sum);
             page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
             page.setCurrent(current);
@@ -309,6 +311,58 @@ public class FileServiceImpl implements FileService {
             return new JsonResult(0, map, "查询结果", page);
         }
         return new JsonResult(2, 0, "查无结果", 0);
+    }
+
+    @Override
+    public JsonResult showSearchFile(String object) {
+        if (object.equals("")) {
+            return new JsonResult(2, 0, "参数为空", 0);
+        }
+        JSONObject jsonObject = JSONObject.parseObject(object);
+        Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
+        Integer current = Integer.parseInt(String.valueOf(jsonObject.get("current")));
+        Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
+        String searchContent = String.valueOf(jsonObject.get("searchContent"));
+        if (userId == null || current == null || pageSize == null || searchContent.equals("")) {
+            return new JsonResult(2, 0, "参数为空", 0);
+        }
+        int startSize = (current - 1) * pageSize;
+        List<Map> map = fileMapper.showSearchFile(userId, searchContent, startSize, pageSize);
+        Integer sum = fileMapper.countSearchFile(userId, searchContent);
+        if (map != null) {
+            page.setTotal(sum);
+            page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
+            page.setCurrent(current);
+            page.setPageSize(pageSize);
+            return new JsonResult(0, map, "查询结果", page);
+        }
+        return new JsonResult(2, 0, "查无结果", 0);
+    }
+
+    @Override
+    public JsonResult updateFileStyle(String object) {
+        if (object.equals("")) {
+            return new JsonResult(2, 0, "参数为空", 0);
+        }
+        JSONObject jsonObject = JSONObject.parseObject(object);
+        Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
+        Integer fileStyleId = Integer.parseInt(String.valueOf(jsonObject.get("fileStyleId")));
+        String fileIds = String.valueOf(jsonObject.get("fileIds"));
+        if (userId == null || fileStyleId == null || fileIds.equals("")) {
+            return new JsonResult(2, 0, "参数为空", 0);
+        }
+        SystemUser systemUser = userRepositoty.findInfo(userId);
+        FileKind fileKind = fileKindMapper.selectFileKind(fileStyleId);
+        Integer result = null;
+        for (String id : fileIds.split(",")) {
+            result = fileMapper.updateFileStyle(Integer.parseInt(id), fileStyleId, fileKind.getFileKindName());
+            OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, Integer.parseInt(id), 3, new DateUtil().getSystemTime());
+            operationMapper.insertOperationLog(operationLog);
+        }
+        if (result != 0) {
+            return new JsonResult(0, 0, "操作成功", 0);
+        }
+        return new JsonResult(2, 0, "操作失败", 0);
     }
 
 }

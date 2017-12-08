@@ -11,6 +11,7 @@ public interface FileService {
 
     /**
      * 查询所有文件，组合查询
+     *
      * @param departmentName
      * @param fileStyleId
      * @param title
@@ -20,10 +21,11 @@ public interface FileService {
      * @param limit
      * @return
      */
-    JsonResult showAllFile(String departmentName, String   fileStyleId, String title,String startDate, String endDate,   Integer page, Integer limit);
+    JsonResult showAllFile(String departmentName, String fileStyleId, String title, String startDate, String endDate, Integer page, Integer limit);
 
     /**
      * 添加文件
+     *
      * @param title
      * @param content
      * @param photourl
@@ -33,26 +35,29 @@ public interface FileService {
      * @param filesize
      * @return
      */
-    JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize,String describe);
+    JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize, String describe);
 
     /**
      * 批量删除文件
+     *
      * @param ids
      * @return
      */
-    JsonResult deleteFile(String  ids,Integer  userId);
+    JsonResult deleteFile(String ids, Integer userId);
 
 
     /**
      * 查阅文件修改此文件被查看次数
+     *
      * @param fileId
      * @param userId
      * @return
      */
-    JsonResult readFile(Integer fileId,Integer userId);
+    JsonResult readFile(Integer fileId, Integer userId);
 
     /**
      * 下载文件执行相应逻辑
+     *
      * @param id
      * @param userId
      * @return
@@ -61,7 +66,8 @@ public interface FileService {
 
 
     /**
-     *修改文件
+     * 修改文件
+     *
      * @param id
      * @param content
      * @param fileurl
@@ -69,16 +75,31 @@ public interface FileService {
      * @param userId
      * @return
      */
-    JsonResult updateFileDetail(Integer id,String content,String fileurl,Integer fileStyleId, Integer userId);
+    JsonResult updateFileDetail(Integer id, String content, String fileurl, Integer fileStyleId, Integer userId);
 
     /**
      * 展示个人能看到的所有文件
+     *
      * @param userId
      * @param current
      * @param pageSize
      * @return
      */
-    JsonResult showUserLookFile(Integer userId,  Integer current, Integer pageSize);
+    JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize);
 
 
+    /**
+     * 展示搜索结果
+     * @param object
+     * @return
+     */
+    JsonResult showSearchFile(String object);
+
+
+    /**
+     * 批量更改文件类型
+     * @param object
+     * @return
+     */
+    JsonResult updateFileStyle(String object);
 }

@@ -76,7 +76,7 @@ public class OperationController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "current", value = "页码", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "pageSize", value = "每页数量", required = true),
     })
-    @RequestMapping(value = "show/allupload.htmls", method = RequestMethod.GET)
+    @RequestMapping(value = "show/allupload.htmls", method = RequestMethod.POST)
     public JsonResult showAllUpload(@RequestBody String object) {
         JSONObject jsonObject = JSONObject.parseObject(object);
         Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
