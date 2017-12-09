@@ -194,9 +194,10 @@ public class FileController {
      * @param object
      * @return
      */
-    @ApiOperation(value = "个人全部文件显示接口", notes = "传递必要参数")
+    @ApiOperation(value = "全部搜索显示接口", notes = "传递必要参数")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户ID", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "searchContent", value = "搜索关键词", required = true),
             @ApiImplicitParam(paramType = "query", dataType = " Integer", name = "current", value = "当前页", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "pageSize", value = "页码", required = true),
     })

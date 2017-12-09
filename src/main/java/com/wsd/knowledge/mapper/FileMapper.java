@@ -152,8 +152,8 @@ public interface FileMapper {
      * @param searchContent
      * @return
      */
-    @Select("select count(*) from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId}   and (  f.departmentName " +
-            "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%'))  ")
+    @Select("select count(*) from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId} and f.departmentName " +
+            "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%')  ")
     Integer countSearchFile(@Param("userId")Integer userId, @Param("searchContent")String searchContent);
 
     @Update(" update  FileDetail set fileStyleId = #{fileStyleId},fileStyle=#{fileStyle} where id=#{id}")

@@ -39,7 +39,7 @@ public class FileServiceImpl implements FileService {
     @Autowired
     private OperationMapper operationMapper;
 
-    RdPage page = null;
+
 
     /**
      * 组合查询和全部查询
@@ -57,20 +57,20 @@ public class FileServiceImpl implements FileService {
     public JsonResult showAllFile(String departmentName, String fileStyleId, String title, String startDate, String endDate, Integer current, Integer pageSize) {
 
 
-        if (departmentName == "null") {
+        if (departmentName.equals("null")){
             departmentName = "";
         }
 
-        if (fileStyleId == "null") {
+        if (fileStyleId == null) {
             fileStyleId = "";
         }
-        if (title == "null") {
+        if (title.equals("null")) {
             title = "";
         }
-        if (startDate == "null") {
+        if (startDate.equals("null")) {
             startDate = "2017-11-01 13:30";
         }
-        if (endDate == "null") {
+        if (endDate .equals("")) {
             endDate = "";
         }
         if (current == null || pageSize == null) {
@@ -90,7 +90,6 @@ public class FileServiceImpl implements FileService {
             page.setCurrent(current);
             page.setPageSize(pageSize);
             return new JsonResult(0, map, "查询结果", page);
-
         } else {
             Map<String, Object> map = new HashMap<>();
             map.put("departmentName", departmentName);
@@ -100,13 +99,13 @@ public class FileServiceImpl implements FileService {
             map.put("endDate", endDate);
             map.put("startSize", startSize);
             map.put("limit", pageSize);
+            List<Map> maps = fileMapper.queryFileByIf(map);
             Map<String, Object> mapss = new HashMap<>();
             mapss.put("departmentName", departmentName);
             mapss.put("fileStyleId", fileStyleId);
             mapss.put("title", title);
             mapss.put("startDate", startDate);
             mapss.put("endDate", endDate);
-            List<Map> maps = fileMapper.queryFileByIf(map);
             Integer sum = fileMapper.countFilePcs(mapss);
             if (sum == null) {
                 sum = 0;
@@ -172,11 +171,9 @@ public class FileServiceImpl implements FileService {
         Integer j = null;
         for (String id : ids.split(",")) {
             j = fileMapper.updateFileShow(id);
-
             OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, Integer.parseInt(id), 2, new DateUtil().getSystemTime());
             operationMapper.insertOperationLog(operationLog);//添加操作日志
         }
-
 //        for (int i = 0; i < lengths; i++) {
 //            j = fileMapper.updateFileShow(id[i]);//更改文件属性
 //            OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, id[i], 2, new DateUtil().getSystemTime());
@@ -304,6 +301,7 @@ public class FileServiceImpl implements FileService {
         List<Map> map = fileMapper.showUserLookFile(userId, startSize, pageSize);
         Integer sum = fileMapper.countUserLookFile(userId);
         if (map != null) {
+            RdPage page = new RdPage();
             page.setTotal(sum);
             page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
             page.setCurrent(current);
@@ -330,16 +328,23 @@ public class FileServiceImpl implements FileService {
         List<Map> map = fileMapper.showSearchFile(userId, searchContent, startSize, pageSize);
         Integer sum = fileMapper.countSearchFile(userId, searchContent);
         if (map != null) {
-            page.setTotal(sum);
-            page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
-            page.setCurrent(current);
-            page.setPageSize(pageSize);
-            return new JsonResult(0, map, "查询结果", page);
+            RdPage rdPage=new RdPage();
+            rdPage.setTotal(sum);
+            rdPage.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
+            rdPage.setCurrent(current);
+            rdPage.setPageSize(pageSize);
+            return new JsonResult(0, map, "查询结果", rdPage);
         }
         return new JsonResult(2, 0, "查无结果", 0);
     }
 
+    /**
+     * 批量更新文件类型
+     * @param object
+     * @return
+     */
     @Override
+    @Transactional(readOnly = false)
     public JsonResult updateFileStyle(String object) {
         if (object.equals("")) {
             return new JsonResult(2, 0, "参数为空", 0);
