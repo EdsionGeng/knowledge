@@ -78,4 +78,22 @@ public class CommonController {
         String docName = String.valueOf(jsonObject.get("docName"));
         return commonService.insertRule(parentId, docName);
     }
+
+
+    /**
+     * 删除目录
+     *
+     * @param object
+     * @return
+     */
+    @ApiOperation(value = "添加文档目录", notes = "传递必要参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "parentId", value = "父ID"),
+            @ApiImplicitParam(paramType = "query", dataType = " String", name = "docName", value = "目录名称")
+    })
+    @RequestMapping(value = "delete/rule.htmls", method = RequestMethod.POST)
+    public JsonResult Rule(@RequestBody String object) {
+        return commonService.deleteRule(object);
+    }
+
 }

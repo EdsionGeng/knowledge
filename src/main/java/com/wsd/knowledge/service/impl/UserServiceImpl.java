@@ -56,4 +56,12 @@ public class UserServiceImpl implements UserService {
         List<Map> map=userRepositoty.queryByGroupId(userGroupId);
         return new JsonResult(0,map,"查询结果",0);
     }
+
+    @Override
+    public JsonResult queryAdmin() {
+
+
+        List<Integer> list=userRepositoty.queryAdmin();
+        return new JsonResult(0,list,"查询结果",0);
+    }
 }

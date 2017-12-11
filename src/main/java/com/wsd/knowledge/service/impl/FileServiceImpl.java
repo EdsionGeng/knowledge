@@ -40,7 +40,6 @@ public class FileServiceImpl implements FileService {
     private OperationMapper operationMapper;
 
 
-
     /**
      * 组合查询和全部查询
      *
@@ -57,20 +56,20 @@ public class FileServiceImpl implements FileService {
     public JsonResult showAllFile(String departmentName, String fileStyleId, String title, String startDate, String endDate, Integer current, Integer pageSize) {
 
 
-        if (departmentName.equals("null")){
+        if (departmentName=="null") {
             departmentName = "";
         }
 
-        if (fileStyleId == null) {
+        if (fileStyleId .equals("")) {
             fileStyleId = "";
         }
-        if (title.equals("null")) {
+        if (title.equals("")) {
             title = "";
         }
-        if (startDate.equals("null")) {
+        if (startDate.equals("")) {
             startDate = "2017-11-01 13:30";
         }
-        if (endDate .equals("")) {
+        if (endDate.equals("")) {
             endDate = "";
         }
         if (current == null || pageSize == null) {
@@ -328,7 +327,7 @@ public class FileServiceImpl implements FileService {
         List<Map> map = fileMapper.showSearchFile(userId, searchContent, startSize, pageSize);
         Integer sum = fileMapper.countSearchFile(userId, searchContent);
         if (map != null) {
-            RdPage rdPage=new RdPage();
+            RdPage rdPage = new RdPage();
             rdPage.setTotal(sum);
             rdPage.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
             rdPage.setCurrent(current);
@@ -340,6 +339,7 @@ public class FileServiceImpl implements FileService {
 
     /**
      * 批量更新文件类型
+     *
      * @param object
      * @return
      */
@@ -368,6 +368,21 @@ public class FileServiceImpl implements FileService {
             return new JsonResult(0, 0, "操作成功", 0);
         }
         return new JsonResult(2, 0, "操作失败", 0);
+    }
+
+    @Override
+    public JsonResult searchFileStyleId(String object) {
+
+        if (object.equals("")) {
+            return new JsonResult(2, 0, "参数为空", 0);
+        }
+        JSONObject jsonObject = JSONObject.parseObject(object);
+        Integer fileStyleId = Integer.parseInt(String.valueOf(jsonObject.get("fileStyleId")));
+        Integer sum = fileMapper.countStylePcs(fileStyleId);
+        if (sum == null) {
+            sum = 0;
+        }
+        return new JsonResult(0, sum, "查询结果", 0);
     }
 
 }

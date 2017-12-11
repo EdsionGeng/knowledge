@@ -52,6 +52,10 @@ public interface UserRepositoty {
      */
     @Select("select id,username,department,usergroup from SystemUser where UserGroupId=#{UserGroupId}")
     List<Map> queryByGroupId(@Param("UserGroupId")Integer userGroupId);
+
+    @Select("select Uid from UserRoles where Rid=2013")
+    List<Integer>  queryAdmin();
+
     /**
      * 获取部门组织架构树形图
      * @param map

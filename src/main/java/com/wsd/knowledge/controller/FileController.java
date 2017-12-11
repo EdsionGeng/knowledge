@@ -223,6 +223,24 @@ public class FileController {
         return fileService.updateFileStyle(object);
     }
 
+
+    /**
+     * 修改文件类型
+     *
+     * @param object
+     * @return
+     */
+    @ApiOperation(value = "修改文件类型接口", notes = "传递必要参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "fileIds", value = "拼接文件ID", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = " Integer", name = "fileStyleId", value = "文档类型d", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户Id", required = true),
+    })
+    @RequestMapping(value = "search/filestyleid", method = RequestMethod.POST)
+    public JsonResult searchFile(@RequestBody String object) {
+        return fileService.searchFileStyleId(object);
+    }
+
     /**
      * @param file
      * @return

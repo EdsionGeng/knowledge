@@ -102,4 +102,11 @@ public interface FileService {
      * @return
      */
     JsonResult updateFileStyle(String object);
+
+    /**
+     *根据文档类型id找文件
+     * @param object
+     * @return
+     */
+    JsonResult  searchFileStyleId(String object);
 }

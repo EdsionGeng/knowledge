@@ -91,11 +91,12 @@ public interface FileMapper {
      * @return
      */
     @Update("update FileDetail set fileDisplay=0 where id=#{id}")
-    Integer updateFileShow(@Param("id") String  id);
+    Integer updateFileShow(@Param("id") String id);
 
 
     /**
      * 更新文件
+     *
      * @param fileStyleId
      * @param fileContent
      * @param id
@@ -105,7 +106,8 @@ public interface FileMapper {
     Integer updateFileContent(@Param("fileStyleId") Integer fileStyleId, @Param("fileContent") String fileContent, @Param("id") Integer id);
 
     /**
-     *更新文件
+     * 更新文件
+     *
      * @param fileStyleId
      * @param fileContent
      * @param id
@@ -117,25 +119,27 @@ public interface FileMapper {
 
     /**
      * 查看用户能看的全部文件
+     *
      * @param userId
      * @param startSize
      * @param limit
      * @return
      */
     @Select("select f.* from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId} order by f.addFileTime Desc limit #{startSize},#{limit} ")
-    List<Map> showUserLookFile(@Param("userId")Integer userId,@Param("startSize")Integer startSize,@Param("limit")Integer limit);
+    List<Map> showUserLookFile(@Param("userId") Integer userId, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
 
     /**
      * 统计用户能看的全部文件数量
-     * @param userId
      *
+     * @param userId
      * @return
      */
     @Select("select count(*)   from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and  f.fileDisplay=1 and u.userId=#{userId} order by f.addFileTime Desc ")
-    Integer  countUserLookFile(@Param("userId")Integer userId);
+    Integer countUserLookFile(@Param("userId") Integer userId);
 
     /**
      * 全局搜索结果
+     *
      * @param userId
      * @param searchContent
      * @param startSize
@@ -144,22 +148,38 @@ public interface FileMapper {
      */
     @Select("select f.* from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId}   and  f.departmentName " +
             "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%') order by f.addFileTime Desc limit #{startSize},#{limit} ")
-    List<Map> showSearchFile(@Param("userId")Integer userId, @Param("searchContent")String searchContent,@Param("startSize")Integer startSize,@Param("limit")Integer limit);
+    List<Map> showSearchFile(@Param("userId") Integer userId, @Param("searchContent") String searchContent, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
 
     /**
      * 全局搜索结果数量
+     *
      * @param userId
      * @param searchContent
      * @return
      */
     @Select("select count(*) from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId} and f.departmentName " +
             "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%')  ")
-    Integer countSearchFile(@Param("userId")Integer userId, @Param("searchContent")String searchContent);
+    Integer countSearchFile(@Param("userId") Integer userId, @Param("searchContent") String searchContent);
 
+    /**
+     * 更新文档类型
+     *
+     * @param id
+     * @param fileStyleId
+     * @param fileStyle
+     * @return
+     */
     @Update(" update  FileDetail set fileStyleId = #{fileStyleId},fileStyle=#{fileStyle} where id=#{id}")
-    Integer updateFileStyle(@Param("id")Integer id,@Param("fileStyleId")Integer fileStyleId,@Param("fileStyle")String fileStyle);
+    Integer updateFileStyle(@Param("id") Integer id, @Param("fileStyleId") Integer fileStyleId, @Param("fileStyle") String fileStyle);
 
-
+    /**
+     * 统计某一文档类型的文件数量
+     *
+     * @param fileStyleId
+     * @return
+     */
+    @Select("select count(*) from FileDetail where  fileStyleId = #{fileStyleId} and fileDisplay=1 ")
+    Integer countStylePcs(@Param("fileStyleId") Integer fileStyleId);
 
     class FileQuery {
         public String queryFileByDep(Map<String, Object> map) {
@@ -183,6 +203,7 @@ public interface FileMapper {
             sql.append(" limit #{startSize},#{limit} ");
             return sql.toString();
         }
+
         public String countFilePcs(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
             sql.append(" select  count(id ) from  FileDetail  o  where o.fileDisplay=1 and o.addFileTime >= #{startDate}");

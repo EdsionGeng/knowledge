@@ -1,5 +1,6 @@
 package com.wsd.knowledge.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.wsd.knowledge.entity.FileKind;
 import com.wsd.knowledge.entity.NewDepartment;
@@ -57,6 +58,7 @@ public class CommonServiceImpl implements CommonService {
 
     /**
      * 添加子目录
+     *
      * @param parentid
      * @param docName
      * @return
@@ -71,6 +73,21 @@ public class CommonServiceImpl implements CommonService {
             return new JsonResult(0, 0, "操作成功", 0);
         }
         return new JsonResult(2, 0, "操作失败", 0);
+    }
+
+    @Override
+    public JsonResult deleteRule(String object) {
+        if (object.equals("")) {
+            return new JsonResult(2, 0, "缺少参数", 0);
+        }
+        JSONObject jsonObject = JSONObject.parseObject(object);
+
+        Integer fileStyleId = Integer.parseInt(String.valueOf(jsonObject.get("fileStyleId")));
+        Integer result = commonMapper.deleteDocRule(fileStyleId);
+        if (result != 0) {
+            return new JsonResult(0, 0, "删除成功", 0);
+        }
+         return new JsonResult(2, 0, "删除失败", 0);
     }
 
     /**

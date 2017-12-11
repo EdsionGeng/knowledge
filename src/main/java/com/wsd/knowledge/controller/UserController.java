@@ -74,4 +74,13 @@ public class UserController {
         return userService.queryByGroupId(object);
     }
 
+
+
+    @ApiOperation(value = " 调取知识库所有管理员", notes = "传递部门")
+    @RequestMapping(value = "queryadmin.htmls", method = RequestMethod.POST)
+    @ResponseBody
+    public JsonResult queryAdmin() {
+        return userService.queryAdmin();
+    }
+
 }

@@ -36,4 +36,11 @@ public interface CommonService {
      * @return
      */
     JsonResult insertRule(Integer parentid,String docName);
+
+    /**
+     * 删除文档类型
+     * @param object
+     * @return
+     */
+    JsonResult deleteRule(String object);
 }
