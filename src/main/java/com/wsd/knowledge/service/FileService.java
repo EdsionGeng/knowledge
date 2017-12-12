@@ -109,4 +109,11 @@ public interface FileService {
      * @return
      */
     JsonResult  searchFileStyleId(String object);
+
+    /**
+     * 删除单个文件
+     * @param object
+     * @return
+     */
+    JsonResult deleteFileStyle(String object);
 }

@@ -138,11 +138,16 @@ public class FileServiceImpl implements FileService {
             return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
         }
         String fileNo = String.valueOf(new Date().getTime()).concat("888888");
+        String re = new DateUtil().cacheExist(String.valueOf(userId));
+        if (re.equals("full")) {
+            return new JsonResult(2, 0, "网络异常", 0);
+        }
         SystemUser systemUser = userRepositoty.findInfo(userId);
         FileKind fileKind = fileKindMapper.selectFileKind(fileStyleId);
         //生成实体类
         FileDetail fileDetail = new FileDetail(systemUser.getDepartment(), systemUser.getUsername(), userId, fileStyleId, fileNo, title
                 , fileKind.getFileKindName(), content, fileurl, photourl, 0, 0, 0, filesize, 1, describe, new DateUtil().getSystemTime());
+
         if (fileMapper.insertFileDetail(fileDetail) != null) {
             //添加文件成功 ，获得此文件ID返回前台，执行权限添加操作
             Integer fileId = fileMapper.selectIdByIf(fileNo);
@@ -273,6 +278,8 @@ public class FileServiceImpl implements FileService {
         if (result != 0) {
             SystemUser systemUser = userRepositoty.findInfo(userId);
             //添加操作日志
+
+
             OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, id, 3, new DateUtil().getSystemTime());
             Integer k = operationMapper.insertOperationLog(operationLog);
             if (k != 0) {
@@ -362,19 +369,24 @@ public class FileServiceImpl implements FileService {
                 rdPage.setPageSize(pageSize);
                 return new JsonResult(0, map, "查询结果", rdPage);
             }
-        } else{
+        } else {
 
-            Map<String,Object> params=new HashMap<>();
-            params.put("userId",userId);
-            params.put("startSize",startSize);
-            params.put("limit",pageSize);
-            params.put("searchContent",searchContent);
-            params.put("departmentName",departmentName);
-            params.put("fileStyleId",fileStyleId);
-            map=fileMapper.showIfSearchFile(params);
-            sum=fileMapper.countIfSearchFile(params);
+            Map<String, Object> params = new HashMap<>();
+            params.put("userId", userId);
+            params.put("startSize", startSize);
+            params.put("limit", pageSize);
+            params.put("searchContent", searchContent);
+            params.put("departmentName", departmentName);
+            params.put("fileStyleId", fileStyleId);
+            map = fileMapper.showIfSearchFile(params);
+            sum = fileMapper.countIfSearchFile(params);
+            rdPage.setTotal(sum);
+            rdPage.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
+            rdPage.setCurrent(current);
+            rdPage.setPageSize(pageSize);
+            return new JsonResult(0, map, "查询结果", rdPage);
         }
-            return new JsonResult(2, 0, "查无结果", 0);
+        return new JsonResult(2, 0, "查无结果", 0);
     }
 
     /**
@@ -402,6 +414,10 @@ public class FileServiceImpl implements FileService {
         for (String id : fileIds.split(",")) {
             result = fileMapper.updateFileStyle(Integer.parseInt(id), fileStyleId, fileKind.getFileKindName());
             OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, Integer.parseInt(id), 3, new DateUtil().getSystemTime());
+            String str = new DateUtil().cacheExist(String.valueOf(userId));
+            if (str.equals("full")) {
+                return new JsonResult(2, 0, "网络异常", 0);
+            }
             operationMapper.insertOperationLog(operationLog);
         }
         if (result != 0) {
@@ -410,6 +426,11 @@ public class FileServiceImpl implements FileService {
         return new JsonResult(2, 0, "操作失败", 0);
     }
 
+    /**
+     * 文件类型对应文件数量
+     * @param object
+     * @return
+     */
     @Override
     public JsonResult searchFileStyleId(String object) {
 
@@ -423,6 +444,34 @@ public class FileServiceImpl implements FileService {
             sum = 0;
         }
         return new JsonResult(0, sum, "查询结果", 0);
+    }
+
+    /**
+     * 删除单个文件
+     * @param object
+     * @return
+     */
+    @Override
+    @Transactional(readOnly = false)
+    public JsonResult deleteFileStyle(String object) {
+        if (object.equals("")) {
+            return new JsonResult(2, 0, "参数为空", 0);
+        }
+        JSONObject jsonObject = JSONObject.parseObject(object);
+        String fileId = String.valueOf(jsonObject.get("fileId"));
+        Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
+        Integer result = fileMapper.updateFileShow(fileId);
+        if (result != 0) {
+            SystemUser systemUser = userRepositoty.findInfo(userId);
+            String str = new DateUtil().cacheExist(String.valueOf(userId));
+            if (str.equals("full")) {
+                return new JsonResult(2, 0, "网络异常", 0);
+            }
+            OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId,Integer.parseInt(fileId),2, new DateUtil().getSystemTime());
+            operationMapper.insertOperationLog(operationLog);//添加操作日志
+            return new JsonResult(0, 0, "操作成功", 0);
+        }
+        return new JsonResult(2, 0, "操作异常", 0);
     }
 
 }

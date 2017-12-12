@@ -93,7 +93,7 @@ public class FileController {
      * @param object
      * @return
      */
-    @ApiOperation(value = "删除文件接口", notes = "传递必要参数")
+    @ApiOperation(value = "批量删除文件接口", notes = "传递必要参数")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileds ", value = "文件ID 数组", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户ID", required = true),
@@ -235,7 +235,23 @@ public class FileController {
      * @param object
      * @return
      */
-    @ApiOperation(value = "修改文件类型接口", notes = "传递必要参数")
+    @ApiOperation(value = "删除单个文件类型接口", notes = "传递必要参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "fileId", value = "文件ID", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户Id", required = true),
+    })
+    @RequestMapping(value = "delete/singlefile", method = RequestMethod.POST)
+    public JsonResult deleteFileStyle(@RequestBody String object) {
+        return fileService.deleteFileStyle(object);
+    }
+
+    /**
+     * 修改文件类型
+     *
+     * @param object
+     * @return
+     */
+    @ApiOperation(value = "根据文件类型查对应的文件数量", notes = "传递必要参数")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "fileIds", value = "拼接文件ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = " Integer", name = "fileStyleId", value = "文档类型d", required = true),

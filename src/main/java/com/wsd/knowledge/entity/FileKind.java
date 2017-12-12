@@ -1,9 +1,9 @@
 package com.wsd.knowledge.entity;
 
 
-
 import java.util.List;
 //@Entity
+
 public class FileKind {
 //    @Id
 //    @GeneratedValue
@@ -13,6 +13,7 @@ public class FileKind {
     private String fileKindName;
 
    // @Column(name = "fileParentId", nullable = false, columnDefinition = " '文件的上一级Id'")
+
     private int fileParentId;//文件的上一级Id
 
     //@Column(name = "operationTime", nullable = false, length = 32, columnDefinition = " '操作时间'")
