@@ -124,13 +124,13 @@ public class AdvertisementController {
      */
     @ApiOperation(value = "发送公告", notes = "传递必要参数")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "departmentId", value = "部门ID", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "userIds", value = "人员拼接ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "commonId", value = "公告ID", required = true)
     })
     @RequestMapping(value = "send/adtouser.htmls", method = RequestMethod.POST)
     public JsonResult sendAdToUser(@RequestBody String object) {
         jsonObject = JSONObject.parseObject(object);
-        String ids = String.valueOf(jsonObject.get("departmentId"));
+        String ids = String.valueOf(jsonObject.get("userIds"));
         List<Integer> departmentId = null;
         for (String id : ids.split(",")) {
             departmentId.add(Integer.parseInt(id));
@@ -153,7 +153,7 @@ public class AdvertisementController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "current", value = "页码数", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "pageSize", value = "页面数量", required = true),
     })
-    @RequestMapping(value = "show/allad.htmls", method = RequestMethod.POST)
+    @RequestMapping(value = "showallad.htmls", method = RequestMethod.POST)
     public JsonResult showAllAd(@RequestBody String object) {
         jsonObject = JSONObject.parseObject(object);
         String title = String.valueOf(jsonObject.get("title"));

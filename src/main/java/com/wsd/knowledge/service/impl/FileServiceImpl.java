@@ -56,11 +56,11 @@ public class FileServiceImpl implements FileService {
     public JsonResult showAllFile(String departmentName, String fileStyleId, String title, String startDate, String endDate, Integer current, Integer pageSize) {
 
 
-        if (departmentName=="null") {
+        if (departmentName == "null") {
             departmentName = "";
         }
 
-        if (fileStyleId .equals("")) {
+        if (fileStyleId.equals("")) {
             fileStyleId = "";
         }
         if (title.equals("")) {
@@ -292,20 +292,42 @@ public class FileServiceImpl implements FileService {
      * @return
      */
     @Override
-    public JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize) {
+    public JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize, String fileStyleId, String departmentName) {
         if (current == null || pageSize == null || userId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
+
         int startSize = (current - 1) * pageSize;
-        List<Map> map = fileMapper.showUserLookFile(userId, startSize, pageSize);
-        Integer sum = fileMapper.countUserLookFile(userId);
-        if (map != null) {
-            RdPage page = new RdPage();
-            page.setTotal(sum);
-            page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
-            page.setCurrent(current);
-            page.setPageSize(pageSize);
-            return new JsonResult(0, map, "查询结果", page);
+        RdPage page = new RdPage();
+        List<Map> map = null;
+        Integer sum = null;
+        if (departmentName.equals("") && fileStyleId == null) {
+            map = fileMapper.showUserLookFile(userId, startSize, pageSize);
+            sum = fileMapper.countUserLookFile(userId);
+            if (map != null) {
+                page.setTotal(sum);
+                page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
+                page.setCurrent(current);
+                page.setPageSize(pageSize);
+                return new JsonResult(0, map, "查询结果", page);
+            }
+        } else {
+            Map<String, Object> params = new HashMap<>();
+            params.put("userId", userId);
+            params.put("startSize", startSize);
+            params.put("limit", pageSize);
+            params.put("departmentName", departmentName);
+            params.put("filestyleId", fileStyleId);
+            map = fileMapper.showUserIfLookFile(params);
+            if (map != null) {
+                sum = fileMapper.showUserIfFilePcs(params);
+                page.setTotal(sum);
+                page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
+                page.setCurrent(current);
+                page.setPageSize(pageSize);
+                return new JsonResult(0, map, "查询结果", page);
+            }
+
         }
         return new JsonResult(2, 0, "查无结果", 0);
     }
@@ -320,21 +342,39 @@ public class FileServiceImpl implements FileService {
         Integer current = Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
         String searchContent = String.valueOf(jsonObject.get("searchContent"));
+        String departmentName = String.valueOf(jsonObject.get("departmentName"));
+        String fileStyleId = String.valueOf(jsonObject.get("fileStyleId"));
         if (userId == null || current == null || pageSize == null || searchContent.equals("")) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         int startSize = (current - 1) * pageSize;
-        List<Map> map = fileMapper.showSearchFile(userId, searchContent, startSize, pageSize);
-        Integer sum = fileMapper.countSearchFile(userId, searchContent);
-        if (map != null) {
-            RdPage rdPage = new RdPage();
-            rdPage.setTotal(sum);
-            rdPage.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
-            rdPage.setCurrent(current);
-            rdPage.setPageSize(pageSize);
-            return new JsonResult(0, map, "查询结果", rdPage);
+
+        RdPage rdPage = new RdPage();
+        List<Map> map = null;
+        Integer sum = null;
+        if (fileStyleId.equals("") && departmentName.equals("")) {
+            map = fileMapper.showSearchFile(userId, searchContent, startSize, pageSize);
+            sum = fileMapper.countSearchFile(userId, searchContent);
+            if (map != null) {
+                rdPage.setTotal(sum);
+                rdPage.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
+                rdPage.setCurrent(current);
+                rdPage.setPageSize(pageSize);
+                return new JsonResult(0, map, "查询结果", rdPage);
+            }
+        } else{
+
+            Map<String,Object> params=new HashMap<>();
+            params.put("userId",userId);
+            params.put("startSize",startSize);
+            params.put("limit",pageSize);
+            params.put("searchContent",searchContent);
+            params.put("departmentName",departmentName);
+            params.put("fileStyleId",fileStyleId);
+            map=fileMapper.showIfSearchFile(params);
+            sum=fileMapper.countIfSearchFile(params);
         }
-        return new JsonResult(2, 0, "查无结果", 0);
+            return new JsonResult(2, 0, "查无结果", 0);
     }
 
     /**

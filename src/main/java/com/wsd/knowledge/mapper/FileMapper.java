@@ -137,6 +137,12 @@ public interface FileMapper {
     @Select("select count(*)   from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and  f.fileDisplay=1 and u.userId=#{userId} order by f.addFileTime Desc ")
     Integer countUserLookFile(@Param("userId") Integer userId);
 
+
+    @SelectProvider(type = FileQuery.class, method = "showUserIfLookFile")
+    List<Map> showUserIfLookFile(Map<String, Object> map);
+
+    @SelectProvider(type = FileQuery.class, method = "showUserIfFilePcs")
+    Integer showUserIfFilePcs(Map<String, Object> map);
     /**
      * 全局搜索结果
      *
@@ -162,6 +168,23 @@ public interface FileMapper {
     Integer countSearchFile(@Param("userId") Integer userId, @Param("searchContent") String searchContent);
 
     /**
+     * 全局 再加条件
+     * @param map
+     * @return
+     */
+    @SelectProvider(type = FileQuery.class, method = "showIfSearchFile")
+    List<Map> showIfSearchFile(Map<String, Object> map);
+
+
+    /**
+     * 全局 再加条件 总数
+     * @param map
+     * @return
+     */
+    @SelectProvider(type = FileQuery.class, method = "countIfSearchFile")
+     Integer countIfSearchFile(Map<String, Object> map);
+
+    /**
      * 更新文档类型
      *
      * @param id
@@ -184,9 +207,6 @@ public interface FileMapper {
     class FileQuery {
         public String queryFileByDep(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-//            map.put("title",title);
-//            map.put("startDate",startDate);
-//            map.put("endDate",endDate);
             sql.append("select o.* from FileDetail  o  where o.fileDisplay=1 and o.addFileTime >= #{startDate} ");
             if (StringUtils.isNotEmpty((String) map.get("endDate"))) {
                 sql.append(" AND o.addFileTime <= #{endDate} ");
@@ -200,7 +220,7 @@ public interface FileMapper {
             if (StringUtils.isNotEmpty((String) map.get("title"))) {
                 sql.append(" AND o.title like concat('%',#{title},'%')");
             }
-            sql.append(" limit #{startSize},#{limit} ");
+            sql.append(" order by o.addFileTime Desc limit #{startSize},#{limit} ");
             return sql.toString();
         }
 
@@ -218,6 +238,61 @@ public interface FileMapper {
             }
             if (StringUtils.isNotEmpty((String) map.get("title"))) {
                 sql.append(" AND o.title like concat('%',#{title},'%')");
+            }
+            return sql.toString();
+        }
+
+        public String showUserIfLookFile(Map<String, Object> map) {
+            StringBuffer sql = new StringBuffer();
+            sql.append("select o.* from FileDetail  o  left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId} ");
+
+            if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
+                sql.append(" AND o.departmentName like concat ('%',#{departmentName},'%') ");
+            }
+            if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
+                sql.append(" AND o.fileStyleId = #{fileStyleId} ");
+            }
+            sql.append("  order by o.addFileTime Desc limit #{startSize},#{limit} ");
+            return sql.toString();
+        }
+
+        public String showUserIfFilePcs(Map<String, Object> map) {
+            StringBuffer sql = new StringBuffer();
+            sql.append("select count(o.id) from FileDetail  o  left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId} ");
+
+            if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
+                sql.append(" AND o.departmentName like concat ('%',#{departmentName},'%') ");
+            }
+            if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
+                sql.append(" AND o.fileStyleId = #{fileStyleId} ");
+            }
+            return sql.toString();
+        }
+
+        public String showIfSearchFile(Map<String, Object> map) {
+            StringBuffer sql = new StringBuffer();
+            sql.append("select f.* from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId}   and  f.departmentName " +
+                    "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%') ");
+
+            if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
+                sql.append(" AND o.departmentName like concat ('%',#{departmentName},'%') ");
+            }
+            if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
+                sql.append(" AND o.fileStyleId = #{fileStyleId} ");
+            }
+            sql.append(" order by f.addFileTime Desc limit #{startSize},#{limit} ");
+            return sql.toString();
+        }
+        public String countIfSearchFile(Map<String, Object> map) {
+            StringBuffer sql = new StringBuffer();
+            sql.append("select count(f.id) from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId}   and  f.departmentName " +
+                    "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%') ");
+
+            if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
+                sql.append(" AND o.departmentName like concat ('%',#{departmentName},'%') ");
+            }
+            if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
+                sql.append(" AND o.fileStyleId = #{fileStyleId} ");
             }
             return sql.toString();
         }

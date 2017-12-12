@@ -64,7 +64,7 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value = "查找人员接口", notes = "传递部门")
+    @ApiOperation(value = "查找人员接口", notes = "传递人员")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "userGroupId", value = "部门", required = true)
     })
@@ -76,7 +76,7 @@ public class UserController {
 
 
 
-    @ApiOperation(value = " 调取知识库所有管理员", notes = "传递部门")
+    @ApiOperation(value = " 调取知识库所有管理员", notes = "传递人员")
     @RequestMapping(value = "queryadmin.htmls", method = RequestMethod.POST)
     @ResponseBody
     public JsonResult queryAdmin() {

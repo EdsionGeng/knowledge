@@ -113,13 +113,12 @@ public class FileController {
      */
     @ApiOperation(value = "阅读文件接口", notes = "传递必要参数")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "id", value = "文件ID", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileId", value = "文件ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户ID", required = true),
     })
     @RequestMapping(value = "readfile.htmls", method = RequestMethod.POST)
     public JsonResult readFile(@RequestBody String object) {
         JSONObject jsonObject = JSONObject.parseObject(object);
-
         Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
         Integer fileId = Integer.parseInt(String.valueOf(jsonObject.get("fileId")));
         return fileService.readFile(fileId, userId);
@@ -179,6 +178,8 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "Intege", name = "userId", value = "用户ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Intege", name = "current", value = "页数", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "pageSize", value = "每页数量", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "departmentName", value = "部门名字"),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileStyleId", value = "文件类型ID"),
     })
     @RequestMapping(value = "show/userlookfile", method = RequestMethod.POST)
     public JsonResult showUserLookFile(@RequestBody String object) {
@@ -186,7 +187,9 @@ public class FileController {
         Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
         Integer current = Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
-        return fileService.showUserLookFile(userId, current, pageSize);
+        String  fileStyleId = String.valueOf(jsonObject.get("fileStyleId"));
+        String  departmentName =String.valueOf(jsonObject.get("pageSize"));
+        return fileService.showUserLookFile(userId, current, pageSize,fileStyleId,departmentName);
     }
     /**
      * 个人全部文件显示页面
@@ -200,6 +203,8 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "searchContent", value = "搜索关键词", required = true),
             @ApiImplicitParam(paramType = "query", dataType = " Integer", name = "current", value = "当前页", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "pageSize", value = "页码", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "departmentName", value = "部门名字"),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileStyleId", value = "文件类型ID"),
     })
     @RequestMapping(value = "show/searchresult", method = RequestMethod.POST)
     public JsonResult showSearchFile(@RequestBody String object) {

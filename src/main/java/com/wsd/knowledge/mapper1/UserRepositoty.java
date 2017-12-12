@@ -22,7 +22,7 @@ public interface UserRepositoty {
      * @param password
      * @return
      */
-    @Select("select id,username,password from SystemUser  where username = #{name} and password = #{password}")
+    @Select("select id,username from SystemUser  where username = #{name} and password = #{password}")
     SystemUser findUser(@Param("name") String name, @Param("password") String password);
 
     /**
@@ -50,10 +50,10 @@ public interface UserRepositoty {
      * @param userGroupId
      * @return
      */
-    @Select("select id,username,department,usergroup from SystemUser where UserGroupId=#{UserGroupId}")
+    @Select("select id,username,usergroup from SystemUser where UserGroupId=#{UserGroupId} and job=1")
     List<Map> queryByGroupId(@Param("UserGroupId")Integer userGroupId);
 
-    @Select("select Uid from UserRoles where Rid=2013")
+    @Select("select Uid from UserRoles where Rid=2013 ")
     List<Integer>  queryAdmin();
 
     /**
