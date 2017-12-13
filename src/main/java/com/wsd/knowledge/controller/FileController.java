@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.Date;
+import java.util.Random;
 
 /**
  * @Author EdsionGeng
@@ -108,6 +109,7 @@ public class FileController {
 
     /**
      * 查阅文件执行相应操作
+     *
      * @param object
      * @return
      */
@@ -187,10 +189,11 @@ public class FileController {
         Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
         Integer current = Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
-        String  fileStyleId = String.valueOf(jsonObject.get("fileStyleId"));
-        String  departmentName =String.valueOf(jsonObject.get("pageSize"));
-        return fileService.showUserLookFile(userId, current, pageSize,fileStyleId,departmentName);
+        String fileStyleId = String.valueOf(jsonObject.get("fileStyleId"));
+        String departmentName = String.valueOf(jsonObject.get("pageSize"));
+        return fileService.showUserLookFile(userId, current, pageSize, fileStyleId, departmentName);
     }
+
     /**
      * 个人全部文件显示页面
      *
@@ -267,8 +270,12 @@ public class FileController {
      * @return
      */
     //上传简历
-    @RequestMapping(value = "file/upload.htmls", method = RequestMethod.POST)
-    public JsonResult upload(@RequestParam("file") MultipartFile file) {
+    @RequestMapping(value = "/upload.htmls", method = RequestMethod.POST)
+    @ApiOperation(value = "上传封面", notes = "传递必要参数")
+    @ApiImplicitParams({
+
+    })
+    public JsonResult uploadImg(@RequestParam("file") MultipartFile file) {
         String resumeurl = null;
         if (!file.isEmpty()) {
             try {
@@ -299,6 +306,50 @@ public class FileController {
             return new JsonResult(0, resumeurl, "上传成功", 0);
         } else {
             return new JsonResult(2, 0, "上传失败，因为文件是空的.", 0);
+        }
+    }
+
+    /**
+     * @param file
+     * @return
+     */
+    //上传文件
+    @RequestMapping(value = "photo/upload.htmls", method = RequestMethod.POST)
+    @ApiOperation(value = "上传文件", notes = "传递必要参数")
+    @ApiImplicitParams({
+
+    })
+    @ResponseBody
+    public JsonResult uploadFile(@RequestParam("file") MultipartFile file) {
+        String resumeurl = null;
+        if (!file.isEmpty()) {
+            try {
+                // 这里只是简单例子，文件直接输出到项目路径下。
+                // 实际项目中，文件需要输出到指定位置，需要在增加代码处理。
+                // 还有关于文件格式限制、文件大小限制，详见：中配置。
+                //重新生成文件名，避免乱码问题
+                String filename = file.getOriginalFilename();
+                String fName = null;
+                if (filename.indexOf(".") >= 0) {
+                    fName = filename.substring(filename.lastIndexOf("."), filename.length());
+                }
+                String path = String.valueOf(new Random().nextInt(100)).concat((fName));//拼接新文件名
+                resumeurl = String.valueOf(new Date().getTime()).concat(path);
+                BufferedOutputStream out = new BufferedOutputStream(
+                        new FileOutputStream("static//" + new File(resumeurl)));
+                out.write(file.getBytes());
+                out.flush();
+                out.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                return new JsonResult(2, 0, "上传失败," + e.getMessage(), 0);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return new JsonResult(2, 0, "上传失败," + e.getMessage(), 0);
+            }
+            return new JsonResult(2, resumeurl, "上传成功", 0);
+        } else {
+            return new JsonResult(2, "", "上传失败，因为文件是空的.", 0);
         }
     }
 

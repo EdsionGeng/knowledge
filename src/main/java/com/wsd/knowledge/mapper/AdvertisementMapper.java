@@ -73,7 +73,7 @@ public interface AdvertisementMapper {
      * @param limit
      * @return
      */
-    @Select(" select id ,adContent,adTitle,addUser,departmentName,sendObject,sendTime,userId from CommonAdvertisement limit #{startSize},#{limit}")
+    @Select(" select id ,adContent,adTitle,addUser,departmentName,sendObject,sendTime,userId from CommonAdvertisement  order by sendtime desc limit #{startSize},#{limit}")
     List<Map> showAllCommon(@Param("startSize") Integer startSize, @Param("limit") Integer limit);
 
     /**

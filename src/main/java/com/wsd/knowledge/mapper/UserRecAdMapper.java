@@ -20,7 +20,7 @@ public interface UserRecAdMapper {
      * @param userRecAdvertisement
      * @return
      */
-    @Insert("insert into UserRecAdvertisement (commonId,userId,ifRead,recAdTime) " +
+    @Insert("insert into UserRecAdvertisement (commonId,ifRead,recAdTime,userId) " +
             "values(#{commonId},#{ifRead},#{recAdTime},#{userId})")
     Integer insertUserRecAd(UserRecAdvertisement userRecAdvertisement);
 

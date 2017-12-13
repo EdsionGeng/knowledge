@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,7 +44,7 @@ public class PermissionController {
     public JsonResult insertFilePerMission(@RequestBody String object) {
         jsonObject = JSONObject.parseObject(object);
         String ids = String.valueOf(jsonObject.get("userids"));
-        List<Integer> userids = null;
+        List<Integer> userids = new ArrayList<>();
         for (String id : ids.split(",")) {
             userids.add(Integer.parseInt(id));
         }
@@ -68,7 +69,7 @@ public class PermissionController {
     public JsonResult updateFilePerMission(@RequestBody String object) {
         jsonObject = JSONObject.parseObject(object);
         String ids = String.valueOf(jsonObject.get("userids"));
-        List<Integer> userids = null;
+        List<Integer> userids = new ArrayList<>();
         for (String id : ids.split(",")) {
             userids.add(Integer.parseInt(id));
         }
@@ -93,7 +94,7 @@ public class PermissionController {
     public JsonResult deleteFilePerMission(@RequestBody String object) {
         jsonObject = JSONObject.parseObject(object);
         String ids = String.valueOf(jsonObject.get("userids"));
-        List<Integer> userids = null;
+        List<Integer> userids = new ArrayList<>();
         for (String id : ids.split(",")) {
             userids.add(Integer.parseInt(id));
         }

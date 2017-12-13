@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.wsd.knowledge.entity.FileKind;
 import com.wsd.knowledge.entity.NewDepartment;
+import com.wsd.knowledge.entity.SystemUser;
 import com.wsd.knowledge.mapper.CommonMapper;
 import com.wsd.knowledge.mapper1.UserRepositoty;
 import com.wsd.knowledge.service.CommonService;
@@ -87,7 +88,7 @@ public class CommonServiceImpl implements CommonService {
         if (result != 0) {
             return new JsonResult(0, 0, "删除成功", 0);
         }
-         return new JsonResult(2, 0, "删除失败", 0);
+        return new JsonResult(2, 0, "删除失败", 0);
     }
 
     /**
@@ -98,7 +99,9 @@ public class CommonServiceImpl implements CommonService {
      */
     public List<NewDepartment> bulid(List<NewDepartment> treeNodes, String pid) {
         List<NewDepartment> trees = new ArrayList<>();
+        Map<String, Object> map = new HashMap<>();
         for (NewDepartment treeNode : treeNodes) {
+
             if (StringUtils.equals(pid, treeNode.getId())) {
                 treeNode.setChecked(1);
             }

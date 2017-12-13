@@ -40,18 +40,25 @@ public interface UserRepositoty {
      * @param userGroupId
      * @return
      */
-    @Select("select id from SystemUser where UserGroupId=#{UserGroupId}")
-    List<Integer> queryUserIDByGroup(@Param("UserGroupId")Integer userGroupId);
-
-
+    @Select("select id  from SystemUser where UserGroupId=#{UserGroupId}")
+    List<Integer > queryUserIdByGroup(@Param("UserGroupId")Integer userGroupId);
     /**
      * 查找同一组别下的人
      *
      * @param userGroupId
      * @return
      */
-    @Select("select id,username,usergroup from SystemUser where UserGroupId=#{UserGroupId} and job=1")
-    List<Map> queryByGroupId(@Param("UserGroupId")Integer userGroupId);
+    @Select("select id,username,userGroupId  from SystemUser where UserGroupId=#{UserGroupId}")
+    List<SystemUser> queryGroup(@Param("UserGroupId")Integer userGroupId);
+
+//    /**
+//     * 查找同一组别下的人
+//     *
+//     * @param
+//     * @return
+//     */
+//    @SelectProvider(type = DepartmentTree.class, method = "showUserTree")
+//    List<NewDepartment> queryByGroupId(Map<String,Object> map);
 
     @Select("select Uid from UserRoles where Rid=2013 ")
     List<Integer>  queryAdmin();
@@ -73,5 +80,14 @@ public interface UserRepositoty {
             }
             return sql.toString();
         }
+
+//        public String showUserTree(Map<String, Object> map) {
+//            StringBuffer sql = new StringBuffer();
+//            sql.append("select  id,userGroupId,username AS name from SystemUser  where 1=1 ");
+//            if (StringUtils.isNotEmpty((String) map.get("pid"))) {
+//                sql.append(" AND userGroupId = #{pid} ");
+//            }
+//            return sql.toString();
+//        }
     }
 }

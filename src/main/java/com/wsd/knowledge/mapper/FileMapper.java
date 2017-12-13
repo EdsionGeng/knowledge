@@ -244,7 +244,7 @@ public interface FileMapper {
 
         public String showUserIfLookFile(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select o.* from FileDetail  o  left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId} ");
+            sql.append("select o.* from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where u.readFile=1 and o.fileDisplay=1 and  u.userId=#{userId} ");
 
             if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
                 sql.append(" AND o.departmentName like concat ('%',#{departmentName},'%') ");
@@ -258,7 +258,7 @@ public interface FileMapper {
 
         public String showUserIfFilePcs(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select count(o.id) from FileDetail  o  left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId} ");
+            sql.append("select count(o.id) from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where u.readFile=1 and o.fileDisplay=1 and  u.userId=#{userId} ");
 
             if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
                 sql.append(" AND o.departmentName like concat ('%',#{departmentName},'%') ");
@@ -275,10 +275,10 @@ public interface FileMapper {
                     "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%') ");
 
             if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
-                sql.append(" AND o.departmentName like concat ('%',#{departmentName},'%') ");
+                sql.append(" AND f.departmentName like concat ('%',#{departmentName},'%') ");
             }
             if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
-                sql.append(" AND o.fileStyleId = #{fileStyleId} ");
+                sql.append(" AND f.fileStyleId = #{fileStyleId} ");
             }
             sql.append(" order by f.addFileTime Desc limit #{startSize},#{limit} ");
             return sql.toString();
@@ -289,10 +289,10 @@ public interface FileMapper {
                     "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%') ");
 
             if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
-                sql.append(" AND o.departmentName like concat ('%',#{departmentName},'%') ");
+                sql.append(" AND f.departmentName like concat ('%',#{departmentName},'%') ");
             }
             if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
-                sql.append(" AND o.fileStyleId = #{fileStyleId} ");
+                sql.append(" AND f.fileStyleId = #{fileStyleId} ");
             }
             return sql.toString();
         }

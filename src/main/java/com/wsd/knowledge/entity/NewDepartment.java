@@ -13,6 +13,7 @@ public class NewDepartment implements Serializable {
     private String pid;//上级id
     private String type;//级别阶级（1.部门2.组3.岗位）
     private List<NewDepartment> children;
+
     private int checked;//是否选中
     private String name;
     public String getDeptno() {
@@ -54,6 +55,8 @@ public class NewDepartment implements Serializable {
     public void setChildren(List<NewDepartment> children) {
         this.children = children;
     }
+
+
 
     public int getChecked() {
         return checked;

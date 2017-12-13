@@ -66,17 +66,16 @@ public class MyRecAdServiceImpl implements MyRecAdService {
         if (str.equals("full")) {
             return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
         }
-        Integer result = null;
-        int length = departmentId.size();
-        for (int i = 0; i < length; i++) {
-            List<Integer> list = userRepositoty.queryUserIDByGroup((departmentId.get(i)));
+        Integer result = 0;
+      //  int length = departmentId.size();
+//        for (int i = 0; i < length; i++) {
+//            List<Integer> list = userRepositoty.queryUserIdByGroup(departmentId.get(i));
             //查找部门下面人员ID
-
-            for (int j = 0, len = list.size(); i < len; i++) {
+            for (int i= 0, len = departmentId.size(); i < len; i++) {
                  //生成实体类，进行插入语句执行
-                UserRecAdvertisement userRecAdvertisement = new UserRecAdvertisement(commonId, list.get(j), 0, new DateUtil().getSystemTime());
+                UserRecAdvertisement userRecAdvertisement = new UserRecAdvertisement(commonId, departmentId.get(i), 0, new DateUtil().getSystemTime());
                 result = userRecAdMapper.insertUserRecAd(userRecAdvertisement);
-            }
+  //          }
         }
         if (result !=0) {
             return  new JsonResult(0,0,"添加成功",0);

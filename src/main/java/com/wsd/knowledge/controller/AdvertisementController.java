@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -129,13 +130,20 @@ public class AdvertisementController {
     })
     @RequestMapping(value = "send/adtouser.htmls", method = RequestMethod.POST)
     public JsonResult sendAdToUser(@RequestBody String object) {
+
+
         jsonObject = JSONObject.parseObject(object);
+        System.out.println ("dffff"+jsonObject);
+
         String ids = String.valueOf(jsonObject.get("userIds"));
-        List<Integer> departmentId = null;
-        for (String id : ids.split(",")) {
-            departmentId.add(Integer.parseInt(id));
-        }
         Integer commonId = Integer.parseInt(String.valueOf(jsonObject.get("commonId")));
+        System.out.println(ids);
+        List<Integer> departmentId = new ArrayList<>();
+        for (String id : ids.split(",")) {
+//             System.out.println(id);
+             departmentId.add(Integer.parseInt(id));
+        }
+
         return myRecAdService.sendAdToUser(departmentId, commonId);
     }
 

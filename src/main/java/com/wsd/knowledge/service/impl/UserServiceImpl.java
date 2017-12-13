@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.wsd.knowledge.entity.SystemUser;
 import com.wsd.knowledge.mapper1.UserRepositoty;
 import com.wsd.knowledge.service.UserService;
+import com.wsd.knowledge.util.HashAlorgithum;
 import com.wsd.knowledge.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,14 +37,16 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public SystemUser login(String username, String password) {
-        SystemUser systemUser = userRepositoty.findUser(username, password);
+
+        SystemUser systemUser = userRepositoty.findUser(username, HashAlorgithum.getSHA256StrJava(password));
         if (systemUser != null) {
-            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-            HttpSession session = request.getSession();
-            session.setAttribute(LOGIN_USER, systemUser);
-            session.setAttribute(LOGIN_USER_ID, systemUser.getId());
+//            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+//            HttpSession session = request.getSession();
+//            session.setAttribute(LOGIN_USER, systemUser);
+//            session.setAttribute(LOGIN_USER_ID, systemUser.getId());
+            return systemUser;
         }
-        return systemUser;
+        return null;
     }
 
     @Override
@@ -53,14 +56,12 @@ public class UserServiceImpl implements UserService {
         }
         JSONObject jsonObject = JSONObject.parseObject(object);
         Integer userGroupId = Integer.parseInt(String.valueOf(jsonObject.get("userGroupId")));
-        List<Map> map=userRepositoty.queryByGroupId(userGroupId);
-        return new JsonResult(0,map,"查询结果",0);
+        List<SystemUser> systemUsers=userRepositoty.queryGroup(userGroupId);
+        return new JsonResult(0,systemUsers,"查询结果",0);
     }
 
     @Override
     public JsonResult queryAdmin() {
-
-
         List<Integer> list=userRepositoty.queryAdmin();
         return new JsonResult(0,list,"查询结果",0);
     }
