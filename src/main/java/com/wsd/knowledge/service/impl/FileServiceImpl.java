@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author EdsionGeng
@@ -174,7 +171,12 @@ public class FileServiceImpl implements FileService {
         SystemUser systemUser = userRepositoty.findInfo(userId);
         Integer j = null;
         for (String id : ids.split(",")) {
+
             j = fileMapper.updateFileShow(id);
+            String re = new DateUtil().cacheExist(id);
+            if (re.equals("full")) {
+                return new JsonResult(2, 0, "网络异常", 0);
+            }
             OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, Integer.parseInt(id), 2, new DateUtil().getSystemTime());
             operationMapper.insertOperationLog(operationLog);//添加操作日志
         }
@@ -303,10 +305,9 @@ public class FileServiceImpl implements FileService {
         if (current == null || pageSize == null || userId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
-
         int startSize = (current - 1) * pageSize;
         RdPage page = new RdPage();
-        List<Map> map = null;
+        List<Map> map =null;
         Integer sum = null;
         if (departmentName.equals("") && fileStyleId == null) {
             map = fileMapper.showUserLookFile(userId, startSize, pageSize);

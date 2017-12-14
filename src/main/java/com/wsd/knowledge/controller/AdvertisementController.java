@@ -130,21 +130,11 @@ public class AdvertisementController {
     })
     @RequestMapping(value = "send/adtouser.htmls", method = RequestMethod.POST)
     public JsonResult sendAdToUser(@RequestBody String object) {
-
-
         jsonObject = JSONObject.parseObject(object);
-        System.out.println ("dffff"+jsonObject);
-
-        String ids = String.valueOf(jsonObject.get("userIds"));
+        String userIds = String.valueOf(jsonObject.get("userIds"));
         Integer commonId = Integer.parseInt(String.valueOf(jsonObject.get("commonId")));
-        System.out.println(ids);
-        List<Integer> departmentId = new ArrayList<>();
-        for (String id : ids.split(",")) {
-//             System.out.println(id);
-             departmentId.add(Integer.parseInt(id));
-        }
-
-        return myRecAdService.sendAdToUser(departmentId, commonId);
+        String  groupIds = String.valueOf(jsonObject.get("groupIds"));
+        return myRecAdService.sendAdToUser(userIds, commonId,groupIds);
     }
 
     /**
@@ -189,6 +179,4 @@ public class AdvertisementController {
         Integer commonId = Integer.parseInt(String.valueOf(jsonObject.get("commonId")));
         return advertisementService.showAdPcs(commonId);
     }
-
-
 }

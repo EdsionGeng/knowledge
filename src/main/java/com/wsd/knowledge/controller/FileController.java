@@ -270,10 +270,9 @@ public class FileController {
      * @return
      */
     //上传简历
-    @RequestMapping(value = "/upload.htmls", method = RequestMethod.POST)
+    @RequestMapping(value = "photo/upload.htmls", method = RequestMethod.POST)
     @ApiOperation(value = "上传封面", notes = "传递必要参数")
     @ApiImplicitParams({
-
     })
     public JsonResult uploadImg(@RequestParam("file") MultipartFile file) {
         String resumeurl = null;
@@ -314,10 +313,9 @@ public class FileController {
      * @return
      */
     //上传文件
-    @RequestMapping(value = "photo/upload.htmls", method = RequestMethod.POST)
+    @RequestMapping(value = "file/upload.htmls", method = RequestMethod.POST)
     @ApiOperation(value = "上传文件", notes = "传递必要参数")
     @ApiImplicitParams({
-
     })
     @ResponseBody
     public JsonResult uploadFile(@RequestParam("file") MultipartFile file) {

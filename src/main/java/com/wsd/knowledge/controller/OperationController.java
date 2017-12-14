@@ -132,7 +132,7 @@ public class OperationController {
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "operationStyle", value = "操作类型"),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "departmentName", value = "部门名字")
     })
-    @RequestMapping(value = "show/fileLog.htmls", method = RequestMethod.GET)
+    @RequestMapping(value = "show/fileLog.htmls", method = RequestMethod.POST)
     public JsonResult showSingleFileLog(@RequestBody String object) {
         JSONObject jsonObject = JSONObject.parseObject(object);
         String operationStyle = String.valueOf(jsonObject.get("operationStyle"));

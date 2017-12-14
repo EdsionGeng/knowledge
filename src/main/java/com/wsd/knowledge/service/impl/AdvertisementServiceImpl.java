@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -136,7 +137,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         if(adStyle.equals("")){
             adStyle="";
         }
-        List<Map> map = null;
+        List<Map> map = new ArrayList<>();
         Integer sum = null;
         RdPage rdPage =new RdPage();
         int startSize = (current - 1) * pageSize;
@@ -164,10 +165,8 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             rdPage.setCurrent(current);
             rdPage.setPageSize(pageSize);
         }
-        if (map != null && sum != null) {
             return new JsonResult(0, map, "查询结果", rdPage);
-        }
-        return new JsonResult(2, 0, "查无结果", 0);
+
     }
 
     /**

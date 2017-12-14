@@ -24,10 +24,10 @@ public interface MyRecAdService {
     /**
      * 发送公告给相应的人
      *
-     * @param departmentId
+     * @param userIds
      * @param commonId
      * @return
      */
-    JsonResult sendAdToUser(List<Integer> departmentId, Integer commonId);
+    JsonResult sendAdToUser(String userIds, Integer commonId,String groupIds);
 
 }
