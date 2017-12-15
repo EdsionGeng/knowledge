@@ -47,6 +47,12 @@ public interface UserPermissionMapper {
     @Select("select id,addPermissionTime,deleteFile,fileId,readFile,updateFile userId from UserPermission where userid=#{userId} and fileId=#{fileId}")
     UserPermission queryFilePermission(@Param("userId") Integer userId, @Param("fileId") Integer fileId);
 
+
+    /**
+     * 删除文件权限相关人员
+     * @param fileId
+     * @return
+     */
     @Delete("delete from UserPermission where  and fileId=#{fileId}")
     Integer deletePerByFileId(@Param("fileId")Integer fileId);
 

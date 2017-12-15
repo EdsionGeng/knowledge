@@ -21,6 +21,9 @@ public class FileDetail implements Serializable {
     // @Column(name = "userId", nullable = false, columnDefinition = " '用户ID'")
     private int userId;//上传用户ID
 
+    //文件种类  0 普通文件 1部门文件 2 公司文件
+    private int fileSpecies;
+
     //@Column(name = "username", nullable = false, length = 32, columnDefinition = " '用户名字'")
     private String username;//上传用户ID
     //@Column(name = "fileNo", nullable = false, length = 32, columnDefinition = " '文件编号'")
@@ -205,7 +208,7 @@ public class FileDetail implements Serializable {
     public void setEnclosureInfo(String enclosureInfo) {
         this.enclosureInfo = enclosureInfo;
     }
-    public FileDetail(String departmentName, String username, int userId, int fileStyleId, String fileNo, String title, String fileStyle, String fileContent, String fileUrl, String photoUrl, int lookPcs, int downloadPcs, int updatePcs, String fileSize, int fileDisplay,String enclosureInfo, String addFileTime) {
+    public FileDetail(String departmentName, String username, int userId, int fileStyleId, String fileNo, String title, String fileStyle, String fileContent, String fileUrl, String photoUrl, int lookPcs, int downloadPcs, int updatePcs, String fileSize, int fileDisplay,String enclosureInfo, String addFileTime,int fileSpecies) {
         this.departmentName = departmentName;
         this.username = username;
         this.fileStyleId = fileStyleId;
@@ -223,6 +226,7 @@ public class FileDetail implements Serializable {
         this.fileDisplay = fileDisplay;
         this.enclosureInfo=enclosureInfo;
         this.addFileTime = addFileTime;
+        this.fileSpecies=fileSpecies;
     }
     public FileDetail() {
     }

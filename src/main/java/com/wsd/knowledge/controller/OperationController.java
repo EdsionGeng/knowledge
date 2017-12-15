@@ -127,8 +127,8 @@ public class OperationController {
     @ApiOperation(value = "查看单个文件操作日志接口", notes = "传递必要参数")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileId", value = "文件ID", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "page", value = "页码", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "limit", value = "每页数量", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "current", value = "页码", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "pageSize", value = "每页数量", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "operationStyle", value = "操作类型"),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "departmentName", value = "部门名字")
     })
@@ -138,8 +138,8 @@ public class OperationController {
         String operationStyle = String.valueOf(jsonObject.get("operationStyle"));
         String departmentName = String.valueOf(jsonObject.get("departmentName"));
         Integer fileId = Integer.parseInt(String.valueOf(jsonObject.get("fileId")));
-        Integer page = Integer.parseInt(String.valueOf(jsonObject.get("page")));
-        Integer limit = Integer.parseInt(String.valueOf(jsonObject.get("limit")));
-        return operationService.showSingleFileLog(fileId, page, limit, operationStyle, departmentName);
+        Integer current = Integer.parseInt(String.valueOf(jsonObject.get("current")));
+        Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
+        return operationService.showSingleFileLog(fileId, current, pageSize, operationStyle, departmentName);
     }
 }

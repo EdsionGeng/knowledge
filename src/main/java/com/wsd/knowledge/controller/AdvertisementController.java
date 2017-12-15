@@ -133,8 +133,7 @@ public class AdvertisementController {
         jsonObject = JSONObject.parseObject(object);
         String userIds = String.valueOf(jsonObject.get("userIds"));
         Integer commonId = Integer.parseInt(String.valueOf(jsonObject.get("commonId")));
-        String  groupIds = String.valueOf(jsonObject.get("groupIds"));
-        return myRecAdService.sendAdToUser(userIds, commonId,groupIds);
+        return myRecAdService.sendAdToUser(userIds, commonId);
     }
 
     /**

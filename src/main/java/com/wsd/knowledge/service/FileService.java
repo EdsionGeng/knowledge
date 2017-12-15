@@ -35,7 +35,7 @@ public interface FileService {
      * @param filesize
      * @return
      */
-    JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize, String describe);
+    JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize, String describe,Integer fileSpecies);
 
     /**
      * 批量删除文件
@@ -116,4 +116,11 @@ public interface FileService {
      * @return
      */
     JsonResult deleteFileStyle(String object);
+
+    /**
+     * 查找单个文件
+     * @param object
+     * @return
+     */
+    JsonResult searchSingleFile(String object);
 }

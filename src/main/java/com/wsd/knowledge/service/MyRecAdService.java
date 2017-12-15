@@ -10,7 +10,6 @@ import java.util.List;
  * @Date:13:24 2017/11/2
  */
 public interface MyRecAdService {
-
     /**
      * 展示个人消息
      *
@@ -20,7 +19,6 @@ public interface MyRecAdService {
      * @return
      */
     JsonResult showAllRecAd(Integer current, Integer pageSize, Integer userId);
-
     /**
      * 发送公告给相应的人
      *
@@ -28,6 +26,6 @@ public interface MyRecAdService {
      * @param commonId
      * @return
      */
-    JsonResult sendAdToUser(String userIds, Integer commonId,String groupIds);
+    JsonResult sendAdToUser(String userIds, Integer commonId);
 
 }

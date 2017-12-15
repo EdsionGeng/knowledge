@@ -49,24 +49,25 @@ public class UserController {
         jsonObject = JSONObject.parseObject(object);
         String username = String.valueOf(jsonObject.get("username"));
         String password = String.valueOf(jsonObject.get("password"));
-        SystemUser systemUser = userService.login(username, password);
-        if (systemUser != null) {
-            return new JsonResult(0, systemUser, "登陆成功", 0);
-        }
-            return new JsonResult(2, 0, "登陆失败", 0);
-//        try {
-//            UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-//            System.out.println(token);
-//            SecurityUtils.getSubject().login(token);
-//            // RememberMe这个参数设置为true后，在登陆的时候就会在客户端设置remenberme的相应cookie
-//            token.setRememberMe(true);
-//            //存入Session
-////            req.getSession().setAttribute("username", username);
-//            return new JsonResult(0, 0, "登录成功", 0);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return new JsonResult(2, 0, "登录失败", 0);
-        // }
+     //   SystemUser systemUser = userService.login(username, password);
+//        if (systemUser != null) {
+//            return new JsonResult(0, systemUser, "登陆成功", 0);
+//        }
+//            return new JsonResult(2, 0, "登陆失败", 0);
+        try {
+            UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+            System.out.println(token);
+            SecurityUtils.getSubject().login(token);
+            // RememberMe这个参数设置为true后，在登陆的时候就会在客户端设置remenberme的相应cookie
+            SystemUser systemUser=(SystemUser) SecurityUtils.getSubject().getPrincipal();
+            token.setRememberMe(true);
+            //存入Session
+            //req.getSession().setAttribute("username", username);
+            return new JsonResult(0, systemUser, "登录成功", 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new JsonResult(2, 0, "登录失败", 0);
+         }
     }
 
     @ApiOperation(value = "查找人员接口", notes = "传递人员")

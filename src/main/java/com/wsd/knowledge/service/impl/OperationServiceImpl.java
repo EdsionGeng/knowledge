@@ -219,13 +219,13 @@ public class OperationServiceImpl implements OperationService {
      * 单个文件操作日志
      *
      * @param fileId
-     * @param page
-     * @param limit
+     * @param current
+     * @param pageSize
      * @return
      */
     @Override
-    public JsonResult showSingleFileLog(Integer fileId, Integer page, Integer limit, String  operationStyle, String departmentName) {
-        if (fileId == null || page == null | limit == null) {
+    public JsonResult showSingleFileLog(Integer fileId, Integer current, Integer pageSize, String  operationStyle, String departmentName) {
+        if (fileId == null || current == null | pageSize == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         if (operationStyle == "null") {
@@ -235,26 +235,34 @@ public class OperationServiceImpl implements OperationService {
         if (departmentName == "null") {
             departmentName = "";
         }
-        int startSize = (page - 1) * limit;
+        int startSize = (current - 1) * pageSize;
         List<Map> map = null;
-        Integer pcs = null;
+        Integer sum = null;
+        RdPage rdPage=new RdPage();
         if (operationStyle .equals("") && departmentName.equals("")) {
-            map = operationMapper.showAllOperationLog(fileId, startSize, limit);
-            pcs = operationMapper.countOperationLog(fileId);
+            map = operationMapper.showAllOperationLog(fileId, startSize, pageSize);
+            sum = operationMapper.countOperationLog(fileId);
+            rdPage.setTotal(sum);
+            rdPage.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
+            rdPage.setCurrent(current);
+            rdPage.setPageSize(pageSize);
         }
         else{
             Map<String,Object> maps=new HashMap<>();
             maps.put("operationStyle",operationStyle);
             maps.put("departmentName",departmentName);
             maps.put("startSize",startSize);
-            maps.put("limit",limit);
+            maps.put("limit",pageSize);
             map=operationMapper.queryLogByIf(maps);
-            pcs=operationMapper.countLogByIf(maps);
+            sum=operationMapper.countLogByIf(maps);
+            rdPage.setTotal(sum);
+            rdPage.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
+            rdPage.setCurrent(current);
+            rdPage.setPageSize(pageSize);
         }
-
-        if (map == null || pcs == null) {
+        if (map == null || sum == null) {
             return new JsonResult(2, 0, "无数据", 0);
         }
-        return new JsonResult(0, map, "查询结果", pcs);
+        return new JsonResult(0, map, "查询结果",rdPage);
     }
 }

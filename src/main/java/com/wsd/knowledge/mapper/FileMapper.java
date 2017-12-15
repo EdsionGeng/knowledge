@@ -20,8 +20,9 @@ public interface FileMapper {
      * @return
      */
     @Insert("insert into FileDetail(departmentName,username,fileStyleId,userId,fileNo,title,fileStyle,fileContent,fileUrl,photoUrl, enclosureInfo" +
-            "lookPcs,downloadPcs,updatePcs,fileSize,fileDisplay,addFileTime) values(#{departmentName},#{username},#{fileStyleId},#{userId},#{fileNo},#{title},#{fileStyle},#{fileContent},#{fileUrl},#{photoUrl},#{lookPcs},#{downloadPcs}," +
-            "#{updatePcs},#{fileSize},#{fileDisplay},#{ enclosureInfo},#{addFileTime})")
+            "lookPcs,downloadPcs,updatePcs,fileSize,fileDisplay,addFileTime,fileSpecies) values(#{departmentName},#{username},#{fileStyleId},#{userId}," +
+            "#{fileNo},#{title},#{fileStyle},#{fileContent},#{fileUrl},#{photoUrl},#{lookPcs},#{downloadPcs}," +
+            "#{updatePcs},#{fileSize},#{fileDisplay},#{enclosureInfo},#{addFileTime},#{fileSpecies})")
     Integer insertFileDetail(FileDetail fileDetail);
 
     /**
@@ -93,6 +94,14 @@ public interface FileMapper {
     @Update("update FileDetail set fileDisplay=0 where id=#{id}")
     Integer updateFileShow(@Param("id") String id);
 
+    /**
+     * 删除文件让其不显示
+     *
+     * @param fileId
+     * @return
+     */
+    @Update("select * from  FileDetail where id=#{id} and fileDisplay=1")
+    FileDetail showSingleFile(@Param("id") Integer  fileId);
 
     /**
      * 更新文件
@@ -125,9 +134,33 @@ public interface FileMapper {
      * @param limit
      * @return
      */
-    @Select("select f.* from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId} order by f.addFileTime Desc limit #{startSize},#{limit} ")
+//       this.departmentName = departmentName;
+//        this.username = username;
+//        this.fileStyleId = fileStyleId;
+//        this.userId = userId;
+//        this.fileNo = fileNo;
+//        this.title = title;
+//        this.fileStyle = fileStyle;
+//        this.fileContent = fileContent;
+//        this.fileUrl = fileUrl;
+//        this.photoUrl = photoUrl;
+//        this.lookPcs = lookPcs;
+//        this.downloadPcs = downloadPcs;
+//        this.updatePcs = updatePcs;
+//        this.fileSize = fileSize;
+//        this.fileDisplay = fileDisplay;
+//        this.enclosureInfo=enclosureInfo;
+//        this.addFileTime = addFileTime;
+//        this.fileSpecies=fileSpecies;
+    @Select("select f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId} order by f.addFileTime Desc limit #{startSize},#{limit} ")
     List<Map> showUserLookFile(@Param("userId") Integer userId, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
 
+    /**
+     * 展示所有公司性质的文件
+     * @return
+     */
+    @Select("select f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where f.fileSpecies=2 order by f.addFileTime  ")
+    List<Map> showCompanyFile();
     /**
      * 统计用户能看的全部文件数量
      *

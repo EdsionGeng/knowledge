@@ -5,6 +5,7 @@ import com.wsd.knowledge.entity.*;
 import com.wsd.knowledge.mapper.FileKindMapper;
 import com.wsd.knowledge.mapper.FileMapper;
 import com.wsd.knowledge.mapper.OperationMapper;
+import com.wsd.knowledge.mapper.UserPermissionMapper;
 import com.wsd.knowledge.mapper1.UserRepositoty;
 import com.wsd.knowledge.service.FileService;
 import com.wsd.knowledge.util.DateUtil;
@@ -35,7 +36,8 @@ public class FileServiceImpl implements FileService {
     private FileKindMapper fileKindMapper;
     @Autowired
     private OperationMapper operationMapper;
-
+    @Autowired
+    private UserPermissionMapper userPermissionMapper;
 
     /**
      * 组合查询和全部查询
@@ -128,7 +130,7 @@ public class FileServiceImpl implements FileService {
      */
     @Override
     @Transactional(readOnly = false)
-    public JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize, String describe) {
+    public JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize, String describe, Integer fileSpecies) {
 
         String str = new DateUtil().cacheExist(String.valueOf(userId));
         if (str.equals("full")) {
@@ -143,7 +145,8 @@ public class FileServiceImpl implements FileService {
         FileKind fileKind = fileKindMapper.selectFileKind(fileStyleId);
         //生成实体类
         FileDetail fileDetail = new FileDetail(systemUser.getDepartment(), systemUser.getUsername(), userId, fileStyleId, fileNo, title
-                , fileKind.getFileKindName(), content, fileurl, photourl, 0, 0, 0, filesize, 1, describe, new DateUtil().getSystemTime());
+                , fileKind.getFileKindName(), content, fileurl, photourl, 0, 0, 0, filesize, 1,
+                describe, new DateUtil().getSystemTime(), fileSpecies);
 
         if (fileMapper.insertFileDetail(fileDetail) != null) {
             //添加文件成功 ，获得此文件ID返回前台，执行权限添加操作
@@ -179,6 +182,7 @@ public class FileServiceImpl implements FileService {
             }
             OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, Integer.parseInt(id), 2, new DateUtil().getSystemTime());
             operationMapper.insertOperationLog(operationLog);//添加操作日志
+
         }
 //        for (int i = 0; i < lengths; i++) {
 //            j = fileMapper.updateFileShow(id[i]);//更改文件属性
@@ -306,12 +310,17 @@ public class FileServiceImpl implements FileService {
         }
         int startSize = (current - 1) * pageSize;
         RdPage page = new RdPage();
-        List<Map> map =null;
+        List<Map> map = null;
         Integer sum = null;
         if (departmentName.equals("") && fileStyleId == null) {
             map = fileMapper.showUserLookFile(userId, startSize, pageSize);
             if (map != null) {
                 sum = fileMapper.countUserLookFile(userId);
+                List<Map> maps = fileMapper.showCompanyFile();
+                if (maps != null) {
+                    map.addAll(maps);
+                }
+                //还要去重
                 page.setTotal(sum);
                 page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
                 page.setCurrent(current);
@@ -388,6 +397,7 @@ public class FileServiceImpl implements FileService {
         }
         return new JsonResult(2, 0, "查无结果", 0);
     }
+
     /**
      * 批量更新文件类型
      *
@@ -427,12 +437,12 @@ public class FileServiceImpl implements FileService {
 
     /**
      * 文件类型对应文件数量
+     *
      * @param object
      * @return
      */
     @Override
     public JsonResult searchFileStyleId(String object) {
-
         if (object.equals("")) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
@@ -447,6 +457,7 @@ public class FileServiceImpl implements FileService {
 
     /**
      * 删除单个文件
+     *
      * @param object
      * @return
      */
@@ -462,15 +473,37 @@ public class FileServiceImpl implements FileService {
         Integer result = fileMapper.updateFileShow(fileId);
         if (result != 0) {
             SystemUser systemUser = userRepositoty.findInfo(userId);
+            OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, Integer.parseInt(fileId), 2, new DateUtil().getSystemTime());
             String str = new DateUtil().cacheExist(String.valueOf(userId));
             if (str.equals("full")) {
                 return new JsonResult(2, 0, "网络异常", 0);
             }
-            OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId,Integer.parseInt(fileId),2, new DateUtil().getSystemTime());
             operationMapper.insertOperationLog(operationLog);//添加操作日志
+            userPermissionMapper.deletePerByFileId(Integer.parseInt(fileId)
+            );
             return new JsonResult(0, 0, "操作成功", 0);
         }
         return new JsonResult(2, 0, "操作异常", 0);
+    }
+
+    /**
+     * 查找单个文件
+     *
+     * @param object
+     * @return
+     */
+    @Override
+    public JsonResult searchSingleFile(String object) {
+        if (object.equals("")) {
+            return new JsonResult(2, 0, "参数为空", 0);
+        }
+        JSONObject jsonObject = JSONObject.parseObject(object);
+        Integer fileId = Integer.parseInt(String.valueOf(jsonObject.get("fileId")));
+        FileDetail detail = fileMapper.showSingleFile(fileId);
+        if (detail != null) {
+            return new JsonResult(0, detail, "查询结果", 0);
+        }
+        return new JsonResult(2, 0, "查询失败", 0);
     }
 
 }
