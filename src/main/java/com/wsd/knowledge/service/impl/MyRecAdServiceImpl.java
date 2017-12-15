@@ -48,8 +48,6 @@ public class MyRecAdServiceImpl implements MyRecAdService {
         page.setPageSize(pageSize);
         return new JsonResult(0, map, "查询结果", page);
     }
-
-
     /**
      * 发送公告给相应的接收人员
      *

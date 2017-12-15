@@ -1,10 +1,7 @@
 package com.wsd.knowledge.mapper;
 
 import com.wsd.knowledge.entity.UserPermission;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 /**
  * @Author EdsionGeng
@@ -49,4 +46,9 @@ public interface UserPermissionMapper {
      */
     @Select("select id,addPermissionTime,deleteFile,fileId,readFile,updateFile userId from UserPermission where userid=#{userId} and fileId=#{fileId}")
     UserPermission queryFilePermission(@Param("userId") Integer userId, @Param("fileId") Integer fileId);
+
+    @Delete("delete from UserPermission where  and fileId=#{fileId}")
+    Integer deletePerByFileId(@Param("fileId")Integer fileId);
+
+
 }

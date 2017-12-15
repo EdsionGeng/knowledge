@@ -82,7 +82,6 @@ public class CommonServiceImpl implements CommonService {
             return new JsonResult(2, 0, "缺少参数", 0);
         }
         JSONObject jsonObject = JSONObject.parseObject(object);
-
         Integer fileStyleId = Integer.parseInt(String.valueOf(jsonObject.get("fileStyleId")));
         Integer result = commonMapper.deleteDocRule(fileStyleId);
         if (result != 0) {
@@ -99,15 +98,18 @@ public class CommonServiceImpl implements CommonService {
      */
     public List<NewDepartment> bulid(List<NewDepartment> treeNodes, String pid) {
         List<NewDepartment> trees = new ArrayList<>();
-        Map<String, Object> map = new HashMap<>();
         for (NewDepartment treeNode : treeNodes) {
-
             if (StringUtils.equals(pid, treeNode.getId())) {
                 treeNode.setChecked(1);
             }
             if (StringUtils.equals("0", treeNode.getPid())) {
                 trees.add(treeNode);
             }
+            List<NewDepartment> treeChildrenNode = userRepositoty.queryByGroupId(Integer.parseInt(treeNode.getId()));
+            if (treeNode.getChildren() == null) {
+                treeNode.setChildren(new ArrayList<>());
+            }
+            treeNode.getChildren().addAll(treeChildrenNode);
             for (NewDepartment it : treeNodes) {
                 if (StringUtils.equals(it.getPid(), treeNode.getId())) {
                     if (treeNode.getChildren() == null) {

@@ -228,11 +228,11 @@ public class OperationServiceImpl implements OperationService {
         if (fileId == null || page == null | limit == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
-        if (operationStyle == null) {
+        if (operationStyle == "null") {
             operationStyle ="";
 
         }
-        if (departmentName == null) {
+        if (departmentName == "null") {
             departmentName = "";
         }
         int startSize = (page - 1) * limit;

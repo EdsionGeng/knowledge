@@ -280,10 +280,9 @@ public class FileServiceImpl implements FileService {
         if (result != 0) {
             SystemUser systemUser = userRepositoty.findInfo(userId);
             //添加操作日志
-
-
             OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, id, 3, new DateUtil().getSystemTime());
             Integer k = operationMapper.insertOperationLog(operationLog);
+
             if (k != 0) {
                 return new JsonResult(0, 0, "操作成功", 0);
             }
@@ -311,8 +310,8 @@ public class FileServiceImpl implements FileService {
         Integer sum = null;
         if (departmentName.equals("") && fileStyleId == null) {
             map = fileMapper.showUserLookFile(userId, startSize, pageSize);
-            sum = fileMapper.countUserLookFile(userId);
             if (map != null) {
+                sum = fileMapper.countUserLookFile(userId);
                 page.setTotal(sum);
                 page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
                 page.setCurrent(current);
@@ -325,7 +324,7 @@ public class FileServiceImpl implements FileService {
             params.put("startSize", startSize);
             params.put("limit", pageSize);
             params.put("departmentName", departmentName);
-            params.put("filestyleId", fileStyleId);
+            params.put("filetyleId", fileStyleId);
             map = fileMapper.showUserIfLookFile(params);
             if (map != null) {
                 sum = fileMapper.showUserIfFilePcs(params);
@@ -389,7 +388,6 @@ public class FileServiceImpl implements FileService {
         }
         return new JsonResult(2, 0, "查无结果", 0);
     }
-
     /**
      * 批量更新文件类型
      *

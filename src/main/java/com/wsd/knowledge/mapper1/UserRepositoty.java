@@ -40,7 +40,7 @@ public interface UserRepositoty {
      * @param userGroupId
      * @return
      */
-    @Select("select id  from SystemUser where UserGroupId=#{UserGroupId}")
+    @Select("select id  from SystemUser where UserGroupId=#{UserGroupId} and job=1")
     List<Integer > queryUserIdByGroup(@Param("UserGroupId")Integer userGroupId);
     /**
      * 查找同一组别下的人
@@ -48,17 +48,17 @@ public interface UserRepositoty {
      * @param userGroupId
      * @return
      */
-    @Select("select id,username,userGroupId  from SystemUser where UserGroupId=#{UserGroupId}")
+    @Select("select id,username,userGroupId  from SystemUser where UserGroupId=#{UserGroupId} and job=1")
     List<SystemUser> queryGroup(@Param("UserGroupId")Integer userGroupId);
 
-//    /**
-//     * 查找同一组别下的人
-//     *
-//     * @param
-//     * @return
-//     */
-//    @SelectProvider(type = DepartmentTree.class, method = "showUserTree")
-//    List<NewDepartment> queryByGroupId(Map<String,Object> map);
+    /**
+     * 查找同一组别下的人
+     *
+     * @param
+     * @return
+     */
+    @Select("select  id,userGroupId,username AS name from SystemUser  where userGroupId=#{id} and job=1")
+    List<NewDepartment> queryByGroupId(@Param("id")Integer id);
 
     @Select("select Uid from UserRoles where Rid=2013 ")
     List<Integer>  queryAdmin();
@@ -93,6 +93,6 @@ public interface UserRepositoty {
 //                sql.append(" AND userGroupId = #{pid} ");
 //            }
 //            return sql.toString();
-//        }
+//       }
     }
 }

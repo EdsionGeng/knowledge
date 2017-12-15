@@ -13,6 +13,15 @@ public class NewDepartment implements Serializable {
     private String pid;//上级id
     private String type;//级别阶级（1.部门2.组3.岗位）
     private List<NewDepartment> children;
+   private int userId;
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
     private int checked;//是否选中
     private String name;

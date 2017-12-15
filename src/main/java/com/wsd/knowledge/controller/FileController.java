@@ -269,7 +269,7 @@ public class FileController {
      * @param file
      * @return
      */
-    //上传简历
+
     @RequestMapping(value = "photo/upload.htmls", method = RequestMethod.POST)
     @ApiOperation(value = "上传封面", notes = "传递必要参数")
     @ApiImplicitParams({
@@ -301,7 +301,6 @@ public class FileController {
                 e.printStackTrace();
                 return new JsonResult(2, 0, "上传失败," + e.getMessage(), 0);
             }
-
             return new JsonResult(0, resumeurl, "上传成功", 0);
         } else {
             return new JsonResult(2, 0, "上传失败，因为文件是空的.", 0);
