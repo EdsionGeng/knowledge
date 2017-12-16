@@ -66,6 +66,9 @@ public class FileDetail implements Serializable {
     //附件描述
     private String enclosureInfo;
 
+    //人员组别id
+    private int userGroupId;
+
     public String getUsername() {
         return username;
     }
@@ -205,10 +208,28 @@ public class FileDetail implements Serializable {
     public String getEnclosureInfo() {
         return enclosureInfo;
     }
+
     public void setEnclosureInfo(String enclosureInfo) {
         this.enclosureInfo = enclosureInfo;
     }
-    public FileDetail(String departmentName, String username, int userId, int fileStyleId, String fileNo, String title, String fileStyle, String fileContent, String fileUrl, String photoUrl, int lookPcs, int downloadPcs, int updatePcs, String fileSize, int fileDisplay,String enclosureInfo, String addFileTime,int fileSpecies) {
+
+    public int getFileSpecies() {
+        return fileSpecies;
+    }
+
+    public void setFileSpecies(int fileSpecies) {
+        this.fileSpecies = fileSpecies;
+    }
+
+    public int getUserGroupId() {
+        return userGroupId;
+    }
+
+    public void setUserGroupId(int userGroupId) {
+        this.userGroupId = userGroupId;
+    }
+
+    public FileDetail(String departmentName, String username, int userId, int fileStyleId, String fileNo, String title, String fileStyle, String fileContent, String fileUrl, String photoUrl, int lookPcs, int downloadPcs, int updatePcs, String fileSize, int fileDisplay, String enclosureInfo, String addFileTime, int fileSpecies, int userGroupId) {
         this.departmentName = departmentName;
         this.username = username;
         this.fileStyleId = fileStyleId;
@@ -224,9 +245,10 @@ public class FileDetail implements Serializable {
         this.updatePcs = updatePcs;
         this.fileSize = fileSize;
         this.fileDisplay = fileDisplay;
-        this.enclosureInfo=enclosureInfo;
+        this.enclosureInfo = enclosureInfo;
         this.addFileTime = addFileTime;
-        this.fileSpecies=fileSpecies;
+        this.fileSpecies = fileSpecies;
+        this.userGroupId = userGroupId;
     }
     public FileDetail() {
     }

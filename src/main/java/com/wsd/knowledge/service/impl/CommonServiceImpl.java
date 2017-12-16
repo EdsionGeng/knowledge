@@ -76,6 +76,11 @@ public class CommonServiceImpl implements CommonService {
         return new JsonResult(2, 0, "操作失败", 0);
     }
 
+    /**
+     * 删除目录
+     * @param object
+     * @return
+     */
     @Override
     public JsonResult deleteRule(String object) {
         if (object.equals("")) {

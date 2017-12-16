@@ -73,7 +73,8 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileStyleId", value = "文件类型ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "filesize", value = "文件大小", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileSpecies", value = "文件种类", required = true)
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileSpecies", value = "文件种类", required = true),
+
     })
     @RequestMapping(value = "insertFile.htmls", method = RequestMethod.POST)
     public JsonResult insertFile(@RequestBody String object) {
@@ -124,7 +125,7 @@ public class FileController {
     public JsonResult readFile(@RequestBody String object) {
         JSONObject jsonObject = JSONObject.parseObject(object);
         Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
-        Integer fileId = Integer.parseInt(String.valueOf(jsonObject.get("fileId")));
+        Integer  fileId = Integer.parseInt(String.valueOf(jsonObject.get("fileId")));
         return fileService.readFile(fileId, userId);
     }
 
@@ -164,9 +165,10 @@ public class FileController {
         Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
         Integer fileId = Integer.parseInt(String.valueOf(jsonObject.get("fileId")));
         Integer fileStyleId = Integer.parseInt(String.valueOf(jsonObject.get("fileStyleId")));
-        String content = String.valueOf(jsonObject.get("content"));
-        String fileurl = String.valueOf(jsonObject.get("fileurl"));
-        return fileService.updateFileDetail(fileId, content, fileurl, fileStyleId, userId);
+        String  content = String.valueOf(jsonObject.get("content"));
+        String  fileurl = String.valueOf(jsonObject.get("fileurl"));
+        String chooseUser = String.valueOf(jsonObject.get("chooseUser"));
+        return fileService.updateFileDetail(fileId, content, fileurl, fileStyleId, userId,chooseUser);
     }
 
     /**
@@ -186,8 +188,8 @@ public class FileController {
     @RequestMapping(value = "show/userlookfile", method = RequestMethod.POST)
     public JsonResult showUserLookFile(@RequestBody String object) {
         JSONObject jsonObject = JSONObject.parseObject(object);
-        Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
-        Integer current = Integer.parseInt(String.valueOf(jsonObject.get("current")));
+        Integer userId   =Integer.parseInt(String.valueOf(jsonObject.get("userId")));
+        Integer current  = Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
         String fileStyleId = String.valueOf(jsonObject.get("fileStyleId"));
         String departmentName = String.valueOf(jsonObject.get("departmentName"));

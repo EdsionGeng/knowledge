@@ -26,7 +26,13 @@ public class MenuServiceImpl implements MenuService {
     private MenuMapper menuMapper;
 
     @Override
-    public JsonResult getMenus(HttpServletRequest request, Integer id) {
+    public JsonResult
+
+
+
+
+
+    getMenus(HttpServletRequest request, Integer id) {
         Map param = new HashMap();
         param.put("id", id);
         param.put("systemId", "2004");
@@ -34,7 +40,7 @@ public class MenuServiceImpl implements MenuService {
         if (rids != null && rids.size() > 0) {
             param.put("rids", rids);
             List<Menu> list = build(menuMapper.getMenus(param));
-            request.getSession().setAttribute("menus", list);
+          //  request.getSession().setAttribute("menus", list);
             return new JsonResult(0, list, "菜单列表", 0);
         }
         return new JsonResult(0, null, "该用户没有任何访问权限", 0);

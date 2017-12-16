@@ -20,9 +20,9 @@ public interface FileMapper {
      * @return
      */
     @Insert("insert into FileDetail(departmentName,username,fileStyleId,userId,fileNo,title,fileStyle,fileContent,fileUrl,photoUrl, enclosureInfo" +
-            "lookPcs,downloadPcs,updatePcs,fileSize,fileDisplay,addFileTime,fileSpecies) values(#{departmentName},#{username},#{fileStyleId},#{userId}," +
+            "lookPcs,downloadPcs,updatePcs,fileSize,fileDisplay,addFileTime,fileSpecies,userGroupId) values(#{departmentName},#{username},#{fileStyleId},#{userId}," +
             "#{fileNo},#{title},#{fileStyle},#{fileContent},#{fileUrl},#{photoUrl},#{lookPcs},#{downloadPcs}," +
-            "#{updatePcs},#{fileSize},#{fileDisplay},#{enclosureInfo},#{addFileTime},#{fileSpecies})")
+            "#{updatePcs},#{fileSize},#{fileDisplay},#{enclosureInfo},#{addFileTime},#{fileSpecies},#{userGroupId})")
     Integer insertFileDetail(FileDetail fileDetail);
 
     /**
@@ -95,7 +95,7 @@ public interface FileMapper {
     Integer updateFileShow(@Param("id") String id);
 
     /**
-     * 删除文件让其不显示
+     *  单个文件
      *
      * @param fileId
      * @return
@@ -159,8 +159,8 @@ public interface FileMapper {
      * 展示所有公司性质的文件
      * @return
      */
-    @Select("select f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where f.fileSpecies=2 order by f.addFileTime  ")
-    List<Map> showCompanyFile();
+    @Select("select f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where f.fileSpecies=2 order by f.addFileTime limit #{startSize},#{pageSize}")
+    List<Map> showCompanyFile(@Param("startSize")Integer startSize,@Param("pageSize")Integer pageSize);
     /**
      * 统计用户能看的全部文件数量
      *
@@ -185,7 +185,7 @@ public interface FileMapper {
      * @param limit
      * @return
      */
-    @Select("select f.* from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId}   and  f.departmentName " +
+    @Select("select f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId}   and  f.departmentName " +
             "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%') order by f.addFileTime Desc limit #{startSize},#{limit} ")
     List<Map> showSearchFile(@Param("userId") Integer userId, @Param("searchContent") String searchContent, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
 
@@ -240,7 +240,7 @@ public interface FileMapper {
     class FileQuery {
         public String queryFileByDep(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select o.* from FileDetail  o  where o.fileDisplay=1 and o.addFileTime >= #{startDate} ");
+            sql.append("select o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime from FileDetail  o  where o.fileDisplay=1 and o.addFileTime >= #{startDate} ");
             if (StringUtils.isNotEmpty((String) map.get("endDate"))) {
                 sql.append(" AND o.addFileTime <= #{endDate} ");
             }
@@ -277,7 +277,7 @@ public interface FileMapper {
 
         public String showUserIfLookFile(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select o.* from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where u.readFile=1 and o.fileDisplay=1 and  u.userId=#{userId} ");
+            sql.append("select o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where u.readFile=1 and o.fileDisplay=1 and  u.userId=#{userId} ");
 
             if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
                 sql.append(" AND o.departmentName like concat ('%',#{departmentName},'%') ");
@@ -304,7 +304,7 @@ public interface FileMapper {
 
         public String showIfSearchFile(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select f.* from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId}   and  f.departmentName " +
+            sql.append("select f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId}   and  f.departmentName " +
                     "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%') ");
 
             if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {

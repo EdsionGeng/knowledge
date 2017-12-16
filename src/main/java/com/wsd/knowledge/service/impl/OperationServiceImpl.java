@@ -230,7 +230,6 @@ public class OperationServiceImpl implements OperationService {
         }
         if (operationStyle == "null") {
             operationStyle ="";
-
         }
         if (departmentName == "null") {
             departmentName = "";

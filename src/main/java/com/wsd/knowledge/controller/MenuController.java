@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,16 +26,16 @@ public class MenuController {
     /**
      * 获取菜单
      *
-     * @param request
+     * @param
      * @return
      */
-    @RequestMapping(value="getMenus.htmls",method = RequestMethod.GET)
+    @RequestMapping(value="getMenus.htmls",method = RequestMethod.POST)
     @ApiOperation(value = "得到用户菜单", notes = "传递必要参数")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "String ", name = "userId", value = "用户"),
 
     })
-    public JsonResult getMenusList(HttpServletRequest request,String object) {
+    public JsonResult getMenusList(@RequestBody String object,HttpServletRequest request) {
 //        List<Menu> list = (List<Menu>) request.getSession().getAttribute("menus");
 //        if (list != null) {
 //            return new JsonResult(0, list);

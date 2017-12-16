@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public SystemUser login(String username, String password) {
 
-        SystemUser systemUser = userRepositoty.findUser(username, HashAlorgithum.getSHA256StrJava(password));
+        SystemUser systemUser = userRepositoty.findUser(username,password);
         if (systemUser != null) {
 //            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 //            HttpSession session = request.getSession();

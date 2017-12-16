@@ -3,7 +3,6 @@ package com.wsd.knowledge.util;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 public class HashAlorgithum {
 
     public static String getSHA256StrJava(String str) {
