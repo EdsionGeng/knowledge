@@ -275,7 +275,6 @@ public class FileServiceImpl implements FileService {
         }
         if (result != 0) {
 
-
             SystemUser systemUser = userRepositoty.findInfo(userId);
             //添加操作日志
             OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, id, 3, new DateUtil().getSystemTime());
@@ -300,7 +299,7 @@ public class FileServiceImpl implements FileService {
      * @return
      */
     @Override
-    public JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize, String fileStyleId, String departmentName) {
+    public JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize, String fileStyleId, String departmentName, Integer userGroupId) {
         if (current == null || pageSize == null || userId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
@@ -308,21 +307,47 @@ public class FileServiceImpl implements FileService {
         RdPage page = new RdPage();
         List<Map> map = null;
         Integer sum = null;
-        if (departmentName.equals("") && fileStyleId == null) {
+        if (departmentName=="null" || fileStyleId=="null") {
             map = fileMapper.showUserLookFile(userId, startSize, pageSize);
             if (map != null) {
                 sum = fileMapper.countUserLookFile(userId);
                 //加上公司文件
-                List<Map> maps = fileMapper.showCompanyFile(startSize, pageSize);
-                if (maps != null) {
-                    map.addAll(maps);
+                List<Map> companyFileList = fileMapper.showCompanyFile(startSize, pageSize);
+                if (companyFileList != null) {
+                    map.addAll(companyFileList);
+                    sum+=fileMapper.countCompanyFile();
+                }
+                List<Integer> groupList = userRepositoty.showPerGroupId(userGroupId);
+                String ss = "";
+                List<Map> groupFileList = new ArrayList<>();
+                if (groupList != null) {
+                    for (int i = 0, len = groupList.size(); i < len; i++) {
+                        if (i > 0) {
+                            ss += ",";
+                        }
+                        ss +="'"+ groupList.get(i)+"'";
+                    }
+                    groupFileList = fileMapper.showGroupFile(startSize, pageSize, ss);
+                    if (groupFileList != null) {
+                        map.addAll(groupFileList);
+                        sum+=fileMapper.countGroupFile(ss);
+                    }
+                } else {
+                    Integer result = userRepositoty.queryPid(userGroupId);
+                    String res=String.valueOf(result).concat(","+String.valueOf(userGroupId));
+                    groupFileList = fileMapper.showGroupIdFile(startSize, pageSize,res);
+                    if(groupFileList!=null){
+                        map.addAll(groupFileList);
+                        sum+=fileMapper.countGroupIdFile(res);
+                    }
                 }
                 //还要去重
+                List<Map> newList = new ArrayList(new HashSet(map));
                 page.setTotal(sum);
                 page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
                 page.setCurrent(current);
                 page.setPageSize(pageSize);
-                return new JsonResult(0, map, "查询结果", page);
+                return new JsonResult(0, newList, "查询结果", page);
             }
         } else {
             Map<String, Object> params = new HashMap<>();
@@ -340,11 +365,15 @@ public class FileServiceImpl implements FileService {
                 page.setPageSize(pageSize);
                 return new JsonResult(0, map, "查询结果", page);
             }
-
         }
         return new JsonResult(2, 0, "查无结果", 0);
     }
 
+    /**
+     * 展示搜寻结果
+     * @param object
+     * @return
+     */
     @Override
     public JsonResult showSearchFile(String object) {
         if (object.equals("")) {
@@ -361,7 +390,6 @@ public class FileServiceImpl implements FileService {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         int startSize = (current - 1) * pageSize;
-
         RdPage rdPage = new RdPage();
         List<Map> map = null;
         Integer sum = null;
@@ -376,7 +404,6 @@ public class FileServiceImpl implements FileService {
                 return new JsonResult(0, map, "查询结果", rdPage);
             }
         } else {
-
             Map<String, Object> params = new HashMap<>();
             params.put("userId", userId);
             params.put("startSize", startSize);
@@ -491,12 +518,12 @@ public class FileServiceImpl implements FileService {
      */
     @Override
     public JsonResult searchSingleFile(String object) {
-        if (object.equals("")) {
-            return new JsonResult(2, 0, "参数为空", 0);
-        }
-        JSONObject jsonObject = JSONObject.parseObject(object);
-        Integer fileId = Integer.parseInt(String.valueOf(jsonObject.get("fileId")));
-        FileDetail detail = fileMapper.showSingleFile(fileId);
+//        if (object.equals("")) {
+//            return new JsonResult(2, 0, "参数为空", 0);
+//        }
+//        JSONObject jsonObject = JSONObject.parseObject(object);
+//        Integer fileId = Integer.parseInt(String.valueOf(jsonObject.get("fileId")));
+        FileDetail detail = fileMapper.showSingleFile(Integer.parseInt(object));
         if (detail != null) {
             return new JsonResult(0, detail, "查询结果", 0);
         }

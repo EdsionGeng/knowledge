@@ -73,7 +73,7 @@ public interface AdvertisementMapper {
      * @param limit
      * @return
      */
-    @Select(" select id ,adContent,adTitle,addUser,departmentName,sendObject,sendTime,userId from CommonAdvertisement  order by sendtime desc limit #{startSize},#{limit}")
+    @Select(" select id ,adContent,adTitle,adStyle,addUser,departmentName,sendObject,sendTime,userId from CommonAdvertisement  order by sendtime desc limit #{startSize},#{limit}")
     List<Map> showAllCommon(@Param("startSize") Integer startSize, @Param("limit") Integer limit);
 
     /**
@@ -134,7 +134,7 @@ public interface AdvertisementMapper {
                 sql.append(" AND o.adtitle like concat('%',#{title},'%') ");
             }
             if (StringUtils.isNotEmpty((String) map.get("adStyle"))) {
-                sql.append(" AND o.adStyle like concat('%',#{adStyle},'%') ");
+                sql.append(" AND o.adStyle =#{adStyle} ");
             }
             sql.append(" limit #{startSize},#{limit} ");
             return sql.toString();
@@ -155,7 +155,7 @@ public interface AdvertisementMapper {
                 sql.append(" AND o.adtitle like concat('%',#{title},'%') ");
             }
             if (StringUtils.isNotEmpty((String) map.get("adStyle"))) {
-                sql.append(" AND o.adStyle like concat('%',#{adStyle},'%') ");
+                sql.append(" AND o.adStyle= #{adStyle} ");
             }
             return sql.toString();
         }

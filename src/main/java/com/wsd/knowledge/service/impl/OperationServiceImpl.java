@@ -254,6 +254,9 @@ public class OperationServiceImpl implements OperationService {
             maps.put("limit",pageSize);
             map=operationMapper.queryLogByIf(maps);
             sum=operationMapper.countLogByIf(maps);
+            if(sum==null){
+                sum=0;
+            }
             rdPage.setTotal(sum);
             rdPage.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
             rdPage.setCurrent(current);

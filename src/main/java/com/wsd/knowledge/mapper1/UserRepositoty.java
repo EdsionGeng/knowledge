@@ -6,6 +6,7 @@ import com.wsd.knowledge.util.StringUtils;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
+
 import java.util.List;
 import java.util.Map;
 
@@ -18,12 +19,13 @@ import java.util.Map;
 public interface UserRepositoty {
     /**
      * 登录
+     *
      * @param name
      * @param password
      * @return
      */
-    @Select("select id,username from SystemUser  where username = #{name} and password = #{password}")
-    SystemUser findUser(@Param("name") String name, @Param("password") String password);
+    @Select("select id,username,UserGroupId from SystemUser  where username = #{name} and password = #{password}")
+    Map findUser(@Param("name") String name, @Param("password") String password);
 
     /**
      * 获取个人信息
@@ -34,14 +36,15 @@ public interface UserRepositoty {
     @Select("select username,department,userGroupId from SystemUser where id=#{id} ")
     SystemUser findInfo(@Param("id") int id);
 
-    /**
-     * 查找同一组别下的人
-     *
-     * @param userGroupId
-     * @return
-     */
-    @Select("select id  from SystemUser where UserGroupId=#{UserGroupId} and job=1")
-    List<Integer > queryUserIdByGroup(@Param("UserGroupId")Integer userGroupId);
+//    /**
+//     * 查找同一组别下的人
+//     *
+//     * @param userGroupId
+//     * @return
+//     */
+//    @Select("select id  from SystemUser where UserGroupId=#{UserGroupId} and job=1")
+//    List<Integer > queryUserIdByGroup(@Param("UserGroupId")Integer userGroupId);
+
     /**
      * 查找同一组别下的人
      *
@@ -49,7 +52,7 @@ public interface UserRepositoty {
      * @return
      */
     @Select("select id,username,userGroupId  from SystemUser where UserGroupId=#{UserGroupId} and job=1")
-    List<SystemUser> queryGroup(@Param("UserGroupId")Integer userGroupId);
+    List<SystemUser> queryGroup(@Param("UserGroupId") Integer userGroupId);
 
     /**
      * 查找同一组别下的人
@@ -57,24 +60,35 @@ public interface UserRepositoty {
      * @param
      * @return
      */
-    @Select("select  id,userGroupId,username AS name from SystemUser  where userGroupId=#{id} and job=1")
-    List<NewDepartment> queryByGroupId(@Param("id")Integer id);
+    @Select("select  id,userGroupId,username AS name  from SystemUser  where userGroupId=#{id} and job=1")
+    List<NewDepartment> queryByGroupId(@Param("id") Integer id);
+
 
     @Select("select Uid from UserRoles where Rid=2013 ")
-    List<Integer>  queryAdmin();
-
-    @Select("select userGroupId from SystemUser where id=#{userId}")
-    Integer queryGroupId(@Param("userId")Integer userId);
+    List<Integer> queryAdmin();
 
 
+    @Select("select id  from UserRoles where  Uid=#{userId} and Rid=2013")
+    Integer ifAdmin(@Param("userId")Object userId);
+//    @Select("select userGroupId from SystemUser where id=#{userId}")
+//    Integer queryGroupId(@Param("userId")Integer userId);
+
+
+    @Select("select  a.id,a.deptno,a.pid from Department_new a LEFT JOIN Department_new b ON b.id =a.Pid where b.pid=#{pid} OR b.id=#{pid}")
+    List<Integer> showPerGroupId(@Param("pid") Integer pid);
+
+
+    @Select("select pid from Department_new where id=#{id}")
+    Integer queryPid(@Param("id") Integer id);
 
     /**
      * 获取部门组织架构树形图
+     *
      * @param map
      * @return
      */
     @SelectProvider(type = DepartmentTree.class, method = "showDepTree")
-    List<NewDepartment> findList(Map<String,Object>map);
+    List<NewDepartment> findList(Map<String, Object> map);
 
     class DepartmentTree {
         public String showDepTree(Map<String, Object> map) {

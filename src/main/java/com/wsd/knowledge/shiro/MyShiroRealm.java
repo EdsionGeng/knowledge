@@ -48,9 +48,9 @@ MyShiroRealm extends AuthorizingRealm {
         String pawDES = HashAlorgithum.getSHA256StrJava(password);
         // Map<String, Object> objectMap = new HashMap<String, Object>();
         // 从数据库获取对应用户名密码的用户
-        SystemUser systemUser = userService.login(name, pawDES);
+        Map map = userService.login(name, pawDES);
 
-        if (systemUser == null) {
+        if (map == null) {
             throw new AccountException("帐号或密码不正确！");
         } /*else if ("1".equals(objectMap.get("status"))) {
             *//**
@@ -67,7 +67,7 @@ MyShiroRealm extends AuthorizingRealm {
         }
         //SystemUser userIn = adminService.login(username,pwd);
         logger.info("身份认证成功，登录用户：" + name);
-        return new SimpleAuthenticationInfo(systemUser, password, getName());
+        return new SimpleAuthenticationInfo(map, password, getName());
     }
 
     /**

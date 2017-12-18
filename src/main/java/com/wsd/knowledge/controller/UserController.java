@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 /**
  * @Author EdsionGeng
@@ -30,7 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 public class UserController {
     @Autowired
     private UserService userService;
-    JSONObject jsonObject = null;
+
 
     @ApiOperation(value = "用户登录接口", notes = "传递用户名和密码")
     @ApiImplicitParams({
@@ -39,14 +40,14 @@ public class UserController {
     })
     @RequestMapping(value = "login.htmls", method = RequestMethod.POST)
     @ResponseBody
-    public JsonResult login(HttpServletRequest req, @RequestBody String object) {
-        req.getSession().setMaxInactiveInterval(3600);
+    public JsonResult login( @RequestBody String object) {
+       // req.getSession().setMaxInactiveInterval(3600);
 //        SystemUser systemUser = userService.login(username, HashAlorgithum.getSHA256StrJava(password));
 //        if (systemUser != null) {
 //            return new JsonResult(0,0,"登录成功",0);
 //        }
 //       return new JsonResult(2,0,"登录失败",0);
-        jsonObject = JSONObject.parseObject(object);
+        JSONObject jsonObject = JSONObject.parseObject(object);
         String username = String.valueOf(jsonObject.get("username"));
         String password = String.valueOf(jsonObject.get("password"));
      //   SystemUser systemUser = userService.login(username, password);
@@ -59,11 +60,13 @@ public class UserController {
             System.out.println(token);
             SecurityUtils.getSubject().login(token);
             // RememberMe这个参数设置为true后，在登陆的时候就会在客户端设置remenberme的相应cookie
-            SystemUser systemUser=(SystemUser) SecurityUtils.getSubject().getPrincipal();
+            Map map=(Map) SecurityUtils.getSubject().getPrincipal();
             token.setRememberMe(true);
             //存入Session
             //req.getSession().setAttribute("username", username);
-            return new JsonResult(0, systemUser, "登录成功", 0);
+            Integer isAdmin=userService.isAdmin(map.get("id"));
+
+            return new JsonResult(0, map, "登录成功", isAdmin);
         } catch (Exception e) {
             e.printStackTrace();
             return new JsonResult(2, 0, "登录失败", 0);

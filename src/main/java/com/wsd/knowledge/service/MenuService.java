@@ -12,9 +12,9 @@ public interface MenuService {
 
     /**
      * 获取菜单
-     * @param request
+     *
      * @param id
      * @return
      */
-    JsonResult getMenus(HttpServletRequest request, Integer id);
+    JsonResult getMenus( Integer id);
 }

@@ -69,7 +69,8 @@ public class MyRecAdServiceImpl implements MyRecAdService {
         }
 //转换为List集合，查找对应的组
         List<Integer> departmentId = new ArrayList<>();
-        for (String id : userIds.split(",")) {
+        String userList=userIds.substring(1,userIds.length());
+        for (String id : userList.split(",")) {
 //             System.out.println(id);
             departmentId.add(Integer.parseInt(id));
         }

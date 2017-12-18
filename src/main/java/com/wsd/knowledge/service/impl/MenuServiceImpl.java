@@ -26,13 +26,7 @@ public class MenuServiceImpl implements MenuService {
     private MenuMapper menuMapper;
 
     @Override
-    public JsonResult
-
-
-
-
-
-    getMenus(HttpServletRequest request, Integer id) {
+    public JsonResult getMenus( Integer id) {
         Map param = new HashMap();
         param.put("id", id);
         param.put("systemId", "2004");

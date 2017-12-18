@@ -100,7 +100,7 @@ public interface FileMapper {
      * @param fileId
      * @return
      */
-    @Update("select * from  FileDetail where id=#{id} and fileDisplay=1")
+    @Select("select * from  FileDetail where id=#{id} and fileDisplay=1")
     FileDetail showSingleFile(@Param("id") Integer  fileId);
 
     /**
@@ -159,8 +159,37 @@ public interface FileMapper {
      * 展示所有公司性质的文件
      * @return
      */
-    @Select("select f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where f.fileSpecies=2 order by f.addFileTime limit #{startSize},#{pageSize}")
+    @Select("select f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where f.fileSpecies=2 order by f.addFileTime desc limit #{startSize},#{pageSize}")
     List<Map> showCompanyFile(@Param("startSize")Integer startSize,@Param("pageSize")Integer pageSize);
+
+    /**
+     * 展示所有公司性质的文件
+     * @return
+     */
+    @Select("select count(f.id) from FileDetail f  where f.fileSpecies=2 ")
+    Integer countCompanyFile();
+    /**
+     * 展示所有公司性质的文件
+     * @return
+     */
+    @Select("select f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where f.fileSpecies=1  and f.userGroupId in (#{result}) order by f.addFileTime  desc  limit #{startSize},#{pageSize}")
+    List<Map> showGroupFile(@Param("startSize")Integer startSize,@Param("pageSize")Integer pageSize,@Param("result")String result);
+    /**
+     * 展示所有公司性质的文件
+     * @return
+     */
+    @Select("select count(f.id) from FileDetail f  where f.fileSpecies=1  and f.userGroupId in (#{result}) ")
+    Integer countGroupFile(@Param("result")String result);
+
+    /**
+     * 展示所有公司性质的文件
+     * @return
+     */
+    @Select("select f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where f.fileSpecies=1  and f.userGroupId in #{result} order by f.addFileTime desc  limit #{startSize},#{pageSize}")
+    List<Map> showGroupIdFile(@Param("startSize")Integer startSize,@Param("pageSize")Integer pageSize,@Param("result")String  result);
+
+    @Select("select count(f.id) from FileDetail f  where f.fileSpecies=1  and f.userGroupId in #{result}")
+    Integer countGroupIdFile(@Param("result")String  result);
     /**
      * 统计用户能看的全部文件数量
      *
@@ -169,7 +198,6 @@ public interface FileMapper {
      */
     @Select("select count(*)   from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and  f.fileDisplay=1 and u.userId=#{userId} order by f.addFileTime Desc ")
     Integer countUserLookFile(@Param("userId") Integer userId);
-
 
     @SelectProvider(type = FileQuery.class, method = "showUserIfLookFile")
     List<Map> showUserIfLookFile(Map<String, Object> map);

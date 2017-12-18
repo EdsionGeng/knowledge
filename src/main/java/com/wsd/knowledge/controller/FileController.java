@@ -27,7 +27,6 @@ import java.util.Random;
 public class FileController {
     @Autowired
     private FileService fileService;
-
     /**
      * 查询所有上传文件 组合查询 共用同一个接口
      * 个人
@@ -57,7 +56,6 @@ public class FileController {
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
         return fileService.showAllFile(departmentName, fileStyleId, title, startDate, endDate, current, pageSize);
     }
-
     /**
      * 用户添加文件
      *
@@ -74,7 +72,7 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileStyleId", value = "文件类型ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "filesize", value = "文件大小", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileSpecies", value = "文件种类", required = true),
-
+            @ApiImplicitParam(paramType = "query", dataType = "", name = "describle", value = "文件描述", required = true),
     })
     @RequestMapping(value = "insertFile.htmls", method = RequestMethod.POST)
     public JsonResult insertFile(@RequestBody String object) {
@@ -90,7 +88,6 @@ public class FileController {
         Integer fileSpecies = Integer.parseInt(String.valueOf(jsonObject.get("fileSpecies")));
         return fileService.insertFile(title, content, photourl, fileurl, userId, fileStyleId, filesize, describe,fileSpecies);
     }
-
     /**
      * 批量删除文件
      *
@@ -184,16 +181,18 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "pageSize", value = "每页数量", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "departmentName", value = "部门名字"),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileStyleId", value = "文件类型ID"),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userGroupId", value = "个人组别ID"),
     })
     @RequestMapping(value = "show/userlookfile", method = RequestMethod.POST)
-    public JsonResult showUserLookFile(@RequestBody String object) {
+    public JsonResult showUserLookFile( @RequestBody String object) {
         JSONObject jsonObject = JSONObject.parseObject(object);
         Integer userId   =Integer.parseInt(String.valueOf(jsonObject.get("userId")));
         Integer current  = Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
         String fileStyleId = String.valueOf(jsonObject.get("fileStyleId"));
         String departmentName = String.valueOf(jsonObject.get("departmentName"));
-        return fileService.showUserLookFile(userId, current, pageSize, fileStyleId, departmentName);
+        Integer  userGroupId =Integer.parseInt(String.valueOf(jsonObject.get("userGroupId")));
+        return fileService.showUserLookFile(userId, current, pageSize, fileStyleId, departmentName,userGroupId);
     }
 
     /**
@@ -267,6 +266,8 @@ public class FileController {
         return fileService.searchFileStyleId(object);
     }
 
+
+
     /**
      * 修改文件类型
      *
@@ -278,12 +279,27 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileId", value = "拼接文件ID", required = true),
 
     })
-    @RequestMapping(value = "query/singlefile", method = RequestMethod.POST)
-    public JsonResult singefile(@RequestBody String object) {
+    @RequestMapping(value = "singledetail", method = RequestMethod.POST)
+    public JsonResult showSingleFile(@RequestBody String object) {
         return fileService.searchSingleFile(object);
     }
 
 
+//     /**
+//     * 查看单个文件详情
+//     *
+//     * @param object
+//     * @return
+//     */
+//    @ApiOperation(value = "单个文件详情", notes = "传递必要参数")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileId", value = "拼接文件ID", required = true),
+//
+//    })
+//    @RequestMapping(value = "querysimplefile", method = RequestMethod.GET)
+//    public JsonResult showSingleFile( String object) {
+//        return fileService.searchSingleFile(object);
+//    }
     /**
      * @param file
      * @return
@@ -345,12 +361,12 @@ public class FileController {
                 // 还有关于文件格式限制、文件大小限制，详见：中配置。
                 //重新生成文件名，避免乱码问题
                 String filename = file.getOriginalFilename();
-                String fName = null;
-                if (filename.indexOf(".") >= 0) {
-                    fName = filename.substring(filename.lastIndexOf("."), filename.length());
-                }
-                String path = String.valueOf(new Random().nextInt(100)).concat((fName));//拼接新文件名
-                resumeurl = String.valueOf(new Date().getTime()).concat(path);
+//                String fName = null;
+//                if (filename.indexOf(".") >= 0) {
+//                    fName = filename.substring(filename.lastIndexOf("."), filename.length());
+//                }
+               // String path = String.valueOf(new Random().nextInt(100)).concat((fName));//拼接新文件名
+                resumeurl = String.valueOf(new Date().getTime()).concat(String.valueOf(new Random().nextInt(100))).concat(filename);
                 BufferedOutputStream out = new BufferedOutputStream(
                         new FileOutputStream("static//" + new File(resumeurl)));
                 out.write(file.getBytes());

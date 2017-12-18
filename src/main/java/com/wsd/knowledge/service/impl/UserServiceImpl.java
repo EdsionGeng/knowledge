@@ -36,33 +36,51 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public SystemUser login(String username, String password) {
+    public Map login(String username, String password) {
 
-        SystemUser systemUser = userRepositoty.findUser(username,password);
-        if (systemUser != null) {
+        Map map = userRepositoty.findUser(username, password);
+        if (map != null) {
 //            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 //            HttpSession session = request.getSession();
 //            session.setAttribute(LOGIN_USER, systemUser);
 //            session.setAttribute(LOGIN_USER_ID, systemUser.getId());
-            return systemUser;
+            return map;
         }
         return null;
     }
 
     @Override
     public JsonResult queryByGroupId(String object) {
-        if(object.equals("")){
-            return new JsonResult(2,0," 缺少参数",0);
+        if (object.equals("")) {
+            return new JsonResult(2, 0, " 缺少参数", 0);
         }
         JSONObject jsonObject = JSONObject.parseObject(object);
         Integer userGroupId = Integer.parseInt(String.valueOf(jsonObject.get("userGroupId")));
-        List<SystemUser> systemUsers=userRepositoty.queryGroup(userGroupId);
-        return new JsonResult(0,systemUsers,"查询结果",0);
+        List<SystemUser> systemUsers = userRepositoty.queryGroup(userGroupId);
+        return new JsonResult(0, systemUsers, "查询结果", 0);
     }
 
+    /**
+     * 调取所有管理员
+     * @return
+     */
     @Override
     public JsonResult queryAdmin() {
-        List<Integer> list=userRepositoty.queryAdmin();
-        return new JsonResult(0,list,"查询结果",0);
+        List<Integer> list = userRepositoty.queryAdmin();
+        return new JsonResult(0, list, "查询结果", 0);
+    }
+
+    /**
+     * 判断是否是管理员
+     * @param userId
+     * @return
+     */
+    @Override
+    public Integer isAdmin(Object userId) {
+        Integer result = userRepositoty.ifAdmin(userId);
+        if (result == null) {
+            return 0;
+        }
+        return 1;
     }
 }
