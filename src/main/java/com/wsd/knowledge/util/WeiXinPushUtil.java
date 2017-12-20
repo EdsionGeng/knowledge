@@ -24,10 +24,10 @@ public class WeiXinPushUtil{
 		String postUrl="{\"Uid\":1300,\"Content\":\"创建人:李四\\n标题:测试\\n内容:知识库系统消息" +
                 "\\n\",\"" +
                 "AgentId\":1000003,\"Title\":\"知识库系统：消息通知\",\"Url\":\"http://report.wsloan.com:8888/gd-mobile//#/?id="+1300+"\"}";
-		logger.info(postUrl);
+		      //logger.info(postUrl);
       try {
 			  String s = httpPostWithJSON(postUrl);
-			  logger.info(s);
+			  //logger.info(s);
 		  } catch (Exception e) {
 			  e.printStackTrace();
 		  }

@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.util.Date;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * @Author EdsionGeng
@@ -72,7 +73,7 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileStyleId", value = "文件类型ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "filesize", value = "文件大小", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileSpecies", value = "文件种类", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "", name = "describle", value = "文件描述", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "describle", value = "文件描述", required = true),
     })
     @RequestMapping(value = "insertFile.htmls", method = RequestMethod.POST)
     public JsonResult insertFile(@RequestBody String object) {
@@ -82,11 +83,11 @@ public class FileController {
         String photourl = String.valueOf(jsonObject.get("photourl"));
         String filesize = String.valueOf(jsonObject.get("filesize"));
         String fileurl = String.valueOf(jsonObject.get("fileurl"));
-        String describe = String.valueOf(jsonObject.get("describe"));
+        String describle = String.valueOf(jsonObject.get("describle"));
         Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
         Integer fileStyleId = Integer.parseInt(String.valueOf(jsonObject.get("fileStyleId")));
         Integer fileSpecies = Integer.parseInt(String.valueOf(jsonObject.get("fileSpecies")));
-        return fileService.insertFile(title, content, photourl, fileurl, userId, fileStyleId, filesize, describe,fileSpecies);
+        return fileService.insertFile(title, content, photourl, fileurl, userId, fileStyleId, filesize, describle,fileSpecies);
     }
     /**
      * 批量删除文件
@@ -96,7 +97,7 @@ public class FileController {
      */
     @ApiOperation(value = "批量删除文件接口", notes = "传递必要参数")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileds ", value = "文件ID 数组", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileIds ", value = "文件ID 数组", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户ID", required = true),
     })
     @RequestMapping(value = "deletefile.htmls", method = RequestMethod.POST)
@@ -151,10 +152,15 @@ public class FileController {
      */
     @ApiOperation(value = "更改文件接口", notes = "传递必要参数")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "filed", value = "文件ID", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileId", value = "文件ID", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "content", value = "文档内容", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "fileurl", value = "文件上传路径", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileStyleId", value = "文件类型ID", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "chooseUser", value = "是否选人", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "fileSize", value = "文件大小", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "photourl", value = "封面url", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "describle", value = "附件描述", required = true),
     })
     @RequestMapping(value = "updateFile.htmls", method = RequestMethod.POST)
     public JsonResult updateFileDetail(@RequestBody String object) {
@@ -164,8 +170,11 @@ public class FileController {
         Integer fileStyleId = Integer.parseInt(String.valueOf(jsonObject.get("fileStyleId")));
         String  content = String.valueOf(jsonObject.get("content"));
         String  fileurl = String.valueOf(jsonObject.get("fileurl"));
-        String chooseUser = String.valueOf(jsonObject.get("chooseUser"));
-        return fileService.updateFileDetail(fileId, content, fileurl, fileStyleId, userId,chooseUser);
+        String  chooseUser = String.valueOf(jsonObject.get("chooseUser"));
+        String  fileSize = String.valueOf(jsonObject.get("fileSize"));
+        String  photourl = String.valueOf(jsonObject.get("photourl"));
+        String  describle = String.valueOf(jsonObject.get("describle"));
+        return fileService.updateFileDetail(fileId, content, fileurl, fileStyleId, userId,chooseUser,fileSize,photourl,describle);
     }
 
     /**
@@ -276,15 +285,12 @@ public class FileController {
      */
     @ApiOperation(value = "单个文件详情", notes = "传递必要参数")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileId", value = "拼接文件ID", required = true),
-
+    @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileId", value = "文件ID", required = true),
     })
     @RequestMapping(value = "singledetail", method = RequestMethod.POST)
-    public JsonResult showSingleFile(@RequestBody String object) {
+    public JsonResult showSingleFile( @RequestBody String object) {
         return fileService.searchSingleFile(object);
     }
-
-
 //     /**
 //     * 查看单个文件详情
 //     *
@@ -365,8 +371,8 @@ public class FileController {
 //                if (filename.indexOf(".") >= 0) {
 //                    fName = filename.substring(filename.lastIndexOf("."), filename.length());
 //                }
-               // String path = String.valueOf(new Random().nextInt(100)).concat((fName));//拼接新文件名
-                resumeurl = String.valueOf(new Date().getTime()).concat(String.valueOf(new Random().nextInt(100))).concat(filename);
+//              String path = String.valueOf(new Random().nextInt(100)).concat((fName));//拼接新文件名
+                resumeurl = String.valueOf(UUID.randomUUID().toString()).concat(filename);
                 BufferedOutputStream out = new BufferedOutputStream(
                         new FileOutputStream("static//" + new File(resumeurl)));
                 out.write(file.getBytes());

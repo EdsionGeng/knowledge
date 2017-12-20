@@ -206,6 +206,7 @@ public class CacheManager {
         ArrayList a = new ArrayList();
         String key;
         try {
+
             Iterator i = cacheMap.entrySet().iterator();
             while (i.hasNext()) {
                 java.util.Map.Entry entry = (java.util.Map.Entry) i.next();
@@ -219,5 +220,4 @@ public class CacheManager {
             return a;
         }
     }
-
 }

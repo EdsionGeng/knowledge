@@ -12,12 +12,12 @@ import java.util.List;
 public interface PermissionService {
     /**
      * 添加权限文件操作权限
-     * @param userids
+     * @param userIds
      * @param operationStyleId
      * @param fileId
      * @return
      */
-    JsonResult insertUserPermission(List<Integer> userids, Integer operationStyleId, Integer fileId);
+    JsonResult insertUserPermission(String userIds, Integer operationStyleId, Integer fileId);
 
 
     /**
@@ -31,20 +31,20 @@ public interface PermissionService {
 
     /**
      *添加修改文件权限
-     * @param userids
+     * @param userIds
      * @param operationStyleId
      * @param fileId
      * @return
      */
-    JsonResult updateFilePerMission(List<Integer> userids, Integer operationStyleId, Integer fileId);
+    JsonResult updateFilePerMission(String  userIds, Integer operationStyleId, Integer fileId);
 
 
     /**
      * 添加删除文件权限
-     * @param userids
+     * @param userIds
      * @param operationStyleId
      * @param fileId
      * @return
      */
-    JsonResult deleteFilePerMission(List<Integer> userids, Integer operationStyleId, Integer fileId);
+    JsonResult deleteFilePerMission(String  userIds, Integer operationStyleId, Integer fileId);
 }

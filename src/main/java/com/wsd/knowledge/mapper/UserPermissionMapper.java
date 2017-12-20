@@ -15,13 +15,16 @@ public interface UserPermissionMapper {
      * @param userPermission
      * @return
      */
-    @Insert("insert into UserPermission (fileId,userId,readFile,addPermissionTime) " +
-            "values(#{fileId},#{userId},#{readFile},#{addPermissionTime})")
+    @Insert("insert into UserPermission (fileId,userId,readFile,addPermissionTime,deleteFile,updateFile) " +
+            "values(#{fileId},#{userId},#{readFile},#{addPermissionTime},#{deleteFile},#{updateFile})")
     Integer insertUserPermission(UserPermission userPermission);
 
     /**
      * 更改是否可以修改文件权限
      * @param userId
+     *
+     *
+     *
      * @param fileId
      * @param operationStyleId
      * @return
@@ -53,7 +56,7 @@ public interface UserPermissionMapper {
      * @param fileId
      * @return
      */
-    @Delete("delete from UserPermission where  and fileId=#{fileId}")
+    @Delete("delete from UserPermission where  fileId=#{fileId}")
     Integer deletePerByFileId(@Param("fileId")Integer fileId);
 
 

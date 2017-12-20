@@ -45,7 +45,6 @@ public class ShiroConfig {
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         // 配置不会被拦截的链接 顺序判断
         filterChainDefinitionMap.put("/login", "anon");
-
         filterChainDefinitionMap.put("/webjars/bycdao-ui/jsonview/jquery.jsonview.min.css", "anon");
         filterChainDefinitionMap.put("/swagger-ui", "anon");
         filterChainDefinitionMap.put("/js/**", "anon");

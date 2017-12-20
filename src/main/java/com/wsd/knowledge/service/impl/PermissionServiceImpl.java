@@ -1,6 +1,7 @@
 package com.wsd.knowledge.service.impl;
 
 import com.wsd.knowledge.entity.UserPermission;
+import com.wsd.knowledge.mapper.FileMapper;
 import com.wsd.knowledge.mapper.UserPermissionMapper;
 import com.wsd.knowledge.service.PermissionService;
 import com.wsd.knowledge.util.DateUtil;
@@ -8,6 +9,8 @@ import com.wsd.knowledge.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -20,39 +23,45 @@ import java.util.List;
 public class PermissionServiceImpl implements PermissionService {
     @Autowired
     private UserPermissionMapper userPermissionMapper;
+    @Autowired
+    private FileMapper fileMapper;
 
     /**
      * 添加文件人员相对应的权限
      *
-     * @param userids
+     * @param userIds
      * @param operationStyleId
      * @param fileId
      * @return
      */
     @Override
-    public JsonResult insertUserPermission(List<Integer> userids, Integer operationStyleId, Integer fileId) {
-        if (userids == null || operationStyleId == null || fileId == null) {
+    public  synchronized JsonResult insertUserPermission(String  userIds, Integer operationStyleId, Integer fileId) {
+        if (userIds .equals("") || operationStyleId == null || fileId == null) {
             return new JsonResult(2, 0, "缺少参数", 0);
         }
-        String str = new DateUtil().cacheExist(String.valueOf(fileId));
-        if (str.equals("full")) {
-            return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
+//        String str = new DateUtil().cacheExist(String.valueOf(fileId));
+//        if (str.equals("full")) {
+//            return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
+//        }
+        List<Integer> userlist = new ArrayList<>();
+        String userList=userIds.substring(1,userIds.length());
+        for (String id : userList.split(",")) {
+            userlist.add(Integer.parseInt(id));
         }
-        String strs = new DateUtil().cacheExist(String.valueOf(fileId));
-        if (strs.equals("full")) {
-            return new JsonResult(2, 0, "网络延时，稍后加载", 0);
-        }
-        int lengths = userids.size();
+        List<Integer > newList = new ArrayList(new HashSet(userlist));
         Integer j = null;
-        for (int i = 0; i < lengths; i++) {
-
-            UserPermission userPermission = new UserPermission(fileId, userids.get(i), operationStyleId, new DateUtil().getSystemTime());
+        for (int i = 0,lengths = newList.size(); i < lengths; i++) {
+            UserPermission userPermission = new UserPermission(fileId, newList.get(i), operationStyleId, new DateUtil().getSystemTime(),0,0);
+            String strss = new DateUtil().cacheExist(String.valueOf(userlist.get(i)));
+            if (strss.equals("full")) {
+                fileMapper.deleteFile(fileId);
+                return new JsonResult(2, 0, "并发问题" , 0);
+            }
             j = userPermissionMapper.insertUserPermission(userPermission);
         }
         if (j != 0) {
             return new JsonResult(0, 0, "添加成功", 0);
         }
-
         return new JsonResult(2, 0, "添加失败", 0);
     }
 
@@ -78,20 +87,29 @@ public class PermissionServiceImpl implements PermissionService {
     /**
      * 添加修改文件权限
      *
-     * @param userids
+     * @param userIds
      * @param operationStyleId
      * @param fileId
      * @return
      */
     @Override
-    public JsonResult updateFilePerMission(List<Integer> userids, Integer operationStyleId, Integer fileId) {
-        if (userids == null || operationStyleId == null || fileId == null) {
+    public JsonResult updateFilePerMission(String  userIds, Integer operationStyleId, Integer fileId) {
+        if (userIds.equals("") || operationStyleId == null || fileId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         Integer result = null;
-        int length = userids.size();
-        for (int i = 0; i < length; i++) {
-            result = userPermissionMapper.addUpdatePermission(userids.get(i), operationStyleId, fileId);
+//        String str = new DateUtil().cacheExist(String.valueOf(fileId));
+//        if (str.equals("full")) {
+//            return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
+//        }
+        List<Integer> userlist = new ArrayList<>();
+        String userList=userIds.substring(1,userIds.length());
+        for (String id : userList.split(",")) {
+            userlist.add(Integer.parseInt(id));
+        }
+        List<Integer> newList = new ArrayList(new HashSet(userlist));
+        for (int i = 0,length=newList.size(); i < length; i++) {
+            result = userPermissionMapper.addUpdatePermission(newList.get(i), operationStyleId, fileId);
         }
         if (result != 0) {
             return new JsonResult(0, 0, "操作成功", 0);
@@ -101,20 +119,29 @@ public class PermissionServiceImpl implements PermissionService {
     /**
      * 添加删除文件权限
      *
-     * @param userids
+     * @param userIds
      * @param operationStyleId
      * @param fileId
      * @return
      */
     @Override
-    public JsonResult deleteFilePerMission(List<Integer> userids, Integer operationStyleId, Integer fileId) {
-        if (userids == null || operationStyleId == null || fileId == null) {
+    public JsonResult deleteFilePerMission(String userIds, Integer operationStyleId, Integer fileId) {
+        if (userIds == null || operationStyleId == null || fileId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         Integer result = null;
-        int length = userids.size();
-        for (int i = 0; i < length; i++) {
-            result = userPermissionMapper.addDeletePermission(userids.get(i), operationStyleId, fileId);
+//        String str = new DateUtil().cacheExist(String.valueOf(fileId));
+//        if (str.equals("full")) {
+//            return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
+//        }
+        List<Integer> userlist = new ArrayList<>();
+        String userList=userIds.substring(1,userIds.length());
+        for (String id : userList.split(",")) {
+            userlist.add(Integer.parseInt(id));
+        }
+        List<Integer> newList = new ArrayList(new HashSet(userlist));
+        for (int i = 0,length=newList.size(); i < length; i++) {
+            result = userPermissionMapper.addDeletePermission(newList.get(i), operationStyleId, fileId);
         }
         if (result != 0) {
             return new JsonResult(0, 0, "操作成功", 0);

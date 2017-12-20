@@ -127,7 +127,7 @@ public class CommonServiceImpl implements CommonService {
         List<NewDepartment> list = Lists.newArrayList();
         NewDepartment zero = new NewDepartment();
         zero.setId("0");
-        zero.setName("公司");
+        zero.setName("聚财科技");
         zero.setChildren(trees);
         if (StringUtils.equals(pid, "0")) {
             zero.setChecked(1);

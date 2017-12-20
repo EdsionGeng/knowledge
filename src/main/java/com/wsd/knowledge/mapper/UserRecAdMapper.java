@@ -31,27 +31,24 @@ public interface UserRecAdMapper {
      * @param limit
      * @return
      */
-    @Select("select  distinct c.adContent ad ,c.adTitle at,c.addUser addUser,u.recAdtime re,u.commonId ,u.ifRead ifRead from UserRecAdvertisement u left join CommonAdvertisement c on u.commonId=c.id order by u.recAdtime DESC limit #{startSize},#{limit}")
-    List<Map>  showUserRecAd(@Param("userId") int userId,@Param("startSize")int startSize,@Param("limit")int limit);
+    @Select("select  u.commonId, c.adContent ad ,c.adTitle at,c.addUser addUser,u.recAdtime re,u.commonId ,u.ifRead ifRead from UserRecAdvertisement u left join CommonAdvertisement c on u.commonId=c.id  where u.userId=#{userId} order by u.recAdtime DESC limit #{startSize},#{limit}")
+    List<Map> showUserRecAd(@Param("userId") int userId,@Param("startSize")int startSize,@Param("limit")int limit);
 
     /**
      * 统计总数量
      * @return
      */
-    @Select("select count(*) from UserRecAdvertisement")
-    Integer countUserAdPcs();
+    @Select("select count(*) from UserRecAdvertisement where userId=#{userId}")
+    Integer countUserAdPcs(@Param("userId")Integer userId);
 
 
-    /**
-     * 更新已读公告的状态
-     * @param commonId
-     * @param userId
-     * @return
-     */
-    @Update("update  UserRecAdvertisement set ifRead=1 where userId=#{userId} and commonId=#{commonId} ")
-    Integer updateCommonStatus(@Param("commonId")int commonId,@Param("userId")int userId);
-
-
-
+//    /**
+//     * 更新已读公告的状态
+//     * @param commonId
+//     * @param userId
+//     * @return
+//     */
+//    @Update("update  UserRecAdvertisement set ifRead=1 where userId=#{userId} and commonId=#{commonId} ")
+//    Integer updateCommonStatus(@Param("commonId")int commonId,@Param("userId")int userId);
 
 }

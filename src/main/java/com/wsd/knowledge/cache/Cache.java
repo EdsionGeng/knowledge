@@ -8,7 +8,7 @@ public class Cache {
 
     public Cache() {
         super();
-        setTimeOut(System.currentTimeMillis() + 1000 * 2);
+        setTimeOut(System.currentTimeMillis() + 800 * 1);
         setExpired(false);
     }
 
