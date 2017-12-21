@@ -3,10 +3,7 @@ package com.wsd.knowledge.mapper;
 
 import com.wsd.knowledge.entity.FileKind;
 import com.wsd.knowledge.util.StringUtils;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.Map;
@@ -48,6 +45,13 @@ public interface CommonMapper {
     @Delete(" delete  from  FileKind where id = #{fileStyleId}")
     Integer deleteDocRule(@Param("fileStyleId") Integer fileStyleId);
 
+    /**
+     * 修改目录名称
+     * @param fileStyleId
+     * @return
+     */
+    @Update(" update FileKind set fileKindName=#{fileName} where id = #{fileStyleId}")
+    Integer updateDocRule(@Param("fileStyleId") Integer fileStyleId,@Param("fileName")String fileName);
     class KindTree {
         public String showKindTree(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();

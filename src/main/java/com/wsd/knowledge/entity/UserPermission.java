@@ -93,6 +93,13 @@ public class UserPermission implements Serializable {
         this.deleteFile=deleteFile;
         this.updateFile=updateFile;
     }
+
+    public UserPermission(int id,  String addPermissionTime,int deleteFile,int updateFile) {
+        this.id=id;
+        this.addPermissionTime = addPermissionTime;
+        this.deleteFile=deleteFile;
+        this.updateFile=updateFile;
+    }
     public UserPermission() {
     }
 }

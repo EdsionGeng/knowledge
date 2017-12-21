@@ -95,6 +95,20 @@ public class CommonServiceImpl implements CommonService {
         return new JsonResult(2, 0, "删除失败", 0);
     }
 
+    @Override
+    public JsonResult updateRule(String object) {
+        if (object.equals("")) {
+            return new JsonResult(2, 0, "缺少参数", 0);
+        }
+        JSONObject jsonObject = JSONObject.parseObject(object);
+        Integer fileStyleId = Integer.parseInt(String.valueOf(jsonObject.get("fileStyleId")));
+        String fileName = String.valueOf(jsonObject.get("fileName"));
+        Integer result = commonMapper.updateDocRule(fileStyleId, fileName);
+        if (result != 0) {
+            return new JsonResult(0, 0, "修改成功", 0);
+        }
+        return new JsonResult(2, 0, "修改失败", 0);
+    }
     /**
      * 部门树形操作
      *
@@ -163,7 +177,7 @@ public class CommonServiceImpl implements CommonService {
         List<FileKind> list = Lists.newArrayList();
         FileKind zero = new FileKind();
         zero.setId(0);
-        zero.setFileKindName("文档目录");
+        zero.setFileKindName("聚财科技文档目录");
         zero.setChildren(trees);
         if (StringUtils.equals(pid, "0")) {
             zero.setChecked(1);

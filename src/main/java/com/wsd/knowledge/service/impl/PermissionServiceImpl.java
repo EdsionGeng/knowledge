@@ -44,8 +44,7 @@ public class PermissionServiceImpl implements PermissionService {
 //            return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
 //        }
         List<Integer> userlist = new ArrayList<>();
-        String userList=userIds.substring(1,userIds.length());
-        for (String id : userList.split(",")) {
+        for (String id : userIds.split(",")) {
             userlist.add(Integer.parseInt(id));
         }
         List<Integer > newList = new ArrayList(new HashSet(userlist));
@@ -55,6 +54,7 @@ public class PermissionServiceImpl implements PermissionService {
             String strss = new DateUtil().cacheExist(String.valueOf(userlist.get(i)));
             if (strss.equals("full")) {
                 fileMapper.deleteFile(fileId);
+                userPermissionMapper.deletePerByFileId(fileId);
                 return new JsonResult(2, 0, "并发问题" , 0);
             }
             j = userPermissionMapper.insertUserPermission(userPermission);
@@ -103,8 +103,8 @@ public class PermissionServiceImpl implements PermissionService {
 //            return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
 //        }
         List<Integer> userlist = new ArrayList<>();
-        String userList=userIds.substring(1,userIds.length());
-        for (String id : userList.split(",")) {
+
+        for (String id : userIds.split(",")) {
             userlist.add(Integer.parseInt(id));
         }
         List<Integer> newList = new ArrayList(new HashSet(userlist));
@@ -135,8 +135,7 @@ public class PermissionServiceImpl implements PermissionService {
 //            return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
 //        }
         List<Integer> userlist = new ArrayList<>();
-        String userList=userIds.substring(1,userIds.length());
-        for (String id : userList.split(",")) {
+        for (String id : userIds.split(",")) {
             userlist.add(Integer.parseInt(id));
         }
         List<Integer> newList = new ArrayList(new HashSet(userlist));

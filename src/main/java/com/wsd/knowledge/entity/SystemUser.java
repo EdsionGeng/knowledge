@@ -17,7 +17,7 @@ public class SystemUser implements Serializable {
     private String email;
     private String duty;
     private int isAdmin;
-    private int userGroupId;
+    private Integer  userGroupId;
     private int job;
     private String tDate;
 
@@ -109,12 +109,12 @@ public class SystemUser implements Serializable {
         this.isAdmin = isAdmin;
     }
 
-    public int getUserGroupId() {
+    public Integer getUserGroupId() {
         return userGroupId;
     }
 
-    public void setUserGroupId(int userGroupId) {
-        userGroupId = userGroupId;
+    public void setUserGroupId(Integer userGroupId) {
+        this.userGroupId = userGroupId;
     }
 
     public int getJob() {
@@ -130,25 +130,19 @@ public class SystemUser implements Serializable {
         this.password = password;
     }
 
-    public SystemUser(String username, String password,
-                      String department, String usergroup,
-                      String mobile, String email, String workWexinId,
-                      String duty, int isAdmin, int userGroupId,
-                      int job, String tDate) {
+    public SystemUser(String username, String department, Integer userGroupId) {
         this.username = username;
-        this.password = password;
         this.department = department;
-        this.usergroup = usergroup;
-        this.mobile = mobile;
-        this.email = email;
-        this.workWexinId = workWexinId;
-        this.duty = duty;
-        this.isAdmin = isAdmin;
         this.userGroupId = userGroupId;
-        this.job = job;
-        this.tDate = tDate;
     }
 
-    public SystemUser() {
+    @Override
+    public String toString() {
+        return "SystemUser{" +
+                ", username='" + username + '\'' +
+                ", department='" + department + '\'' +
+
+                ", userGroupId=" + userGroupId +
+                '}';
     }
 }

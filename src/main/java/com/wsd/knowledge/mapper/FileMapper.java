@@ -128,70 +128,54 @@ public interface FileMapper {
      * @param limit
      * @return
      */
-//       this.departmentName = departmentName;
-//        this.username = username;
-//        this.fileStyleId = fileStyleId;
-//        this.userId = userId;
-//        this.fileNo = fileNo;
-//        this.title = title;
-//        this.fileStyle = fileStyle;
-//        this.fileContent = fileContent;
-//        this.fileUrl = fileUrl;
-//        this.photoUrl = photoUrl;
-//        this.lookPcs = lookPcs;
-//        this.downloadPcs = downloadPcs;
-//        this.updatePcs = updatePcs;
-//        this.fileSize = fileSize;
-//        this.fileDisplay = fileDisplay;
-//        this.enclosureInfo=enclosureInfo;
-//        this.addFileTime = addFileTime;
-//        this.fileSpecies=fileSpecies;
-    @Select("select f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId} order by f.addFileTime Desc limit #{startSize},#{limit} ")
+
+    @Select("select f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileSpecies=1 and f.fileDisplay=1 and  u.userId=#{userId} order by f.addFileTime Desc limit #{startSize},#{limit} ")
     List<Map> showUserLookFile(@Param("userId") Integer userId, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
 
-    /**
-     * 展示所有公司性质的文件
-     * @return
-     */
-    @Select("select f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where f.fileSpecies=2 order by f.addFileTime desc limit #{startSize},#{pageSize}")
-    List<Map> showCompanyFile(@Param("startSize")Integer startSize,@Param("pageSize")Integer pageSize);
-
-    /**
-     * 展示所有公司性质的文件
-     * @return
-     */
-    @Select("select count(f.id) from FileDetail f  where f.fileSpecies=2 ")
-    Integer countCompanyFile();
-    /**
-     * 展示所有公司性质的文件
-     * @return
-     */
-    @Select("select f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where f.fileSpecies=1  and f.userGroupId in (#{result}) order by f.addFileTime  desc  limit #{startSize},#{pageSize}")
-    List<Map> showGroupFile(@Param("startSize")Integer startSize,@Param("pageSize")Integer pageSize,@Param("result")String result);
-    /**
-     * 展示所有公司性质的文件
-     * @return
-     */
-    @Select("select count(f.id) from FileDetail f  where f.fileSpecies=1  and f.userGroupId in (#{result}) ")
-    Integer countGroupFile(@Param("result")String result);
-
-    /**
-     * 展示所有公司性质的文件
-     * @return
-     */
-    @Select("select f.id, f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where f.fileSpecies=1  and f.userGroupId in (#{result}) order by f.addFileTime desc  limit #{startSize},#{pageSize}")
-    List<Map> showGroupIdFile(@Param("startSize")Integer startSize,@Param("pageSize")Integer pageSize,@Param("result")String  result);
-
-    @Select("select count(f.id) from FileDetail f  where f.fileSpecies=1  and f.userGroupId in (#{result})")
-    Integer countGroupIdFile(@Param("result")String  result);
     /**
      * 统计用户能看的全部文件数量
      *
      * @param userId
      * @return
      */
-    @Select("select count(*)   from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and  f.fileDisplay=1 and u.userId=#{userId} order by f.addFileTime Desc ")
+    @Select("select count(*)   from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileSpecies=1 and f.fileDisplay=1 and u.userId=#{userId} order by f.addFileTime Desc ")
     Integer countUserLookFile(@Param("userId") Integer userId);
+
+    /**
+     * 展示所有公司性质的文件
+     * @return
+     */
+    @Select("select f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where f.fileSpecies=2 and f.fileDisplay = 1 order by f.addFileTime desc limit #{startSize},#{pageSize}")
+    List<Map> showCompanyFile(@Param("startSize")Integer startSize,@Param("pageSize")Integer pageSize);
+
+    /**
+     * 展示所有公司性质的文件
+     * @return
+     */
+    @Select("select count(f.id) from FileDetail f  where f.fileSpecies=2 and f.fileDisplay = 1 ")
+    Integer countCompanyFile();
+    /**
+     * 展示所有公司性质的文件
+     * @return
+     */
+    @Select("select f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId in (#{result}) order by f.addFileTime  desc  limit #{startSize},#{pageSize}")
+    List<Map> showGroupFile(@Param("startSize")Integer startSize,@Param("pageSize")Integer pageSize,@Param("result")String result);
+    /**
+     * 展示所有公司性质的文件
+     * @return
+     */
+    @Select("select count(f.id) from FileDetail f  where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId in (#{result}) ")
+    Integer countGroupFile(@Param("result")String result);
+
+    /**
+     * 展示所有公司性质的文件
+     * @return
+     */
+    @Select("select f.id, f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where  f.fileDisplay = 1 and  f.userGroupId in (#{result}) order by f.addFileTime desc  limit #{startSize},#{pageSize}")
+    List<Map> showGroupIdFile(@Param("startSize")Integer startSize,@Param("pageSize")Integer pageSize,@Param("result")String  result);
+
+    @Select("select count(f.id) from FileDetail f  where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId in (#{result})")
+    Integer countGroupIdFile(@Param("result")String  result);
 
     @SelectProvider(type = FileQuery.class, method = "showUserIfLookFile")
     List<Map> showUserIfLookFile(Map<String, Object> map);
@@ -207,8 +191,7 @@ public interface FileMapper {
      * @param limit
      * @return
      */
-    @Select("select distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId}   and (f.departmentName " +
-            "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%') ) order by f.addFileTime Desc limit #{startSize},#{limit} ")
+    @Select("select distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileDisplay=1 and  u.userId=#{userId} and  (f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%'))  order by f.addFileTime Desc limit #{startSize},#{limit} ")
     List<Map> showSearchFile(@Param("userId") Integer userId, @Param("searchContent") String searchContent, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
 
     /**
@@ -218,8 +201,7 @@ public interface FileMapper {
      * @param searchContent
      * @return
      */
-    @Select("select count(*) from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId} and (f.departmentName " +
-            "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%'))  ")
+    @Select("select count(*) from FileDetail f left join UserPermission  u on  f.id=u.fileId where  f.fileDisplay=1 and  u.userId=#{userId} and  (f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%')) ")
     Integer countSearchFile(@Param("userId") Integer userId, @Param("searchContent") String searchContent);
 
     /**
@@ -265,7 +247,7 @@ public interface FileMapper {
      * @return
      */
      @Delete("delete from FileDetail where id=#{id}")
-    Integer deleteFile(@Param("id")Integer id);
+     Integer  deleteFile(@Param("id")Integer id);
     class FileQuery {
         public String queryFileByDep(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();

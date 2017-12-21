@@ -1,4 +1,5 @@
 package com.wsd.knowledge.controller;
+
 import com.alibaba.fastjson.JSONObject;
 import com.wsd.knowledge.entity.FileKind;
 import com.wsd.knowledge.entity.NewDepartment;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
 
 /**
@@ -79,9 +81,8 @@ public class CommonController {
         return commonService.insertRule(parentId, docName);
     }
 
-
     /**
-     * 删除目录
+     * 添加文档目录
      *
      * @param object
      * @return
@@ -96,4 +97,13 @@ public class CommonController {
         return commonService.deleteRule(object);
     }
 
+    @ApiOperation(value = "添加文档目录", notes = "传递必要参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileStyleId", value = "父ID"),
+            @ApiImplicitParam(paramType = "query", dataType = " String", name = "fileName", value = "目录名称")
+    })
+    @RequestMapping(value = "update/docname.htmls", method = RequestMethod.POST)
+    public JsonResult updateDocName(@RequestBody String object) {
+        return commonService.updateRule(object);
+    }
 }

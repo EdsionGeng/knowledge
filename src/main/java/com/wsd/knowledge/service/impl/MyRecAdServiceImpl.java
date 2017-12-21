@@ -68,14 +68,11 @@ public class MyRecAdServiceImpl implements MyRecAdService {
         if (str.equals("full")) {
             return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
         }
-//转换为List集合，查找对应的组
+        //转换为List集合，查找对应的组
         List<Integer> departmentId = new ArrayList<>();
-        String userList=userIds.substring(1,userIds.length());
-        for (String id : userList.split(",")) {
-//             System.out.println(id);
+        for (String id : userIds.split(",")) {
             departmentId.add(Integer.parseInt(id));
         }
-
         Integer result = 0;
         //查找部门下面人员ID
         for (int i = 0, len = departmentId.size(); i < len; i++) {
@@ -86,8 +83,6 @@ public class MyRecAdServiceImpl implements MyRecAdService {
             }
             UserRecAdvertisement userRecAdvertisement = new UserRecAdvertisement(commonId, departmentId.get(i), 0, new DateUtil().getSystemTime());
             result = userRecAdMapper.insertUserRecAd(userRecAdvertisement);
-          //  System.out.println("此次所选的人"+departmentId.get(i));
-            //          }
         }
         if (result != 0) {
             return new JsonResult(0, 0, "添加成功", 0);

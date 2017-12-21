@@ -33,8 +33,8 @@ public interface UserRepositoty {
      * @param id
      * @return
      */
-    @Select("select username,department,userGroupId from SystemUser where id=#{id} ")
-    SystemUser findInfo(@Param("id") int id);
+    @Select("select username,department,UserGroupId from SystemUser where id=#{id} ")
+    SystemUser findInfo(@Param("id") Integer  id);
 
 //    /**
 //     * 查找同一组别下的人
