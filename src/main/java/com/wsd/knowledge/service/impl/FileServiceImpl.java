@@ -376,26 +376,30 @@ public class FileServiceImpl implements FileService {
         Integer current = Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
         String searchContent = String.valueOf(jsonObject.get("searchContent"));
-        String departmentName = String.valueOf(jsonObject.get("departmentName"));
-        String fileStyleId = String.valueOf(jsonObject.get("fileStyleId"));
+//        String departmentName = String.valueOf(jsonObject.get("departmentName"));
+//        String fileStyleId = String.valueOf(jsonObject.get("fileStyleId"));
         if (userId == null || current == null || pageSize == null || searchContent.equals("")) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         int startSize = (current - 1) * pageSize;
         RdPage rdPage = new RdPage();
-
-
         List<Map> map = fileMapper.showSearchFile1(userId, searchContent, startSize, pageSize);
         List<Map> map1 = fileMapper.showSearchFile2(userId, searchContent, startSize, pageSize);
         List<Map> map2 = fileMapper.showSearchFile3(userId, searchContent, startSize, pageSize);
-        int sum = fileMapper.countSearchFile1(userId, searchContent);
-        int sum1 = fileMapper.countSearchFile2(userId, searchContent);
-        int sum2 = fileMapper.countSearchFile3(userId, searchContent);
+        Integer sum = fileMapper.countSearchFile1(userId, searchContent);
+        Integer sum1 = fileMapper.countSearchFile2(userId, searchContent);
+        Integer sum2 = fileMapper.countSearchFile3(userId, searchContent);
         if (map != null) {
             map.addAll(map1);
             map.addAll(map2);
-            sum+=sum1;
-            sum+=sum2;
+            if(sum1==null){
+                sum1=0;
+            }
+            if(sum2==null){
+                sum1=0;
+            }
+            sum += sum1;
+            sum += sum2;
             List<Map> newList = new ArrayList(new HashSet(map));
             rdPage.setTotal(sum);
             rdPage.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
