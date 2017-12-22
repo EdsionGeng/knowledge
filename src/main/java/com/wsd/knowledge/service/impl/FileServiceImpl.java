@@ -125,12 +125,8 @@ public class FileServiceImpl implements FileService {
     @Transactional(readOnly = false)
     public JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize, String describe, Integer fileSpecies) {
 
-        String str = new DateUtil().cacheExist(String.valueOf(userId));
-        if (str.equals("full")) {
-            return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
-        }
-        String fileNo = String.valueOf(new Date().getTime()).concat("888888");
 
+        String fileNo = String.valueOf(new Date().getTime()).concat("888888");
         SystemUser systemUser = userRepositoty.findInfo(userId);
         FileKind fileKind = fileKindMapper.selectFileKind(fileStyleId);
         //生成实体类
@@ -259,11 +255,11 @@ public class FileServiceImpl implements FileService {
      */
     @Override
     @Transactional(readOnly = false)
-    public JsonResult updateFileDetail(Integer id, String content, String fileurl, Integer fileStyleId, Integer userId, String chooseUser,String fileSize,String photourl,String describle) {
+    public JsonResult updateFileDetail(Integer id, String content, String fileurl, Integer fileStyleId, Integer userId, String chooseUser, String fileSize, String photourl, String describle, String fileStyleName) {
         if (id == null || content.equals("") || fileStyleId == null || userId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
-        Integer result = fileMapper.updateFileContentUrl(id,content,fileurl,fileStyleId,fileSize,photourl,describle);
+        Integer result = fileMapper.updateFileContentUrl(id, content, fileurl, fileStyleId, fileSize, photourl, describle, fileStyleName);
         if (result != 0) {
             SystemUser systemUser = userRepositoty.findInfo(userId);
             //添加操作日志
@@ -280,7 +276,7 @@ public class FileServiceImpl implements FileService {
                 return new JsonResult(0, 0, "操作成功", 0);
             }
         }
-           return new JsonResult(2, 0, "操作失败", 0);
+        return new JsonResult(2, 0, "操作失败", 0);
     }
 
 
@@ -328,7 +324,7 @@ public class FileServiceImpl implements FileService {
                     }
                 } else {
                     Integer result = userRepositoty.queryPid(userGroupId);
-                    String res = "'" + String.valueOf(result) + "'" + "," + "'" + String.valueOf(userGroupId) + "'";
+                    String res = "'" + result + "'" + "," + "'" + userGroupId + "'";
                     groupFileList = fileMapper.showGroupIdFile(startSize, pageSize, res);
                     if (groupFileList.size() != 0) {
                         map.addAll(groupFileList);
@@ -387,34 +383,42 @@ public class FileServiceImpl implements FileService {
         }
         int startSize = (current - 1) * pageSize;
         RdPage rdPage = new RdPage();
-        List<Map> map = null;
-        Integer sum = null;
-        if (fileStyleId.equals("null") && departmentName.equals("null")) {
-            map = fileMapper.showSearchFile(userId, searchContent, startSize, pageSize);
-            sum = fileMapper.countSearchFile(userId, searchContent);
-            if (map != null) {
-                rdPage.setTotal(sum);
-                rdPage.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
-                rdPage.setCurrent(current);
-                rdPage.setPageSize(pageSize);
-                return new JsonResult(0, map, "查询结果", rdPage);
-            }
-        } else {
-            Map<String, Object> params = new HashMap<>();
-            params.put("userId", userId);
-            params.put("startSize", startSize);
-            params.put("limit", pageSize);
-            params.put("searchContent", searchContent);
-            params.put("departmentName", departmentName);
-            params.put("fileStyleId", fileStyleId);
-            map = fileMapper.showIfSearchFile(params);
-            sum = fileMapper.countIfSearchFile(params);
+
+
+        List<Map> map = fileMapper.showSearchFile1(userId, searchContent, startSize, pageSize);
+        List<Map> map1 = fileMapper.showSearchFile2(userId, searchContent, startSize, pageSize);
+        List<Map> map2 = fileMapper.showSearchFile3(userId, searchContent, startSize, pageSize);
+        int sum = fileMapper.countSearchFile1(userId, searchContent);
+        int sum1 = fileMapper.countSearchFile2(userId, searchContent);
+        int sum2 = fileMapper.countSearchFile3(userId, searchContent);
+        if (map != null) {
+            map.addAll(map1);
+            map.addAll(map2);
+            sum+=sum1;
+            sum+=sum2;
+            List<Map> newList = new ArrayList(new HashSet(map));
             rdPage.setTotal(sum);
             rdPage.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
             rdPage.setCurrent(current);
             rdPage.setPageSize(pageSize);
-            return new JsonResult(0, map, "查询结果", rdPage);
+            return new JsonResult(0, newList, "查询结果", rdPage);
         }
+//        } else {
+//            Map<String, Object> params = new HashMap<>();
+//            params.put("userId", userId);
+//            params.put("startSize", startSize);
+//            params.put("limit", pageSize);
+//            params.put("searchContent", searchContent);
+//            params.put("departmentName", departmentName);
+//            params.put("fileStyleId", fileStyleId);
+//            map = fileMapper.showIfSearchFile(params);
+//            sum = fileMapper.countIfSearchFile(params);
+//            rdPage.setTotal(sum);
+//            rdPage.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
+//            rdPage.setCurrent(current);
+//            rdPage.setPageSize(pageSize);
+//            return new JsonResult(0, map, "查询结果", rdPage);
+//        }
         return new JsonResult(2, 0, "查无结果", 0);
     }
 

@@ -159,6 +159,7 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileStyleId", value = "文件类型ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "chooseUser", value = "是否选人", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "fileSize", value = "文件大小", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "fileStyleName", value = "文档类型名称", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "photourl", value = "封面url", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "describle", value = "附件描述", required = true),
     })
@@ -168,13 +169,14 @@ public class FileController {
         Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
         Integer fileId = Integer.parseInt(String.valueOf(jsonObject.get("fileId")));
         Integer fileStyleId = Integer.parseInt(String.valueOf(jsonObject.get("fileStyleId")));
+        String  fileStyleName = String.valueOf(jsonObject.get("fileStyleName"));
         String  content = String.valueOf(jsonObject.get("content"));
         String  fileurl = String.valueOf(jsonObject.get("fileurl"));
         String  chooseUser = String.valueOf(jsonObject.get("chooseUser"));
         String  fileSize = String.valueOf(jsonObject.get("fileSize"));
         String  photourl = String.valueOf(jsonObject.get("photourl"));
         String  describle = String.valueOf(jsonObject.get("describle"));
-        return fileService.updateFileDetail(fileId, content, fileurl, fileStyleId, userId,chooseUser,fileSize,photourl,describle);
+        return fileService.updateFileDetail(fileId, content, fileurl, fileStyleId, userId,chooseUser,fileSize,photourl,describle,fileStyleName);
     }
 
     /**
@@ -372,7 +374,7 @@ public class FileController {
 //                    fName = filename.substring(filename.lastIndexOf("."), filename.length());
 //                }
 //              String path = String.valueOf(new Random().nextInt(100)).concat((fName));//拼接新文件名
-                resumeurl = String.valueOf(UUID.randomUUID().toString()).concat(filename);
+                resumeurl = String.valueOf(new Date().getTime()).concat(String.valueOf(new Random().nextInt(100))).concat(filename);
                 BufferedOutputStream out = new BufferedOutputStream(
                         new FileOutputStream("static//" + new File(resumeurl)));
                 out.write(file.getBytes());

@@ -116,9 +116,8 @@ public interface FileMapper {
      * @param describle
      * @return
      */
-    @Update("update FileDetail set fileStyleId=#{fileStyleId},fileContent=#{content},fileUrl=#{fileUrl},fileSize=#{fileSize},photoUrl=#{photourl},enclosureInfo=#{describle},updatePcs=updatePcs+1 where id=#{id}")
-    Integer updateFileContentUrl(@Param("id") Integer id,@Param("content") String content,@Param("fileurl") String fileurl, @Param("fileStyleId") Integer fileStyleId,@Param("fileSize") String fileSize,@Param("photourl") String photourl,@Param("describle") String describle);
-
+    @Update("update FileDetail set fileStyleId=#{fileStyleId},fileContent=#{content},fileUrl=#{fileurl},fileSize=#{fileSize},photoUrl=#{photourl},enclosureInfo=#{describle},fileStyle=#{fileStyleName},updatePcs=updatePcs+1 where id=#{id}")
+    Integer updateFileContentUrl(@Param("id") Integer id,@Param("content") String content,@Param("fileurl") String fileurl, @Param("fileStyleId") Integer fileStyleId,@Param("fileSize") String fileSize,@Param("photourl") String photourl,@Param("describle") String describle,@Param("fileStyleName") String fileStyleName);
 
     /**
      * 查看用户能看的全部文件
@@ -128,7 +127,6 @@ public interface FileMapper {
      * @param limit
      * @return
      */
-
     @Select("select f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileSpecies=0 and f.fileDisplay=1 and  u.userId=#{userId} order by f.addFileTime Desc limit #{startSize},#{limit} ")
     List<Map> showUserLookFile(@Param("userId") Integer userId, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
 
@@ -171,7 +169,7 @@ public interface FileMapper {
      * 展示部门公司性质的文件
      * @return
      */
-    @Select("select f.id, f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where  f.fileDisplay = 1 and  f.userGroupId in (#{result}) order by f.addFileTime desc  limit #{startSize},#{pageSize}")
+    @Select("select f.id, f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where  f.fileDisplay = 1 and f.fileSpecies=1 and f.userGroupId in (#{result}) order by f.addFileTime desc  limit #{startSize},#{pageSize}")
     List<Map> showGroupIdFile(@Param("startSize")Integer startSize,@Param("pageSize")Integer pageSize,@Param("result")String  result);
     /**
      * 展示部门公司性质的文件
@@ -194,8 +192,51 @@ public interface FileMapper {
      * @param limit
      * @return
      */
-    @Select("select distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileDisplay=1 and  u.userId=#{userId} and  (f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%'))  order by f.addFileTime Desc limit #{startSize},#{limit} ")
-    List<Map> showSearchFile(@Param("userId") Integer userId, @Param("searchContent") String searchContent, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
+    @Select("select distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileDisplay=1 and  u.userId=#{userId} and  f.fileContent like concat('%',#{searchContent},'%')   order by f.addFileTime Desc limit #{startSize},#{limit} ")
+    List<Map> showSearchFile1(@Param("userId") Integer userId, @Param("searchContent") String searchContent, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
+
+    /**
+     * 全局搜索结果数量
+     *
+     * @param userId
+     * @param searchContent
+     * @return
+     */
+    @Select("select count(*) from FileDetail f left join UserPermission  u on  f.id=u.fileId where  f.fileDisplay=1 and  u.userId=#{userId} and   f.title like concat('%',#{searchContent},'%') ")
+    Integer countSearchFile1(@Param("userId") Integer userId, @Param("searchContent") String searchContent);
+    /**
+     * 全局搜索结果
+     *
+     * @param userId
+     * @param searchContent
+     * @param startSize
+     * @param limit
+     * @return
+     */
+    @Select("select distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileDisplay=1 and  u.userId=#{userId} and   f.title like concat('%',#{searchContent},'%') order by f.addFileTime Desc limit #{startSize},#{limit} ")
+    List<Map> showSearchFile2(@Param("userId") Integer userId, @Param("searchContent") String searchContent, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
+
+    /**
+     * 全局搜索结果数量
+     *
+     * @param userId
+     * @param searchContent
+     * @return
+     */
+    @Select("select count(*) from FileDetail f left join UserPermission  u on  f.id=u.fileId where  f.fileDisplay=1 and  u.userId=#{userId} and f.title like concat('%',#{searchContent},'%') ")
+    Integer countSearchFile2(@Param("userId") Integer userId, @Param("searchContent") String searchContent);
+
+    /**
+     * 全局搜索结果
+     *
+     * @param userId
+     * @param searchContent
+     * @param startSize
+     * @param limit
+     * @return
+     */
+    @Select("select distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileDisplay=1 and  u.userId=#{userId} and  f.fileUrl like concat('%',#{searchContent},'%')  order by f.addFileTime Desc limit #{startSize},#{limit} ")
+    List<Map> showSearchFile3(@Param("userId") Integer userId, @Param("searchContent") String searchContent, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
 
     /**
      * 全局搜索结果数量
@@ -205,24 +246,24 @@ public interface FileMapper {
      * @return
      */
     @Select("select count(*) from FileDetail f left join UserPermission  u on  f.id=u.fileId where  f.fileDisplay=1 and  u.userId=#{userId} and  (f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%')) ")
-    Integer countSearchFile(@Param("userId") Integer userId, @Param("searchContent") String searchContent);
+    Integer countSearchFile3(@Param("userId") Integer userId, @Param("searchContent") String searchContent);
 
-    /**
-     * 全局 再加条件
-     * @param map
-     * @return
-     */
-    @SelectProvider(type = FileQuery.class, method = "showIfSearchFile")
-    List<Map> showIfSearchFile(Map<String, Object> map);
-
-
-    /**
-     * 全局 再加条件 总数
-     * @param map
-     * @return
-     */
-    @SelectProvider(type = FileQuery.class, method = "countIfSearchFile")
-     Integer countIfSearchFile(Map<String, Object> map);
+//    /**
+//     * 全局 再加条件
+//     * @param map
+//     * @return
+//     */
+//    @SelectProvider(type = FileQuery.class, method = "showIfSearchFile")
+//    List<Map> showIfSearchFile(Map<String, Object> map);
+//
+//
+//    /**
+//     * 全局 再加条件 总数
+//     * @param map
+//     * @return
+//     */
+//    @SelectProvider(type = FileQuery.class, method = "countIfSearchFile")
+//     Integer countIfSearchFile(Map<String, Object> map);
 
     /**
      * 更新文档类型
@@ -291,7 +332,7 @@ public interface FileMapper {
 
         public String showUserIfLookFile(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select distinct o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where  o.fileDisplay=1 and o.fileSpecies=0  u.userId=#{userId} ");
+            sql.append("select distinct o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where  o.fileDisplay=1 and o.fileSpecies=0 and u.userId=#{userId} ");
 
             if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
                 sql.append(" AND o.departmentName like concat ('%',#{departmentName},'%') ");
@@ -316,30 +357,30 @@ public interface FileMapper {
             return sql.toString();
         }
 
-        public String showIfSearchFile(Map<String, Object> map) {
-            StringBuffer sql = new StringBuffer();
-            sql.append("select distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime ,f.fileStylefrom FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileDisplay=1 and  u.userId=#{userId}   and  (f.departmentName " +
-                    "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%')) ");
-            if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
-                sql.append(" AND f.departmentName like concat ('%',#{departmentName},'%') ");
-            }
-            if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
-                sql.append(" AND f.fileStyleId = #{fileStyleId} ");
-            }
-            sql.append(" order by f.addFileTime Desc limit #{startSize},#{limit} ");
-            return sql.toString();
-        }
-        public String countIfSearchFile(Map<String, Object> map) {
-            StringBuffer sql = new StringBuffer();
-            sql.append("select count(f.id) from FileDetail f left join UserPermission  u on  f.id=u.fileId where  f.fileDisplay=1 and  u.userId=#{userId}   and  (f.departmentName " +
-                    "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%') ) ");
-            if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
-                sql.append(" AND f.departmentName like concat ('%',#{departmentName},'%') ");
-            }
-            if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
-                sql.append(" AND f.fileStyleId = #{fileStyleId} ");
-            }
-            return sql.toString();
-        }
+//        public String showIfSearchFile(Map<String, Object> map) {
+//            StringBuffer sql = new StringBuffer();
+//            sql.append("select distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime ,f.fileStylefrom FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileDisplay=1 and  u.userId=#{userId}   and  (f.departmentName " +
+//                    "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%')) ");
+//            if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
+//                sql.append(" AND f.departmentName like concat ('%',#{departmentName},'%') ");
+//            }
+//            if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
+//                sql.append(" AND f.fileStyleId = #{fileStyleId} ");
+//            }
+//            sql.append(" order by f.addFileTime Desc limit #{startSize},#{limit} ");
+//            return sql.toString();
+//        }
+//        public String countIfSearchFile(Map<String, Object> map) {
+//            StringBuffer sql = new StringBuffer();
+//            sql.append("select count(f.id) from FileDetail f left join UserPermission  u on  f.id=u.fileId where  f.fileDisplay=1 and  u.userId=#{userId}   and  (f.departmentName " +
+//                    "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%') ) ");
+//            if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
+//                sql.append(" AND f.departmentName like concat ('%',#{departmentName},'%') ");
+//            }
+//            if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
+//                sql.append(" AND f.fileStyleId = #{fileStyleId} ");
+//            }
+//            return sql.toString();
+//        }
     }
 }

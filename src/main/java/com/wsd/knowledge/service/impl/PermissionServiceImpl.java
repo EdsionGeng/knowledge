@@ -81,7 +81,7 @@ public class PermissionServiceImpl implements PermissionService {
         if (userPermission != null) {
             return new JsonResult(0, userPermission, "查询成功", 0);
         }
-        return new JsonResult(0, 0, "查询失败", 0);
+        return new JsonResult(2, 0, "查询失败", 0);
     }
 
     /**

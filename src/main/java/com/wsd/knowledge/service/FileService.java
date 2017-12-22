@@ -75,7 +75,7 @@ public interface FileService {
      * @param userId
      * @return
      */
-    JsonResult updateFileDetail(Integer id, String content, String fileurl, Integer fileStyleId, Integer userId,String chooseUser,String fileSize,String photourl,String describle);
+    JsonResult updateFileDetail(Integer id, String content, String fileurl, Integer fileStyleId, Integer userId,String chooseUser,String fileSize,String photourl,String describle,String fileStyleName);
 
     /**
      * 展示个人能看到的所有文件

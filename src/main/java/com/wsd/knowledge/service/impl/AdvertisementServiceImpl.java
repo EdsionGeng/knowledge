@@ -52,6 +52,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         if (str.equals("full")) {
             return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
         }
+
         SystemUser systemUser = userRepositoty.findInfo(userId);
         CommonAdvertisement commonAdvertisement = new CommonAdvertisement(title, content, systemUser.getDepartment(), systemUser.getUsername(),
                 userId, new DateUtil().getSystemTime(), sendDepartmentName,adStyle);
