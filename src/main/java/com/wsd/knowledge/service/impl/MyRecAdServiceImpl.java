@@ -60,7 +60,6 @@ public class MyRecAdServiceImpl implements MyRecAdService {
     @Transactional(readOnly = false)
     public JsonResult sendAdToUser(String userIds, Integer commonId) {
 
-
         if (commonId == null || userIds.equals("")) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
@@ -69,7 +68,7 @@ public class MyRecAdServiceImpl implements MyRecAdService {
             return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
         }
         //转换为List集合，查找对应的组
-        String userlist=userIds.substring(1,str.length());
+        String userlist=userIds.substring(1,userIds.length());
         List<Integer> departmentId = new ArrayList<>();
         for (String id : userlist.split(",")) {
             departmentId.add(Integer.parseInt(id));
