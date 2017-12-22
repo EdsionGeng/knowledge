@@ -139,7 +139,7 @@ public class FileServiceImpl implements FileService {
                 describe, new DateUtil().getSystemTime(), fileSpecies, systemUser.getUserGroupId());
         String re = new DateUtil().cacheExist(fileNo);
         if (re.equals("full")) {
-            return new JsonResult(2, 0, "网络异常", 0);
+            return new JsonResult(2, 0, "并发问题", 0);
         }
         if (fileMapper.insertFileDetail(fileDetail) != null) {
             //添加文件成功 ，获得此文件ID返回前台，执行权限添加操作
@@ -299,6 +299,8 @@ public class FileServiceImpl implements FileService {
         }
         int startSize = (current - 1) * pageSize;
         RdPage page = new RdPage();
+
+
         List<Map> map = null;
         Integer sum = null;
         if (departmentName == "null" || fileStyleId == "null") {
@@ -441,10 +443,10 @@ public class FileServiceImpl implements FileService {
         FileKind fileKind = fileKindMapper.selectFileKind(fileStyleId);
         Integer result = null;
         for (String id : fileIds.split(",")) {
-            String str = new DateUtil().cacheExist();
-            if (str.equals("full")) {
-                return new JsonResult(2, 0, "并发情况", 0);
-            }
+//            String str = new DateUtil().cacheExist(id);
+//            if (str.equals("full")) {
+//                return new JsonResult(2, 0, "并发情况", 0);
+//            }
             result = fileMapper.updateFileStyle(Integer.parseInt(id), fileStyleId, fileKind.getFileKindName());
             OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, Integer.parseInt(id), 3, new DateUtil().getSystemTime());
             operationMapper.insertOperationLog(operationLog);

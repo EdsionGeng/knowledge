@@ -138,7 +138,7 @@ public interface FileMapper {
      * @param userId
      * @return
      */
-    @Select("select count(*)   from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileSpecies=0 and f.fileDisplay=1 and u.userId=#{userId} order by f.addFileTime Desc ")
+    @Select("select count(*)   from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileSpecies=0 and f.fileDisplay=1 and u.userId=#{userId} ")
     Integer countUserLookFile(@Param("userId") Integer userId);
 
     /**
@@ -155,25 +155,28 @@ public interface FileMapper {
     @Select("select count(f.id) from FileDetail f  where f.fileSpecies=2 and f.fileDisplay = 1 ")
     Integer countCompanyFile();
     /**
-     * 展示所有公司性质的文件
+     * 展示所有部门性质的文件
      * @return
      */
     @Select("select f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId in (#{result}) order by f.addFileTime  desc  limit #{startSize},#{pageSize}")
     List<Map> showGroupFile(@Param("startSize")Integer startSize,@Param("pageSize")Integer pageSize,@Param("result")String result);
     /**
-     * 展示所有公司性质的文件
+     * 展示所有部门性质的文件
      * @return
      */
     @Select("select count(f.id) from FileDetail f  where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId in (#{result}) ")
     Integer countGroupFile(@Param("result")String result);
 
     /**
-     * 展示所有公司性质的文件
+     * 展示部门公司性质的文件
      * @return
      */
     @Select("select f.id, f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where  f.fileDisplay = 1 and  f.userGroupId in (#{result}) order by f.addFileTime desc  limit #{startSize},#{pageSize}")
     List<Map> showGroupIdFile(@Param("startSize")Integer startSize,@Param("pageSize")Integer pageSize,@Param("result")String  result);
-
+    /**
+     * 展示部门公司性质的文件
+     * @return
+     */
     @Select("select count(f.id) from FileDetail f  where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId in (#{result})")
     Integer countGroupIdFile(@Param("result")String  result);
 
@@ -251,7 +254,7 @@ public interface FileMapper {
     class FileQuery {
         public String queryFileByDep(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select  distinct o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime from FileDetail  o  where o.fileDisplay=1 and o.addFileTime >= #{startDate} ");
+            sql.append("select  distinct o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle from FileDetail  o  where o.fileDisplay=1 and o.addFileTime >= #{startDate} ");
             if (StringUtils.isNotEmpty((String) map.get("endDate"))) {
                 sql.append(" AND o.addFileTime <= #{endDate} ");
             }
@@ -288,7 +291,7 @@ public interface FileMapper {
 
         public String showUserIfLookFile(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select distinct o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where  o.fileDisplay=1 and o.fileSpecies=0  u.userId=#{userId} ");
+            sql.append("select distinct o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where  o.fileDisplay=1 and o.fileSpecies=0  u.userId=#{userId} ");
 
             if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
                 sql.append(" AND o.departmentName like concat ('%',#{departmentName},'%') ");
@@ -315,7 +318,7 @@ public interface FileMapper {
 
         public String showIfSearchFile(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileDisplay=1 and  u.userId=#{userId}   and  (f.departmentName " +
+            sql.append("select distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime ,f.fileStylefrom FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileDisplay=1 and  u.userId=#{userId}   and  (f.departmentName " +
                     "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%')) ");
 
             if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {

@@ -154,8 +154,8 @@ public class AdvertisementController {
     public JsonResult showAllAd(@RequestBody String object) {
         jsonObject = JSONObject.parseObject(object);
         String title = String.valueOf(jsonObject.get("title"));
-        String date1 = String.valueOf(jsonObject.get("date1"));
-        String date2 = String.valueOf(jsonObject.get("date2"));
+        String date1 = String.valueOf(jsonObject.get("startDate"));
+        String date2 = String.valueOf(jsonObject.get("endDate"));
         String adStyle= String.valueOf(jsonObject.get("adStyle"));
         Integer page = Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer limit= Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
