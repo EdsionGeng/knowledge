@@ -299,8 +299,6 @@ public class FileServiceImpl implements FileService {
         }
         int startSize = (current - 1) * pageSize;
         RdPage page = new RdPage();
-
-
         List<Map> map = null;
         Integer sum = null;
         if (departmentName == "null" || fileStyleId == "null") {
@@ -351,7 +349,7 @@ public class FileServiceImpl implements FileService {
             params.put("startSize", startSize);
             params.put("limit", pageSize);
             params.put("departmentName", departmentName);
-            params.put("filetyleId", fileStyleId);
+            params.put("fileStyleId", fileStyleId);
             map = fileMapper.showUserIfLookFile(params);
             if (map != null) {
                 sum = fileMapper.showUserIfFilePcs(params);

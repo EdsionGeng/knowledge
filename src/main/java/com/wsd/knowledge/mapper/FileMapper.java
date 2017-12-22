@@ -320,7 +320,6 @@ public interface FileMapper {
             StringBuffer sql = new StringBuffer();
             sql.append("select distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime ,f.fileStylefrom FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileDisplay=1 and  u.userId=#{userId}   and  (f.departmentName " +
                     "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%')) ");
-
             if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
                 sql.append(" AND f.departmentName like concat ('%',#{departmentName},'%') ");
             }
@@ -334,7 +333,6 @@ public interface FileMapper {
             StringBuffer sql = new StringBuffer();
             sql.append("select count(f.id) from FileDetail f left join UserPermission  u on  f.id=u.fileId where  f.fileDisplay=1 and  u.userId=#{userId}   and  (f.departmentName " +
                     "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%') ) ");
-
             if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
                 sql.append(" AND f.departmentName like concat ('%',#{departmentName},'%') ");
             }
