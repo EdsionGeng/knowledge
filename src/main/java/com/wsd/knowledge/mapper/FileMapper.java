@@ -129,7 +129,7 @@ public interface FileMapper {
      * @return
      */
 
-    @Select("select f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileSpecies=1 and f.fileDisplay=1 and  u.userId=#{userId} order by f.addFileTime Desc limit #{startSize},#{limit} ")
+    @Select("select f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileSpecies=0 and f.fileDisplay=1 and  u.userId=#{userId} order by f.addFileTime Desc limit #{startSize},#{limit} ")
     List<Map> showUserLookFile(@Param("userId") Integer userId, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
 
     /**
@@ -138,7 +138,7 @@ public interface FileMapper {
      * @param userId
      * @return
      */
-    @Select("select count(*)   from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileSpecies=1 and f.fileDisplay=1 and u.userId=#{userId} order by f.addFileTime Desc ")
+    @Select("select count(*)   from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileSpecies=0 and f.fileDisplay=1 and u.userId=#{userId} order by f.addFileTime Desc ")
     Integer countUserLookFile(@Param("userId") Integer userId);
 
     /**
@@ -288,7 +288,7 @@ public interface FileMapper {
 
         public String showUserIfLookFile(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select distinct o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where u.readFile=1 and o.fileDisplay=1 and  u.userId=#{userId} ");
+            sql.append("select distinct o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where  o.fileDisplay=1 and o.fileSpecies=0  u.userId=#{userId} ");
 
             if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
                 sql.append(" AND o.departmentName like concat ('%',#{departmentName},'%') ");
@@ -302,7 +302,7 @@ public interface FileMapper {
 
         public String showUserIfFilePcs(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select count(o.id) from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where u.readFile=1 and o.fileDisplay=1 and  u.userId=#{userId} ");
+            sql.append("select count(o.id) from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where o.fileSpecies=0 and o.fileDisplay=1 and  u.userId=#{userId} ");
 
             if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
                 sql.append(" AND o.departmentName like concat ('%',#{departmentName},'%') ");
@@ -315,7 +315,7 @@ public interface FileMapper {
 
         public String showIfSearchFile(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId}   and  (f.departmentName " +
+            sql.append("select distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileDisplay=1 and  u.userId=#{userId}   and  (f.departmentName " +
                     "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%')) ");
 
             if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
@@ -329,7 +329,7 @@ public interface FileMapper {
         }
         public String countIfSearchFile(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select count(f.id) from FileDetail f left join UserPermission  u on  f.id=u.fileId where u.readFile=1 and f.fileDisplay=1 and  u.userId=#{userId}   and  (f.departmentName " +
+            sql.append("select count(f.id) from FileDetail f left join UserPermission  u on  f.id=u.fileId where  f.fileDisplay=1 and  u.userId=#{userId}   and  (f.departmentName " +
                     "like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%') ) ");
 
             if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
