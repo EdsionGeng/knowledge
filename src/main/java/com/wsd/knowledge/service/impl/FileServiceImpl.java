@@ -441,12 +441,12 @@ public class FileServiceImpl implements FileService {
         FileKind fileKind = fileKindMapper.selectFileKind(fileStyleId);
         Integer result = null;
         for (String id : fileIds.split(",")) {
+            String str = new DateUtil().cacheExist();
+            if (str.equals("full")) {
+                return new JsonResult(2, 0, "并发情况", 0);
+            }
             result = fileMapper.updateFileStyle(Integer.parseInt(id), fileStyleId, fileKind.getFileKindName());
             OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, Integer.parseInt(id), 3, new DateUtil().getSystemTime());
-            String str = new DateUtil().cacheExist(String.valueOf(userId));
-            if (str.equals("full")) {
-                return new JsonResult(2, 0, "网络异常", 0);
-            }
             operationMapper.insertOperationLog(operationLog);
         }
         if (result != 0) {
