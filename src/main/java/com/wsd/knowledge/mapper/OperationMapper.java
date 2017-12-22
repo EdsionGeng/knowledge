@@ -134,12 +134,10 @@ public interface OperationMapper {
     /**
      * 统计个人上传文件 总数
      * @param userId
-     * @param startSize
-     * @param limit
      * @return
      */
-    @Select("select count(id) from ((select  id from FileDetail f  where f.fileDisplay= 1 and userId=#{userId}  limit #{startSize},#{limit}) as s)")
-    Integer countAllFilePcs(@Param("userId") Integer userId, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
+    @Select("select count(*) from  FileDetail f  where f.fileDisplay= 1 and userId=#{userId}")
+    Integer countAllFilePcs(@Param("userId") Integer userId);
 
     /**
      * 查询当日查看文件日志次数

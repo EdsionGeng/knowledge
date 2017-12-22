@@ -81,7 +81,7 @@ public class OperationServiceImpl implements OperationService {
         }
         int startSize = (current - 1) * pageSize;
         List<Map> map = operationMapper.showUserUpFile(userId, startSize, pageSize);
-        Integer sum = operationMapper.countAllFilePcs(userId, startSize, pageSize);
+        Integer sum = operationMapper.countAllFilePcs(userId);
         if (sum != null) {
             RdPage page =new RdPage();
             page.setTotal(sum);

@@ -385,7 +385,7 @@ public class FileController {
                 e.printStackTrace();
                 return new JsonResult(2, 0, "上传失败," + e.getMessage(), 0);
             }
-            return new JsonResult(2, resumeurl, "上传成功", 0);
+            return new JsonResult(0, resumeurl, "上传成功", 0);
         } else {
             return new JsonResult(2, "", "上传失败，因为文件是空的.", 0);
         }
