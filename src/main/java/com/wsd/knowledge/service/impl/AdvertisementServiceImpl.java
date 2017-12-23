@@ -139,13 +139,14 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             adStyle="";
         }
         List<Map> map = new ArrayList<>();
-        Integer sum = null;
+        int sum = 0;
         RdPage rdPage =new RdPage();
         int startSize = (current - 1) * pageSize;
         if (title.equals("")  && date2.equals("")&&adStyle.equals("")) {
             //展示所有
             map = advertisementMapper.showAllCommon(startSize, pageSize);
             sum = advertisementMapper.countAdPcs();
+
             rdPage.setTotal(sum);
             rdPage.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
             rdPage.setCurrent(current);
@@ -167,7 +168,6 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             rdPage.setPageSize(pageSize);
         }
             return new JsonResult(0, map, "查询结果", rdPage);
-
     }
 
     /**

@@ -285,7 +285,7 @@ public interface OperationMapper {
     class Operation {
         public String queryLogByDep(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select o.*,CASE o.operationStyle WHEN 1 THEN '添加文档' WHEN 2 THEN '删除文档' WHEN 3 THEN '更改文档' WHEN 3 THEN '查阅文档' ELSE '其他' " +
+            sql.append("select o.*,CASE o.operationStyle WHEN 1 THEN '添加文档' WHEN 2 THEN '删除文档' WHEN 3 THEN '更改文档' WHEN 4 THEN '查阅文档' ELSE '其他' " +
                     "END AS operation from OperationLog  o  where o.fileId=#{fileId}");
 
             if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
@@ -294,13 +294,7 @@ public interface OperationMapper {
             if (StringUtils.isNotEmpty((String) map.get("operationStyle"))) {
                 sql.append(" AND o.operationStyle = #{operationStyle} ");
             }
-            if (StringUtils.isNotEmpty((String) map.get("type"))) {
-                if ("asc".equals(map.get("type"))) {
-                    sql.append("order by a.entryDate asc");
-                } else if ("desc".equals(map.get("type"))) {
-                    sql.append("order by a.entryDate desc");
-                }
-            }
+
             sql.append(" limit #{startSize},#{limit} ");
             return sql.toString();
         }
@@ -315,7 +309,7 @@ public interface OperationMapper {
             if (StringUtils.isNotEmpty((String) map.get("operationStyle"))) {
                 sql.append(" AND o.operationStyle = #{operationStyle} ");
             }
-            sql.append(" limit #{startSize},#{limit} ");
+
             return sql.toString();
         }
 

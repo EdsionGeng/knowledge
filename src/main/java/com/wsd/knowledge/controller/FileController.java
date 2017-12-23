@@ -154,14 +154,14 @@ public class FileController {
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileId", value = "文件ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户ID", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "String", name = "content", value = "文档内容", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "String", name = "fileurl", value = "文件上传路径", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileStyleId", value = "文件类型ID", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "String", name = "chooseUser", value = "是否选人", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "String", name = "fileSize", value = "文件大小", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "String", name = "fileStyleName", value = "文档类型名称", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "String", name = "photourl", value = "封面url", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "String", name = "describle", value = "附件描述", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "content", value = "文档内容"),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "fileurl", value = "文件上传路径"),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileStyleId", value = "文件类型ID"),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "chooseUser", value = "是否选人"),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "fileSize", value = "文件大小"),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "fileStyleName", value = "文档类型名称"),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "photourl", value = "封面url"),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "describle", value = "附件描述"),
     })
     @RequestMapping(value = "updateFile.htmls", method = RequestMethod.POST)
     public JsonResult updateFileDetail(@RequestBody String object) {
@@ -176,7 +176,8 @@ public class FileController {
         String  fileSize = String.valueOf(jsonObject.get("fileSize"));
         String  photourl = String.valueOf(jsonObject.get("photourl"));
         String  describle = String.valueOf(jsonObject.get("describle"));
-        return fileService.updateFileDetail(fileId, content, fileurl, fileStyleId, userId,chooseUser,fileSize,photourl,describle,fileStyleName);
+        Integer   fileSpecies =Integer.parseInt( String.valueOf(jsonObject.get("fileSpecies")));
+        return fileService.updateFileDetail(fileId, content, fileurl, fileStyleId, userId,chooseUser,fileSize,photourl,describle,fileStyleName,fileSpecies);
     }
 
     /**

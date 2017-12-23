@@ -3,6 +3,8 @@ package com.wsd.knowledge.mapper;
 import com.wsd.knowledge.entity.UserPermission;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 /**
  * @Author EdsionGeng
  * @Description 用户操作文件权限持久层
@@ -21,28 +23,29 @@ public interface UserPermissionMapper {
 
     /**
      * 更改是否可以修改文件权限
+     *
      * @param userId
-     *
-     *
-     *
      * @param fileId
      * @param operationStyleId
      * @return
      */
     @Update("update UserPermission set updateFile=#{operationStyleId} where userId=#{userId} and fileId=#{fileId}")
-    Integer  addUpdatePermission(@Param("userId")Integer userId,@Param("operationStyleId")Integer operationStyleId,@Param("fileId")Integer fileId);
+    Integer addUpdatePermission(@Param("userId") Integer userId, @Param("operationStyleId") Integer operationStyleId, @Param("fileId") Integer fileId);
 
     /**
      * 更改是否可以修改文件权限
+     *
      * @param userId
      * @param fileId
      * @param operationStyleId
      * @return
      */
     @Update("update UserPermission set deleteFile=#{operationStyleId} where userId=#{userId} and fileId=#{fileId}")
-    Integer  addDeletePermission(@Param("userId")Integer userId,@Param("operationStyleId")Integer operationStyleId,@Param("fileId")Integer fileId);
+    Integer addDeletePermission(@Param("userId") Integer userId, @Param("operationStyleId") Integer operationStyleId, @Param("fileId") Integer fileId);
+
     /**
      * 查看对单个文件操作权限
+     *
      * @param userId
      * @param fileId
      * @return
@@ -52,10 +55,21 @@ public interface UserPermissionMapper {
 
     /**
      * 删除文件权限相关人员
+     *
      * @param fileId
      * @return
      */
     @Delete("delete from UserPermission where  fileId=#{fileId}")
-    Integer deletePerByFileId(@Param("fileId")Integer fileId);
+    Integer deletePerByFileId(@Param("fileId") Integer fileId);
+
+
+    @Select("select userId from UserPermission where fileId=#{fileId} and readFile=1")
+    List<Integer> queryPerReadUserId(@Param("fileId") Integer fileId);
+
+    @Select("select userId from UserPermission where fileId=#{fileId} and deleteFile=1")
+    List<Integer> queryPerUpdateUserId(@Param("fileId") Integer fileId);
+
+    @Select("select userId from UserPermission where fileId=#{fileId} and updateFile=1")
+    List<Integer> queryPerDeleteUserId(@Param("fileId") Integer fileId);
 
 }

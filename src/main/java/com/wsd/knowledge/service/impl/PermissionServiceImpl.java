@@ -1,5 +1,6 @@
 package com.wsd.knowledge.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.wsd.knowledge.entity.UserPermission;
 import com.wsd.knowledge.mapper.FileMapper;
 import com.wsd.knowledge.mapper.UserPermissionMapper;
@@ -9,9 +10,7 @@ import com.wsd.knowledge.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Author EdsionGeng
@@ -35,8 +34,8 @@ public class PermissionServiceImpl implements PermissionService {
      * @return
      */
     @Override
-    public  synchronized JsonResult insertUserPermission(String  userIds, Integer operationStyleId, Integer fileId) {
-        if (userIds .equals("") || operationStyleId == null || fileId == null) {
+    public synchronized JsonResult insertUserPermission(String userIds, Integer operationStyleId, Integer fileId) {
+        if (userIds.equals("") || operationStyleId == null || fileId == null) {
             return new JsonResult(2, 0, "缺少参数", 0);
         }
 //        String str = new DateUtil().cacheExist(String.valueOf(fileId));
@@ -47,10 +46,10 @@ public class PermissionServiceImpl implements PermissionService {
         for (String id : userIds.split(",")) {
             userlist.add(Integer.parseInt(id));
         }
-        List<Integer > newList = new ArrayList(new HashSet(userlist));
+        List<Integer> newList = new ArrayList(new HashSet(userlist));
         Integer j = null;
-        for (int i = 0,lengths = newList.size(); i < lengths; i++) {
-            UserPermission userPermission = new UserPermission(fileId, newList.get(i), operationStyleId, new DateUtil().getSystemTime(),0,0);
+        for (int i = 0, lengths = newList.size(); i < lengths; i++) {
+            UserPermission userPermission = new UserPermission(fileId, newList.get(i), operationStyleId, new DateUtil().getSystemTime(), 0, 0);
 //            String strss = new DateUtil().cacheExist(String.valueOf(userlist.get(i)));
 //            if (strss.equals("full")) {
 //                fileMapper.deleteFile(fileId);
@@ -93,7 +92,7 @@ public class PermissionServiceImpl implements PermissionService {
      * @return
      */
     @Override
-    public JsonResult updateFilePerMission(String  userIds, Integer operationStyleId, Integer fileId) {
+    public JsonResult updateFilePerMission(String userIds, Integer operationStyleId, Integer fileId) {
         if (userIds.equals("") || operationStyleId == null || fileId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
@@ -108,7 +107,7 @@ public class PermissionServiceImpl implements PermissionService {
             userlist.add(Integer.parseInt(id));
         }
         List<Integer> newList = new ArrayList(new HashSet(userlist));
-        for (int i = 0,length=newList.size(); i < length; i++) {
+        for (int i = 0, length = newList.size(); i < length; i++) {
             result = userPermissionMapper.addUpdatePermission(newList.get(i), operationStyleId, fileId);
         }
         if (result != 0) {
@@ -116,6 +115,7 @@ public class PermissionServiceImpl implements PermissionService {
         }
         return new JsonResult(2, 0, "操作失败", 0);
     }
+
     /**
      * 添加删除文件权限
      *
@@ -139,7 +139,7 @@ public class PermissionServiceImpl implements PermissionService {
             userlist.add(Integer.parseInt(id));
         }
         List<Integer> newList = new ArrayList(new HashSet(userlist));
-        for (int i = 0,length=newList.size(); i < length; i++) {
+        for (int i = 0, length = newList.size(); i < length; i++) {
             result = userPermissionMapper.addDeletePermission(newList.get(i), operationStyleId, fileId);
         }
         if (result != 0) {
@@ -147,5 +147,30 @@ public class PermissionServiceImpl implements PermissionService {
         }
         return new JsonResult(2, 0, "操作失败", 0);
 
+    }
+
+    /**
+     * 文件权相关的人
+     * @param object
+     * @return
+     */
+    @Override
+    public JsonResult queryPerUsers(String object) {
+        if (object.equals("")) {
+            return new JsonResult(2, 0, "参数为空", 0);
+        }
+        JSONObject jsonObject = JSONObject.parseObject(object);
+        Integer fileId = Integer.parseInt(String.valueOf(jsonObject.get("fileId")));
+        List<Integer>  looklist = userPermissionMapper.queryPerReadUserId(fileId);
+        List<Integer> updatelist = userPermissionMapper.queryPerUpdateUserId(fileId);
+        List<Integer> deletelist = userPermissionMapper.queryPerDeleteUserId(fileId);
+        List<List<Integer>> list = new ArrayList<List<Integer>>();
+        list.add(looklist);
+        list.add(updatelist);
+        list.add(deletelist);
+        if(list!=null){
+            return new JsonResult(0,list,"查询结果",0);
+        }
+        return new JsonResult(2,0,"查询失败",0);
     }
 }

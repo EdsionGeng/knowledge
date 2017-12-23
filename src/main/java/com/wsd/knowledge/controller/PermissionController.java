@@ -107,4 +107,15 @@ public class PermissionController {
         return permissionService.showFilePermission(userId, fileId);
     }
 
+
+    @ApiOperation(value = "查看文件权限对应的人", notes = "传递必要参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileId", value = "文件ID", required = true)
+    })
+    @RequestMapping(value = "showmission/users.htmls", method = RequestMethod.POST
+    )
+    public JsonResult showFile(@RequestBody String object) {
+
+        return permissionService.queryPerUsers(object);
+    }
 }

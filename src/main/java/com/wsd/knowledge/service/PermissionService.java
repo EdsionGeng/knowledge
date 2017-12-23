@@ -47,4 +47,13 @@ public interface PermissionService {
      * @return
      */
     JsonResult deleteFilePerMission(String  userIds, Integer operationStyleId, Integer fileId);
+
+    /**
+     *
+     * @param object
+     * @return
+     */
+    JsonResult queryPerUsers(String object );
+
+
 }

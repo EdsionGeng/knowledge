@@ -53,8 +53,6 @@ public class FileServiceImpl implements FileService {
      */
     @Override
     public JsonResult showAllFile(String departmentName, String fileStyleId, String title, String startDate, String endDate, Integer current, Integer pageSize) {
-
-
         if (departmentName == "null") {
             departmentName = "";
         }
@@ -255,11 +253,11 @@ public class FileServiceImpl implements FileService {
      */
     @Override
     @Transactional(readOnly = false)
-    public JsonResult updateFileDetail(Integer id, String content, String fileurl, Integer fileStyleId, Integer userId, String chooseUser, String fileSize, String photourl, String describle, String fileStyleName) {
+    public JsonResult updateFileDetail(Integer id, String content, String fileurl, Integer fileStyleId, Integer userId, String chooseUser, String fileSize, String photourl, String describle, String fileStyleName, Integer fileSpecies) {
         if (id == null || content.equals("") || fileStyleId == null || userId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
-        Integer result = fileMapper.updateFileContentUrl(id, content, fileurl, fileStyleId, fileSize, photourl, describle, fileStyleName);
+        Integer result = fileMapper.updateFileContentUrl(id, content, fileurl, fileStyleId, fileSize, photourl, describle, fileStyleName, fileSpecies);
         if (result != 0) {
             SystemUser systemUser = userRepositoty.findInfo(userId);
             //添加操作日志
@@ -302,10 +300,10 @@ public class FileServiceImpl implements FileService {
             if (map != null) {
                 sum = fileMapper.countUserLookFile(userId);
                 //加上公司文件
-                List<Map> companyFileList = fileMapper.showCompanyFile(startSize, pageSize);
+                List<Map> companyFileList = fileMapper.showCompanyFile(startSize, pageSize, userId);
                 if (companyFileList != null) {
                     map.addAll(companyFileList);
-                    sum += fileMapper.countCompanyFile();
+                    sum += fileMapper.countCompanyFile(userId);
                 }
                 List<Integer> groupList = userRepositoty.showPerGroupId(userGroupId);
                 String ss = "";
@@ -328,12 +326,15 @@ public class FileServiceImpl implements FileService {
                     groupFileList = fileMapper.showGroupIdFile(startSize, pageSize, res);
                     if (groupFileList.size() != 0) {
                         map.addAll(groupFileList);
-                        sum += fileMapper.countGroupIdFile(res);
+                        sum += fileMapper.countGroupIdFile(res, userId);
                     }
                 }
+                int i = map.size();
                 //还要去重
                 List<Map> newList = new ArrayList(new HashSet(map));
-                page.setTotal(sum);
+                int b = newList.size();
+                int c=i-b;
+                page.setTotal(sum-c);
                 page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
                 page.setCurrent(current);
                 page.setPageSize(pageSize);
@@ -386,21 +387,14 @@ public class FileServiceImpl implements FileService {
         List<Map> map = fileMapper.showSearchFile1(userId, searchContent, startSize, pageSize);
         List<Map> map1 = fileMapper.showSearchFile2(userId, searchContent, startSize, pageSize);
         List<Map> map2 = fileMapper.showSearchFile3(userId, searchContent, startSize, pageSize);
-        Integer sum = fileMapper.countSearchFile1(userId, searchContent);
-        Integer sum1 = fileMapper.countSearchFile2(userId, searchContent);
-        Integer sum2 = fileMapper.countSearchFile3(userId, searchContent);
+        Integer sum = 0;
+        fileMapper.countSearchFile2(userId, searchContent);
+        fileMapper.countSearchFile3(userId, searchContent);
         if (map != null) {
             map.addAll(map1);
             map.addAll(map2);
-            if(sum1==null){
-                sum1=0;
-            }
-            if(sum2==null){
-                sum1=0;
-            }
-            sum += sum1;
-            sum += sum2;
             List<Map> newList = new ArrayList(new HashSet(map));
+            sum = newList.size();
             rdPage.setTotal(sum);
             rdPage.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
             rdPage.setCurrent(current);

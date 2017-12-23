@@ -248,6 +248,7 @@ public class OperationServiceImpl implements OperationService {
         }
         else{
             Map<String,Object> maps=new HashMap<>();
+            maps.put("fileId",fileId);
             maps.put("operationStyle",operationStyle);
             maps.put("departmentName",departmentName);
             maps.put("startSize",startSize);
