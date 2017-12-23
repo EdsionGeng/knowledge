@@ -51,12 +51,12 @@ public class PermissionServiceImpl implements PermissionService {
         Integer j = null;
         for (int i = 0,lengths = newList.size(); i < lengths; i++) {
             UserPermission userPermission = new UserPermission(fileId, newList.get(i), operationStyleId, new DateUtil().getSystemTime(),0,0);
-            String strss = new DateUtil().cacheExist(String.valueOf(userlist.get(i)));
-            if (strss.equals("full")) {
-                fileMapper.deleteFile(fileId);
-                userPermissionMapper.deletePerByFileId(fileId);
-                return new JsonResult(2, 0, "并发问题" , 0);
-            }
+//            String strss = new DateUtil().cacheExist(String.valueOf(userlist.get(i)));
+//            if (strss.equals("full")) {
+//                fileMapper.deleteFile(fileId);
+//                userPermissionMapper.deletePerByFileId(fileId);
+//                return new JsonResult(2, 0, "并发问题" , 0);
+//            }
             j = userPermissionMapper.insertUserPermission(userPermission);
         }
         if (j != 0) {
