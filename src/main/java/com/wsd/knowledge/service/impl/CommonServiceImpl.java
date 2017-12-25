@@ -121,7 +121,7 @@ public class CommonServiceImpl implements CommonService {
             if (StringUtils.equals(pid, treeNode.getId())) {
                 treeNode.setChecked(1);
             }
-            if (StringUtils.equals("0", treeNode.getPid())) {
+            if (StringUtils.equals("3", treeNode.getId())) {
                 trees.add(treeNode);
             }
             List<NewDepartment> treeChildrenNode = userRepositoty.queryByGroupId(Integer.parseInt(treeNode.getId()));
@@ -138,16 +138,7 @@ public class CommonServiceImpl implements CommonService {
                 }
             }
         }
-        List<NewDepartment> list = Lists.newArrayList();
-        NewDepartment zero = new NewDepartment();
-        zero.setId("0");
-        zero.setName("聚财科技");
-        zero.setChildren(trees);
-        if (StringUtils.equals(pid, "0")) {
-            zero.setChecked(1);
-        }
-        list.add(zero);
-        return list;
+        return trees;
     }
 
     /**
