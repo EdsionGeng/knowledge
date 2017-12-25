@@ -357,7 +357,7 @@ public class FileServiceImpl implements FileService {
                 return new JsonResult(0, map, "查询结果", page);
             }
         }
-        return new JsonResult(2, 0, "查无结果", 0);
+        return new JsonResult(2, 0, "查无此结果", 0);
     }
 
     /**
