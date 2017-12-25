@@ -78,8 +78,8 @@ public interface AdvertisementMapper {
      * @param limit
      * @return
      */
-    @Select(" select id ,adContent,adTitle,adStyle,addUser,departmentName,sendObject,sendTime,userId from CommonAdvertisement  order by sendtime desc limit #{startSize},#{limit}")
-    List<Map> showAllCommon(@Param("startSize") Integer startSize, @Param("limit") Integer limit);
+    @Select(" select id ,adContent,adTitle,adStyle,addUser,departmentName,sendObject,sendTime,userId from CommonAdvertisement  order by sendtime = #{sortType} limit #{startSize},#{limit}")
+    List<Map> showAllCommon(@Param("startSize") Integer startSize, @Param("limit") Integer limit,@Param("sortType")String sortType);
 
     /**
      * 统计展示所有公告数量
@@ -141,7 +141,7 @@ public interface AdvertisementMapper {
             if (StringUtils.isNotEmpty((String) map.get("adStyle"))) {
                 sql.append(" AND o.adStyle =#{adStyle} ");
             }
-            sql.append(" limit #{startSize},#{limit} ");
+            sql.append(" order by o.sendtime = #{sortType}  limit #{startSize},#{limit} ");
             return sql.toString();
         }
         public String countAdByIf(Map<String, Object> map) {

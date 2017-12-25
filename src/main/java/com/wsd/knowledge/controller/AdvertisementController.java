@@ -157,9 +157,10 @@ public class AdvertisementController {
         String date1 = String.valueOf(jsonObject.get("startDate"));
         String date2 = String.valueOf(jsonObject.get("endDate"));
         String adStyle= String.valueOf(jsonObject.get("adStyle"));
+        String sortType= String.valueOf(jsonObject.get("sortType"));
         Integer page = Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer limit= Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
-        return advertisementService.showAllAd(title, date1, date2,adStyle, page, limit);
+        return advertisementService.showAllAd(title, date1, date2,adStyle,sortType, page, limit);
     }
 
     /**

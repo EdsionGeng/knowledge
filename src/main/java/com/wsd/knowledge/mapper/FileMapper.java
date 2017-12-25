@@ -123,12 +123,10 @@ public interface FileMapper {
      * 查看用户能看的全部文件
      *
      * @param userId
-     * @param startSize
-     * @param limit
      * @return
      */
-    @Select("select  distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileSpecies=0 and f.fileDisplay=1 and  u.userId=#{userId} order by f.addFileTime Desc limit #{startSize},#{limit} ")
-    List<Map> showUserLookFile(@Param("userId") Integer userId, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
+    @Select("select  distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileSpecies=0 and f.fileDisplay=1 and  u.userId=#{userId} order by f.addFileTime Desc  ")
+    List<Map> showUserLookFile(@Param("userId") Integer userId);
 
     /**
      * 统计用户能看的全部文件数量
@@ -143,8 +141,8 @@ public interface FileMapper {
      * 展示所有公司性质的文件
      * @return
      */
-    @Select("select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f    where f.fileSpecies=2 and f.fileDisplay = 1 order by f.addFileTime desc limit #{startSize},#{pageSize}")
-    List<Map> showCompanyFile(@Param("startSize")Integer startSize,@Param("pageSize")Integer pageSize,@Param("userId")Integer userId);
+    @Select("select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f    where f.fileSpecies=2 and f.fileDisplay = 1 order by f.addFileTime desc ")
+    List<Map> showCompanyFile();
 
     /**
      * 展示所有公司性质的文件
@@ -156,8 +154,8 @@ public interface FileMapper {
      * 展示所有部门性质的文件
      * @return
      */
-    @Select("select distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f where f.fileSpecies=1 and f.fileDisplay = 1  and f.userGroupId in (#{result}) order by f.addFileTime  desc  limit #{startSize},#{pageSize}")
-    List<Map> showGroupFile(@Param("startSize")Integer startSize,@Param("pageSize")Integer pageSize,@Param("result")String result);
+    @Select("select distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f where f.fileSpecies=1 and f.fileDisplay = 1  and f.userGroupId in (#{result}) order by f.addFileTime  desc  ")
+    List<Map> showGroupFile(@Param("result")String result);
     /**
      * 展示所有部门性质的文件
      * @return
@@ -170,8 +168,8 @@ public interface FileMapper {
      * 展示部门公司性质的文件
      * @return
      */
-    @Select("select distinct f.id, f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f where  f.fileDisplay = 1 and f.fileSpecies=1  and f.userGroupId in (#{result}) order by f.addFileTime desc  limit #{startSize},#{pageSize}")
-    List<Map> showGroupIdFile(@Param("startSize")Integer startSize,@Param("pageSize")Integer pageSize,@Param("result")String  result);
+    @Select("select distinct f.id, f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f where  f.fileDisplay = 1 and f.fileSpecies=1  and f.userGroupId in (#{result}) order by f.addFileTime desc  ")
+    List<Map> showGroupIdFile(@Param("result")String  result);
 
     /**
      * 展示部门公司性质的文件

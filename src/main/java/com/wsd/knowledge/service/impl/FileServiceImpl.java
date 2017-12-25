@@ -278,6 +278,89 @@ public class FileServiceImpl implements FileService {
     }
 
 
+//    /**
+//     * 查看个人能查看的文件
+//     *
+//     * @param userId
+//     * @param current
+//     * @param pageSize
+//     * @return
+//     */
+//    @Override
+//    public JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize, String fileStyleId, String departmentName, Integer userGroupId) {
+//        if (current == null || pageSize == null || userId == null) {
+//            return new JsonResult(2, 0, "参数为空", 0);
+//        }
+//        int startSize = (current - 1) * pageSize;
+//        RdPage page = new RdPage();
+//        List<Map> map = null;
+//        Integer sum = null;
+//        if (departmentName == "null" || fileStyleId == "null") {
+//            map = fileMapper.showUserLookFile(userId, startSize, pageSize);
+//            if (map != null) {
+//                sum = fileMapper.countUserLookFile(userId);
+//                //加上公司文件
+//                List<Map> companyFileList = fileMapper.showCompanyFile(startSize, pageSize, userId);
+//                if (companyFileList != null) {
+//                    map.addAll(companyFileList);
+//                    sum += fileMapper.countCompanyFile(userId);
+//                }
+//                List<Integer> groupList = userRepositoty.showPerGroupId(userGroupId);
+//                String ss = "";
+//                List<Map> groupFileList = new ArrayList<>();
+//                if (groupList.size() != 0) {
+//                    for (int i = 0, len = groupList.size(); i < len; i++) {
+//                        if (i > 0) {
+//                            ss += ",";
+//                        }
+//                        ss += "'" + groupList.get(i) + "'";
+//                    }
+//                    groupFileList = fileMapper.showGroupFile(startSize, pageSize, ss);
+//                    if (groupFileList.size() != 0) {
+//                        map.addAll(groupFileList);
+//                        sum += fileMapper.countGroupFile(ss);
+//                    }
+//                } else {
+//                    Integer result = userRepositoty.queryPid(userGroupId);
+//                    String res = "'" + result + "'" + "," + "'" + userGroupId + "'";
+//                    groupFileList = fileMapper.showGroupIdFile(startSize, pageSize, res);
+//                    if (groupFileList.size() != 0) {
+//                        map.addAll(groupFileList);
+//                        sum += fileMapper.countGroupIdFile(res, userId);
+//                    }
+//                }
+////                int i = map.size();
+////                //还要去重
+//               List<Map> newList = new ArrayList(new HashSet(map));
+////                int b = newList.size();
+////                int c=i-b;
+//
+//                page.setTotal(sum);
+//                page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
+//                page.setCurrent(current);
+//                page.setPageSize(pageSize);
+//                return new JsonResult(0,newList, "查询结果", page);
+//            }
+//        } else {
+//            Map<String, Object> params = new HashMap<>();
+//            params.put("userId", userId);
+//            params.put("startSize", startSize);
+//            params.put("limit", pageSize);
+//            params.put("departmentName", departmentName);
+//            params.put("fileStyleId", fileStyleId);
+//            map = fileMapper.showUserIfLookFile(params);
+//            if (map != null) {
+//                sum = fileMapper.showUserIfFilePcs(params);
+//                page.setTotal(sum);
+//                page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
+//                page.setCurrent(current);
+//                page.setPageSize(pageSize);
+//                return new JsonResult(0, map, "查询结果", page);
+//            }
+//        }
+//        return new JsonResult(2, 0, "查无此结果", 0);
+//    }
+
     /**
      * 查看个人能查看的文件
      *
@@ -291,16 +374,16 @@ public class FileServiceImpl implements FileService {
         if (current == null || pageSize == null || userId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
-        int startSize = (current - 1) * pageSize;
+       int startSize = (current - 1) * pageSize;
         RdPage page = new RdPage();
         List<Map> map = null;
         Integer sum = null;
         if (departmentName == "null" || fileStyleId == "null") {
-            map = fileMapper.showUserLookFile(userId, startSize, pageSize);
+            map = fileMapper.showUserLookFile(userId);
             if (map != null) {
                 sum = fileMapper.countUserLookFile(userId);
                 //加上公司文件
-                List<Map> companyFileList = fileMapper.showCompanyFile(startSize, pageSize, userId);
+                List<Map> companyFileList = fileMapper.showCompanyFile();
                 if (companyFileList != null) {
                     map.addAll(companyFileList);
                     sum += fileMapper.countCompanyFile(userId);
@@ -315,7 +398,7 @@ public class FileServiceImpl implements FileService {
                         }
                         ss += "'" + groupList.get(i) + "'";
                     }
-                    groupFileList = fileMapper.showGroupFile(startSize, pageSize, ss);
+                    groupFileList = fileMapper.showGroupFile( ss);
                     if (groupFileList.size() != 0) {
                         map.addAll(groupFileList);
                         sum += fileMapper.countGroupFile(ss);
@@ -323,22 +406,19 @@ public class FileServiceImpl implements FileService {
                 } else {
                     Integer result = userRepositoty.queryPid(userGroupId);
                     String res = "'" + result + "'" + "," + "'" + userGroupId + "'";
-                    groupFileList = fileMapper.showGroupIdFile(startSize, pageSize, res);
+                    groupFileList = fileMapper.showGroupIdFile( res);
                     if (groupFileList.size() != 0) {
                         map.addAll(groupFileList);
                         sum += fileMapper.countGroupIdFile(res, userId);
                     }
                 }
-//                int i = map.size();
-//                //还要去重
-               List<Map> newList = new ArrayList(new HashSet(map));
-//                int b = newList.size();
-//                int c=i-b;
+                List<Map> newList = new ArrayList(new HashSet(map));
+                List<Map> listresult=listSplit2(current,pageSize,newList);
                 page.setTotal(sum);
                 page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
                 page.setCurrent(current);
                 page.setPageSize(pageSize);
-                return new JsonResult(0,newList, "查询结果", page);
+                return new JsonResult(0,listresult, "查询结果", page);
             }
         } else {
             Map<String, Object> params = new HashMap<>();
@@ -527,5 +607,27 @@ public class FileServiceImpl implements FileService {
         }
         return new JsonResult(2, 0, "查询失败", 0);
     }
+    //集合分页
+    public static List<Map> listSplit2(int page, int limit, List<Map> list) {
 
+        List<Map> result = new ArrayList<Map>();
+        if (list != null && list.size() > 0) {
+            int allCount = list.size();
+            int pageCount = (allCount + limit - 1) / limit;
+            if (page >= pageCount) {
+                page = pageCount;
+            }
+            int start = (page - 1) * limit;
+            int end = page * limit;
+            if (end >= allCount) {
+                end = allCount;
+            }
+            for (int i = start; i < end; i++) {
+                result.add(list.get(i));
+            }
+        }
+
+        return (result != null && result.size() > 0) ? result : new ArrayList<>();
+
+    }
 }

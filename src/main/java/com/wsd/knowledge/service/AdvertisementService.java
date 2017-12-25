@@ -43,7 +43,7 @@ public interface AdvertisementService {
      * @param pageSize
      * @return
      */
-    JsonResult showAllAd(String title,String date1,String date2,String adStyle,Integer current,Integer pageSize);
+    JsonResult showAllAd(String title,String date1,String date2,String adStyle,String sortType,Integer current,Integer pageSize);
 
 
     /**

@@ -121,7 +121,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
      * @return
      */
     @Override
-    public JsonResult showAllAd(String title, String date1, String date2,String adStyle, Integer current, Integer pageSize) {
+    public JsonResult showAllAd(String title, String date1, String date2,String adStyle,String sortType ,Integer current, Integer pageSize) {
         if (current == null || pageSize == null) {
             current = 1;
             pageSize = 20;
@@ -138,13 +138,16 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         if(adStyle.equals("")){
             adStyle="";
         }
+        if(sortType.equals("")){
+            sortType="desc";
+        }
         List<Map> map = new ArrayList<>();
         int sum = 0;
         RdPage rdPage =new RdPage();
         int startSize = (current - 1) * pageSize;
         if (title.equals("")  && date2.equals("")&&adStyle.equals("")) {
             //展示所有
-            map = advertisementMapper.showAllCommon(startSize, pageSize);
+            map = advertisementMapper.showAllCommon(startSize, pageSize,sortType);
             sum = advertisementMapper.countAdPcs();
             rdPage.setTotal(sum);
             rdPage.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
@@ -157,6 +160,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             maps.put("date1", date1);
             maps.put("date2", date2);
             maps.put("adStyle", adStyle);
+            maps.put("sortType", sortType);
             maps.put("startSize", startSize);
             maps.put("limit", pageSize);
             map = advertisementMapper.showAllCommonByIf(maps);
