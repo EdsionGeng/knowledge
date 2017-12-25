@@ -138,9 +138,7 @@ public interface AdvertisementMapper {
             }
             sql.append(" limit #{startSize},#{limit} ");
             return sql.toString();
-
         }
-
         public String countAdByIf(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
             sql.append("select count(id)  from CommonAdvertisement  o   ");

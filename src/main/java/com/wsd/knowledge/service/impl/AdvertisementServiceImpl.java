@@ -126,13 +126,13 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             current = 1;
             pageSize = 20;
         }
-        if (title.equals("")) {
+        if (title=="") {
             title = "";
         }
-        if (date1 == "null") {
+        if (date1.equals("")) {
             date1 = "2016-11-01 00:00:00";
         }
-        if (date2 =="null") {
+        if (date2 .equals("")) {
             date2 = "";
         }
         if(adStyle.equals("")){
