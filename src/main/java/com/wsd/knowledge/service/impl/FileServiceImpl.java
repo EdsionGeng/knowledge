@@ -331,14 +331,14 @@ public class FileServiceImpl implements FileService {
                 }
 //                int i = map.size();
 //                //还要去重
-//                List<Map> newList = new ArrayList(new HashSet(map));
+               List<Map> newList = new ArrayList(new HashSet(map));
 //                int b = newList.size();
 //                int c=i-b;
                 page.setTotal(sum);
                 page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
                 page.setCurrent(current);
                 page.setPageSize(pageSize);
-                return new JsonResult(0,map, "查询结果", page);
+                return new JsonResult(0,newList, "查询结果", page);
             }
         } else {
             Map<String, Object> params = new HashMap<>();

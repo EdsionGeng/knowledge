@@ -119,6 +119,15 @@ public class CommonAdvertisement implements Serializable {
         this.adStyle=adStyle;
     }
 
+    public CommonAdvertisement(String adTitle, String adContent, String addUser, String sendTime, String adStyle,String departmentName) {
+        this.adTitle = adTitle;
+        this.adContent = adContent;
+        this.addUser = addUser;
+        this.sendTime = sendTime;
+        this.adStyle = adStyle;
+        this.departmentName=departmentName;
+    }
+
     public CommonAdvertisement() {
     }
 }

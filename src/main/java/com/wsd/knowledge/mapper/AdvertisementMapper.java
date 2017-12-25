@@ -25,6 +25,11 @@ public interface AdvertisementMapper {
             "values(#{adContent},#{adTitle},#{addUser},#{departmentName},#{sendObject},#{sendTime},#{userId},#{adStyle})")
     Integer insertAd(CommonAdvertisement commonAdvertisement);
 
+
+    @Select("select adTitle,sendTime,addUser,departmentName,adContent,adStyle from CommonAdvertisement where id=#{id}")
+    CommonAdvertisement queryComAd(@Param("id")int id);
+
+
     /**
      * 删除公告
      *

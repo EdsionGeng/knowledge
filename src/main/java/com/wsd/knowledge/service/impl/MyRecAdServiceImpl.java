@@ -1,8 +1,10 @@
 package com.wsd.knowledge.service.impl;
 
 
+import com.wsd.knowledge.entity.CommonAdvertisement;
 import com.wsd.knowledge.entity.RdPage;
 import com.wsd.knowledge.entity.UserRecAdvertisement;
+import com.wsd.knowledge.mapper.AdvertisementMapper;
 import com.wsd.knowledge.mapper.UserRecAdMapper;
 import com.wsd.knowledge.mapper1.UserRepositoty;
 import com.wsd.knowledge.service.MyRecAdService;
@@ -22,6 +24,8 @@ public class MyRecAdServiceImpl implements MyRecAdService {
 
     @Autowired
     private UserRecAdMapper userRecAdMapper;
+    @Autowired
+    private AdvertisementMapper advertisementMapper;
 
     @Autowired
     private UserRepositoty userRepositoty;
@@ -70,6 +74,7 @@ public class MyRecAdServiceImpl implements MyRecAdService {
         }
         //转换为List集合，查找对应的组
 
+        CommonAdvertisement commonAdvertisement=advertisementMapper.queryComAd(commonId);
         List<Integer> departmentId = new ArrayList<>();
         for (String id : userIds.split(",")) {
             departmentId.add(Integer.parseInt(id));
@@ -84,13 +89,13 @@ public class MyRecAdServiceImpl implements MyRecAdService {
             }
             UserRecAdvertisement userRecAdvertisement = new UserRecAdvertisement(commonId, departmentId.get(i), 0, new DateUtil().getSystemTime());
             result = userRecAdMapper.insertUserRecAd(userRecAdvertisement);
-            String postUrl="{\"Uid\":"+departmentId.get(i)+",\"Content\":\"创建人:李四\\n标题:测试\\n内容:知识库系统消息" +
+            String postUrl="{\"Uid\":"+departmentId.get(i)+",\"Content\":\"创建人:"+commonAdvertisement.getAddUser()+"\\n标题:"+commonAdvertisement.getAdTitle()+"\\n内容:"+commonAdvertisement.getAdContent() +
                     "\\n\",\"" +
                     "AgentId\":1000003,\"Title\":\"知识库系统：消息通知\",\"Url\":\"http://report.wsloan.com:8888/gd-mobile//#/?id="+departmentId.get(i)+"\"}";
             //logger.info(postUrl);
             try {
                 String s = new WeiXinPushUtil().httpPostWithJSON(postUrl);
-                System.out.print(s);
+               // System.out.print(s);
                 //logger.info(s);
             } catch (Exception e) {
                 e.printStackTrace();
