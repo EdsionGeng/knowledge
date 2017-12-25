@@ -8,6 +8,7 @@ import com.wsd.knowledge.mapper1.UserRepositoty;
 import com.wsd.knowledge.service.MyRecAdService;
 import com.wsd.knowledge.util.DateUtil;
 import com.wsd.knowledge.util.JsonResult;
+import com.wsd.knowledge.util.WeiXinPushUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,9 +69,9 @@ public class MyRecAdServiceImpl implements MyRecAdService {
             return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
         }
         //转换为List集合，查找对应的组
-        String userlist=userIds.substring(1,userIds.length());
+
         List<Integer> departmentId = new ArrayList<>();
-        for (String id : userlist.split(",")) {
+        for (String id : userIds.split(",")) {
             departmentId.add(Integer.parseInt(id));
         }
         Integer result = 0;
@@ -83,6 +84,17 @@ public class MyRecAdServiceImpl implements MyRecAdService {
             }
             UserRecAdvertisement userRecAdvertisement = new UserRecAdvertisement(commonId, departmentId.get(i), 0, new DateUtil().getSystemTime());
             result = userRecAdMapper.insertUserRecAd(userRecAdvertisement);
+            String postUrl="{\"Uid\":"+departmentId.get(i)+",\"Content\":\"创建人:李四\\n标题:测试\\n内容:知识库系统消息" +
+                    "\\n\",\"" +
+                    "AgentId\":1000003,\"Title\":\"知识库系统：消息通知\",\"Url\":\"http://report.wsloan.com:8888/gd-mobile//#/?id="+departmentId.get(i)+"\"}";
+            //logger.info(postUrl);
+            try {
+                String s = new WeiXinPushUtil().httpPostWithJSON(postUrl);
+                System.out.print(s);
+                //logger.info(s);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         if (result != 0) {
             return new JsonResult(0, 0, "添加成功", 0);

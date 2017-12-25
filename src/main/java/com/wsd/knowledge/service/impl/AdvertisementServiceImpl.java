@@ -146,7 +146,6 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             //展示所有
             map = advertisementMapper.showAllCommon(startSize, pageSize);
             sum = advertisementMapper.countAdPcs();
-
             rdPage.setTotal(sum);
             rdPage.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
             rdPage.setCurrent(current);
