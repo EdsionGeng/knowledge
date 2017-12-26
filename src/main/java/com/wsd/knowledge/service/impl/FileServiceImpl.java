@@ -164,7 +164,7 @@ public class FileServiceImpl implements FileService {
         for (String id : ids.split(",")) {
             j = fileMapper.updateFileShow(id);
             OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, Integer.parseInt(id), 2, new DateUtil().getSystemTime());
-            String re = new DateUtil().cacheExist(String.valueOf(userId));
+            String re = new DateUtil().cacheExist(id);
             if (re.equals("full")) {
                 return new JsonResult(2, 0, "网络异常", 0);
             }

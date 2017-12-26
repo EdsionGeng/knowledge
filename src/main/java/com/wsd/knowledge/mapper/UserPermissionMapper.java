@@ -66,10 +66,10 @@ public interface UserPermissionMapper {
     @Select("select userId from UserPermission where fileId=#{fileId} and readFile=1")
     List<Integer> queryPerReadUserId(@Param("fileId") Integer fileId);
 
-    @Select("select userId from UserPermission where fileId=#{fileId} and deleteFile=1")
+    @Select("select userId from UserPermission where fileId=#{fileId} and updateFile=1")
     List<Integer> queryPerUpdateUserId(@Param("fileId") Integer fileId);
 
-    @Select("select userId from UserPermission where fileId=#{fileId} and updateFile=1")
+    @Select("select userId from UserPermission where fileId=#{fileId} and deleteFile=1")
     List<Integer> queryPerDeleteUserId(@Param("fileId") Integer fileId);
 
 }
