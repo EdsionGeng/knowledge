@@ -45,14 +45,14 @@ public class MyRecAdServiceImpl implements MyRecAdService {
         }
         int startSize = (current - 1) * pageSize;
         List<Map> map = userRecAdMapper.showUserRecAd(userId, startSize, pageSize);
-        List<Map> newList = new ArrayList(new HashSet(map));
+
         RdPage page = new RdPage();
         Integer sum = userRecAdMapper.countUserAdPcs(userId);
         page.setTotal(sum);
         page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
         page.setCurrent(current);
         page.setPageSize(pageSize);
-        return new JsonResult(0,newList, "查询结果", page);
+        return new JsonResult(0,map, "查询结果", page);
     }
     /**
      * 发送公告给相应的接收人员
