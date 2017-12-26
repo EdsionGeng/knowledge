@@ -48,7 +48,7 @@ public class CommonServiceImpl implements CommonService {
     public List<NewDepartment> getDepByTree(NewDepartment department) {
         Map<String, Object> map = new HashMap<>();
         map.put("pid", department.getPid());
-        return bulid(userRepositoty.findList(map), department.getPid());
+        return bulidDep(userRepositoty.findList(map), department.getPid());
 
     }
 

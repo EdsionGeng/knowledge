@@ -57,8 +57,7 @@ public class CommonController {
             @ApiImplicitParam(paramType = "query", dataType = "Object", name = "department", value = "部门实体类"),
     })
     @RequestMapping(value = "getDepByTree", method = RequestMethod.POST)
-
-    public List<NewDepartment> getDepByTree(@RequestBody NewDepartment department) {
+    public List<NewDepartment> getDepByTree( @RequestBody NewDepartment department) {
         return commonService.getDepByTree(department);
     }
 
