@@ -52,7 +52,7 @@ public class FileServiceImpl implements FileService {
      * @return
      */
     @Override
-    public JsonResult showAllFile( String fileStyleId, String title, String startDate, String endDate, Integer current, Integer pageSize) {
+    public JsonResult showAllFile(String fileStyleId, String title, String startDate, String endDate, Integer current, Integer pageSize) {
 
         if (fileStyleId.equals("")) {
             fileStyleId = "";
@@ -66,15 +66,15 @@ public class FileServiceImpl implements FileService {
         if (endDate.equals("")) {
             endDate = "";
         }
-        if(fileStyleId.equals("0")){
-            fileStyleId="";
+        if (fileStyleId.equals("0")) {
+            fileStyleId = "";
         }
         if (current == null || pageSize == null) {
             current = 1;
             pageSize = 20;
         }
         int startSize = (current - 1) * pageSize;
-        if ( fileStyleId.equals("") && title.equals("") && startDate.equals("2017-11-01 13:30") && endDate.equals("")) {
+        if (fileStyleId.equals("") && title.equals("") && startDate.equals("2017-11-01 13:30") && endDate.equals("")) {
             List<Map> map = fileMapper.showAllFile(startSize, pageSize);
             Integer sum = fileMapper.countFile();
             if (sum == null) {
@@ -379,6 +379,7 @@ public class FileServiceImpl implements FileService {
         RdPage page = new RdPage();
         List<Map> map = null;
         Integer sum = null;
+        List<Integer> groupList = userRepositoty.showPerGroupId(userGroupId);
         if (departmentName == "null" || fileStyleId == "null") {
             map = fileMapper.showUserLookFile(userId);
             if (map != null) {
@@ -389,7 +390,6 @@ public class FileServiceImpl implements FileService {
                     map.addAll(companyFileList);
                     sum += fileMapper.countCompanyFile(userId);
                 }
-                List<Integer> groupList = userRepositoty.showPerGroupId(userGroupId);
                 String ss = "";
                 List<Map> groupFileList = new ArrayList<>();
                 if (groupList.size() != 0) {
@@ -425,15 +425,58 @@ public class FileServiceImpl implements FileService {
             Map<String, Object> params = new HashMap<>();
             params.put("userId", userId);
             params.put("departmentName", departmentName);
+            if(fileStyleId.equals("0")){
+                fileStyleId="";
+            }
             params.put("fileStyleId", fileStyleId);
-            map = fileMapper.showUserIfLookFile(params);
-            if (map != null) {
-//                sum = fileMapper.showUserIfFilePcs(params);
-                page.setTotal(sum);
-                page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
+            Integer result = 0;
+            List<Map> searchmap = fileMapper.showUserIfLookFile(params);
+            result += searchmap.size();
+            if (searchmap != null) {
+                List<Map> mapa = fileMapper.showUserLookCompanyFile(params);
+                searchmap.addAll(mapa);
+                result += mapa.size();
+                String ss="";
+                if (groupList.size() != 0) {
+                    for (int i = 0, len = groupList.size(); i < len; i++) {
+                        if (i > 0) {
+                            ss += ",";
+                        }
+                        ss += "'" + groupList.get(i) + "'";
+                    }
+                    Map<String, Object> param = new HashMap<>();
+                    param.put("userId", userId);
+                    param.put("departmentName", departmentName);
+                    param.put("fileStyleId", fileStyleId);
+                    param.put("result", ss);
+                   List<Map> groupFileList = fileMapper.showUserLookGroupFile(param);
+
+                    if (groupFileList.size() != 0) {
+                        searchmap.addAll(groupFileList);
+                        result +=groupFileList.size();
+                    }
+                } else {
+                    Integer resultId = userRepositoty.queryPid(userGroupId);
+                    String res = "'" + resultId + "'" + "," + "'" + userGroupId + "'";
+                    Map<String, Object> param = new HashMap<>();
+                    param.put("userId", userId);
+                    param.put("departmentName", departmentName);
+                    param.put("fileStyleId", fileStyleId);
+                    param.put("result", res);
+                    List<Map> groupFilelist = fileMapper.showUserLookGroupFile(param);
+                    if (groupFilelist.size() != 0) {
+                        searchmap.addAll(groupFilelist);
+                        result +=groupFilelist.size();
+                       // sum += fileMapper.countGroupIdFile(res, userId);
+                    }
+                }
+                List<Map> newList = new ArrayList(new HashSet(searchmap));
+                List<Map> listResult = listSplit2(current, pageSize, newList);
+                page.setTotal(result);
+                page.setPages(result% pageSize == 0 ? result/ pageSize : result / pageSize + 1);
                 page.setCurrent(current);
                 page.setPageSize(pageSize);
-                return new JsonResult(0, map, "查询结果", page);
+                return new JsonResult(0, listResult, "查询结果", page);
             }
         }
         return new JsonResult(2, 0, "查无此结果", 0);
@@ -495,13 +538,13 @@ public class FileServiceImpl implements FileService {
             map.addAll(map5);
             map.addAll(groupFileList);
             List<Map> newList = new ArrayList(new HashSet(map));
-            int sum=newList.size();
-            List<Map>  pageMap=listSplit2(current,pageSize,newList);
+            int sum = newList.size();
+            List<Map> pageMap = listSplit2(current, pageSize, newList);
             rdPage.setTotal(sum);
             rdPage.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
             rdPage.setCurrent(current);
             rdPage.setPageSize(pageSize);
-            return new JsonResult(0,pageMap, "查询结果", rdPage);
+            return new JsonResult(0, pageMap, "查询结果", rdPage);
         }
         return new JsonResult(2, 0, "查无结果", 0);
     }

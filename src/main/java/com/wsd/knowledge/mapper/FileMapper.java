@@ -181,6 +181,13 @@ public interface FileMapper {
     @SelectProvider(type = FileQuery.class, method = "showUserIfLookFile")
     List<Map> showUserIfLookFile(Map<String, Object> map);
 
+
+    @SelectProvider(type = FileQuery.class, method = "showUserIfCompanyFile")
+    List<Map> showUserLookCompanyFile(Map<String, Object> map);
+
+
+    @SelectProvider(type = FileQuery.class, method = "showUserIfGroupFile")
+    List<Map> showUserLookGroupFile(Map<String, Object> map);
 //    @SelectProvider(type = FileQuery.class, method = "showUserIfFilePcs")
 //    Integer showUserIfFilePcs(Map<String, Object> map);
     /**
@@ -366,13 +373,27 @@ public interface FileMapper {
             if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
                 sql.append(" AND o.fileStyleId = #{fileStyleId} ");
             }
-            sql.append("  order by o.addFileTime Desc limit #{startSize},#{limit} ");
+            sql.append("  order by o.addFileTime Desc  ");
             return sql.toString();
         }
 
-        public String showUserIfFilePcs(Map<String, Object> map) {
+     public String    showUserIfCompanyFile(Map<String, Object> map) {
+         StringBuffer sql = new StringBuffer();
+         sql.append("select distinct o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where  o.fileDisplay=1 and o.fileSpecies=2 ");
+
+         if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
+             sql.append(" AND o.departmentName like concat ('%',#{departmentName},'%') ");
+         }
+         if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
+             sql.append(" AND o.fileStyleId = #{fileStyleId} ");
+         }
+         sql.append("  order by o.addFileTime Desc  ");
+         return sql.toString();
+     }
+       // select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f    where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId  in (#{result}) and f.title like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%')  order by f.addFileTime desc
+        public String showUserIfGroupFile(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select count(o.id) from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where o.fileSpecies=0 and o.fileDisplay=1 and  u.userId=#{userId} ");
+            sql.append("select distinct o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where  o.fileDisplay=1 and o.fileSpecies=1 and o.userGroupId  in (#{result}) ");
 
             if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
                 sql.append(" AND o.departmentName like concat ('%',#{departmentName},'%') ");
@@ -380,8 +401,22 @@ public interface FileMapper {
             if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
                 sql.append(" AND o.fileStyleId = #{fileStyleId} ");
             }
+            sql.append("  order by o.addFileTime Desc  ");
             return sql.toString();
 
         }
+//        public String showUserIfFilePcs(Map<String, Object> map) {
+//            StringBuffer sql = new StringBuffer();
+//            sql.append("select count(o.id) from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where o.fileSpecies=0 and o.fileDisplay=1 and  u.userId=#{userId} ");
+//
+//            if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
+//                sql.append(" AND o.departmentName like concat ('%',#{departmentName},'%') ");
+//            }
+//            if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
+//                sql.append(" AND o.fileStyleId = #{fileStyleId} ");
+//            }
+//            return sql.toString();
+//
+//        }
     }
 }
