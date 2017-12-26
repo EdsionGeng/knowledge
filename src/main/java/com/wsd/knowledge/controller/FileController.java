@@ -219,8 +219,8 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "searchContent", value = "搜索关键词", required = true),
             @ApiImplicitParam(paramType = "query", dataType = " Integer", name = "current", value = "当前页", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "pageSize", value = "页码", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "String", name = "departmentName", value = "部门名字"),
-            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileStyleId", value = "文件类型ID"),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userGroupId", value = "组别Id", required = true),
+
     })
     @RequestMapping(value = "show/searchresult", method = RequestMethod.POST)
     public JsonResult showSearchFile(@RequestBody String object) {

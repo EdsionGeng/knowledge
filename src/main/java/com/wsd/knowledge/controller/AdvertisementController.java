@@ -162,7 +162,6 @@ public class AdvertisementController {
         Integer limit= Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
         return advertisementService.showAllAd(title, date1, date2,adStyle,sortType, page, limit);
     }
-
     /**
      * 统计某一公告已读未读人数
      *

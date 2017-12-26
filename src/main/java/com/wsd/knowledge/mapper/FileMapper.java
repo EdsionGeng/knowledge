@@ -188,12 +188,10 @@ public interface FileMapper {
      *
      * @param userId
      * @param searchContent
-     * @param startSize
-     * @param limit
      * @return
      */
-    @Select("select distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileDisplay=1 and  u.userId=#{userId} and  f.fileContent like concat('%',#{searchContent},'%')   order by f.addFileTime Desc limit #{startSize},#{limit} ")
-    List<Map> showSearchFile1(@Param("userId") Integer userId, @Param("searchContent") String searchContent, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
+    @Select("select distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileDisplay=1 and  u.userId=#{userId} and   f.fileContent like concat('%',#{searchContent},'%')   order by f.addFileTime desc")
+    List<Map> showSearchFile1(@Param("userId") Integer userId, @Param("searchContent") String searchContent);
 
 //    /**
 //     * 全局搜索结果数量
@@ -209,44 +207,67 @@ public interface FileMapper {
      *
      * @param userId
      * @param searchContent
-     * @param startSize
-     * @param limit
      * @return
      */
-    @Select("select distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileDisplay=1 and  u.userId=#{userId} and   f.title like concat('%',#{searchContent},'%') order by f.addFileTime Desc limit #{startSize},#{limit} ")
-    List<Map> showSearchFile2(@Param("userId") Integer userId, @Param("searchContent") String searchContent, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
+    @Select("select distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileDisplay=1 and  u.userId=#{userId} and   f.title like concat('%',#{searchContent},'%') order by f.addFileTime Desc ")
+    List<Map> showSearchFile2(@Param("userId") Integer userId, @Param("searchContent") String searchContent);
 
-    /**
-     * 全局搜索结果数量
-     *
-     * @param userId
-     * @param searchContent
-     * @return
-     */
-    @Select("select count(*) from FileDetail f left join UserPermission  u on  f.id=u.fileId where  f.fileDisplay=1 and  u.userId=#{userId} and f.title like concat('%',#{searchContent},'%') ")
-    Integer countSearchFile2(@Param("userId") Integer userId, @Param("searchContent") String searchContent);
+//    /**
+//     * 全局搜索结果数量
+//     *
+//     * @param userId
+//     * @param searchContent
+//     * @return
+//     */
+//    @Select("select count(*) from FileDetail f left join UserPermission  u on  f.id=u.fileId where  f.fileDisplay=1 and  u.userId=#{userId} and f.title like concat('%',#{searchContent},'%') ")
+//    Integer countSearchFile2(@Param("userId") Integer userId, @Param("searchContent") String searchContent);
 
     /**
      * 全局搜索结果
      *
      * @param userId
      * @param searchContent
-     * @param startSize
-     * @param limit
      * @return
      */
-    @Select("select distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileDisplay=1 and  u.userId=#{userId} and  f.fileUrl like concat('%',#{searchContent},'%')  order by f.addFileTime Desc limit #{startSize},#{limit} ")
-    List<Map> showSearchFile3(@Param("userId") Integer userId, @Param("searchContent") String searchContent, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
+    @Select("select distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileDisplay=1 and  u.userId=#{userId} and  f.fileUrl like concat('%',#{searchContent},'%')  order by f.addFileTime Desc ")
+    List<Map> showSearchFile3(@Param("userId") Integer userId, @Param("searchContent") String searchContent);
 
     /**
-     * 全局搜索结果数量
-     *
-     * @param userId
-     * @param searchContent
+     * 展示所有公司性质的文件
      * @return
      */
-    @Select("select count(*) from FileDetail f left join UserPermission  u on  f.id=u.fileId where  f.fileDisplay=1 and  u.userId=#{userId} and  (f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%')) ")
-    Integer countSearchFile3(@Param("userId") Integer userId, @Param("searchContent") String searchContent);
+    @Select("select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f    where f.fileSpecies=2 and f.fileDisplay = 1 and f.title like concat('%',#{searchContent},'%')  order by f.addFileTime desc ")
+    List<Map> searchCompanyFile1(@Param("searchContent")String searchContent );
+    /**
+     * 展示所有公司性质的文件
+     * @return
+     */
+    @Select("select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f    where f.fileSpecies=2 and f.fileDisplay = 1 and f.fileContent like concat('%',#{searchContent},'%')  order by f.addFileTime desc ")
+    List<Map> searchCompanyFile2(@Param("searchContent")String searchContent );
+    /**
+     * 展示所有公司性质的文件
+     * @return
+     */
+    @Select("select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f    where f.fileSpecies=2 and f.fileDisplay = 1 and f.fileUrl like concat('%',#{searchContent},'%')  order by f.addFileTime desc ")
+    List<Map> searchCompanyFile3(@Param("searchContent")String searchContent );
+
+    /**
+     * 展示所有公司性质的文件
+     * @return
+     */
+    @Select("select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f    where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId  in (#{result}) and f.title like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%')  order by f.addFileTime desc ")
+    List<Map> searchGroupFile1(@Param("searchContent")String searchContent,@Param("result")String result);
+    /**
+
+//    /**
+//     * 全局搜索结果数量
+//     *
+//     * @param userId
+//     * @param searchContent
+//     * @return
+//     */
+//    @Select("select count(*) from FileDetail f left join UserPermission  u on  f.id=u.fileId where  f.fileDisplay=1 and  u.userId=#{userId} and  (f.fileContent like concat('%',#{searchContent},'%') or f.title like concat('%',#{searchContent},'%')) ")
+//    Integer countSearchFile3(@Param("userId") Integer userId, @Param("searchContent") String searchContent);
 
 //    /**
 //     * 全局 再加条件
