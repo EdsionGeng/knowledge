@@ -139,6 +139,9 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         if(adStyle.equals("")){
             adStyle="";
         }
+        if(!sortType.equals("asc")&&!sortType.equals("desc")){
+            sortType="desc";
+        }
 
         List<Map> map = new ArrayList<>();
         int sum = 0;

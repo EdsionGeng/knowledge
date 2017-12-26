@@ -33,7 +33,7 @@ public interface UserRepositoty {
      * @param id
      * @return
      */
-    @Select("select username,department,UserGroupId from SystemUser where id=#{id} ")
+    @Select("select username,userGroup,UserGroupId from SystemUser where id=#{id} ")
     SystemUser findInfo(@Param("id") Integer  id);
 
 //    /**

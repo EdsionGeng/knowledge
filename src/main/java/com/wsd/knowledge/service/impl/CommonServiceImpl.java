@@ -44,6 +44,14 @@ public class CommonServiceImpl implements CommonService {
         return bulid(userRepositoty.findList(map), department.getPid());
     }
 
+    @Override
+    public List<NewDepartment> getDepByTree(NewDepartment department) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("pid", department.getPid());
+        return bulid(userRepositoty.findList(map), department.getPid());
+
+    }
+
     /**
      * 文档目录树形结构
      *
@@ -141,6 +149,33 @@ public class CommonServiceImpl implements CommonService {
         return trees;
     }
 
+
+    /**
+     * 部门树形操作
+     *
+     * @param treeNodes
+     * @return
+     */
+    public List<NewDepartment> bulidDep(List<NewDepartment> treeNodes, String pid) {
+        List<NewDepartment> trees = new ArrayList<>();
+        for (NewDepartment treeNode : treeNodes) {
+            if (StringUtils.equals(pid, treeNode.getId())) {
+                treeNode.setChecked(1);
+            }
+            if (StringUtils.equals("3", treeNode.getId())) {
+                trees.add(treeNode);
+            }
+            for (NewDepartment it : treeNodes) {
+                if (StringUtils.equals(it.getPid(), treeNode.getId())) {
+                    if (treeNode.getChildren() == null) {
+                        treeNode.setChildren(new ArrayList<>());
+                    }
+                    treeNode.getChildren().add(it);
+                }
+            }
+        }
+        return trees;
+    }
     /**
      * 文档目录树形操作
      *

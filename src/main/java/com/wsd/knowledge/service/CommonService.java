@@ -22,6 +22,13 @@ public interface CommonService {
      */
     List<NewDepartment> getListByTree(NewDepartment department);
 
+
+    /**
+     * 组织架构树
+     * @param department
+     * @return
+     */
+    List<NewDepartment> getDepByTree(NewDepartment department);
     /**
      * 文件目录树形结构
      * @param fileKind

@@ -47,6 +47,22 @@ public class CommonController {
     }
 
     /**
+     * 获取部门树形
+     *
+     * @param department
+     * @return
+     */
+    @ApiOperation(value = "获取部门树形结构", notes = "传递必要参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "Object", name = "department", value = "部门实体类"),
+    })
+    @RequestMapping(value = "getDepByTree", method = RequestMethod.POST)
+
+    public List<NewDepartment> getDepByTree(@RequestBody NewDepartment department) {
+        return commonService.getDepByTree(department);
+    }
+
+    /**
      * 文件目录树形结构
      *
      * @param fileKind

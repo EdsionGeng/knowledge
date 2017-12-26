@@ -128,7 +128,7 @@ public interface AdvertisementMapper {
     class CommonAd {
         public String queryAdByIf(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select dictinct  o.* from CommonAdvertisement o  ");
+            sql.append("select distinct  o.* from CommonAdvertisement o  ");
             if (StringUtils.isNotEmpty((String) map.get("date1"))) {
                 sql.append(" where o.sendtime >= #{date1} ");
             }
@@ -141,7 +141,15 @@ public interface AdvertisementMapper {
             if (StringUtils.isNotEmpty((String) map.get("adStyle"))) {
                 sql.append(" AND o.adStyle =#{adStyle} ");
             }
-            sql.append(" order by o.sendtime  ${sortType}  limit #{startSize},#{limit} ");
+            if (StringUtils.isNotEmpty((String) map.get("sortType"))) {
+               if(map.get("sortType").equals("desc")){
+                   sql.append("  order by o.sendtime desc ");
+               }
+                if(map.get("sortType").equals("asc")){
+                    sql.append("  order by o.sendtime asc ");
+                }
+            }
+            sql.append("  limit #{startSize},#{limit} ");
             return sql.toString();
         }
         public String countAdByIf(Map<String, Object> map) {
