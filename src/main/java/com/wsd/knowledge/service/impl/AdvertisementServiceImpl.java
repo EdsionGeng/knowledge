@@ -48,14 +48,15 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         if (title .equals("") || content .equals("")|| sendDepartmentName .equals("")|| userId == null||adStyle.equals("")) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
-        String str = new DateUtil().cacheExist(String.valueOf(userId));
-        if (str.equals("full")) {
-            return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
-        }
+
 
         SystemUser systemUser = userRepositoty.findInfo(userId);
         CommonAdvertisement commonAdvertisement = new CommonAdvertisement(title, content, systemUser.getDepartment(), systemUser.getUsername(),
                 userId, new DateUtil().getSystemTime(), sendDepartmentName,adStyle);
+        String str = new DateUtil().cacheExist(String.valueOf(userId));
+        if (str.equals("full")) {
+            return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
+        }
         if (advertisementMapper.insertAd(commonAdvertisement) != 0) {
             //发送公告给相应的人
             //返回公告ID
@@ -138,9 +139,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         if(adStyle.equals("")){
             adStyle="";
         }
-        if(sortType.equals("")){
-            sortType="desc";
-        }
+
         List<Map> map = new ArrayList<>();
         int sum = 0;
         RdPage rdPage =new RdPage();

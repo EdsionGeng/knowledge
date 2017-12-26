@@ -78,7 +78,7 @@ public interface AdvertisementMapper {
      * @param limit
      * @return
      */
-    @Select(" select id ,adContent,adTitle,adStyle,addUser,departmentName,sendObject,sendTime,userId from CommonAdvertisement  order by sendtime = #{sortType} limit #{startSize},#{limit}")
+    @Select(" select  distinct id ,adContent,adTitle,adStyle,addUser,departmentName,sendObject,sendTime,userId from CommonAdvertisement  order by sendtime  ${sortType} limit #{startSize},#{limit}")
     List<Map> showAllCommon(@Param("startSize") Integer startSize, @Param("limit") Integer limit,@Param("sortType")String sortType);
 
     /**
@@ -128,7 +128,7 @@ public interface AdvertisementMapper {
     class CommonAd {
         public String queryAdByIf(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select o.* from CommonAdvertisement o  ");
+            sql.append("select dictinct  o.* from CommonAdvertisement o  ");
             if (StringUtils.isNotEmpty((String) map.get("date1"))) {
                 sql.append(" where o.sendtime >= #{date1} ");
             }
@@ -141,7 +141,7 @@ public interface AdvertisementMapper {
             if (StringUtils.isNotEmpty((String) map.get("adStyle"))) {
                 sql.append(" AND o.adStyle =#{adStyle} ");
             }
-            sql.append(" order by o.sendtime = #{sortType}  limit #{startSize},#{limit} ");
+            sql.append(" order by o.sendtime  ${sortType}  limit #{startSize},#{limit} ");
             return sql.toString();
         }
         public String countAdByIf(Map<String, Object> map) {
