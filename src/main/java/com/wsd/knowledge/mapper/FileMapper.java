@@ -297,6 +297,9 @@ public interface FileMapper {
     @Update(" update  FileDetail set fileStyleId = #{fileStyleId},fileStyle=#{fileStyle} where id=#{id}")
     Integer updateFileStyle(@Param("id") Integer id, @Param("fileStyleId") Integer fileStyleId, @Param("fileStyle") String fileStyle);
 
+     @Update(" update FileDetail  set fileStyle=#{fileStyleName} where fileStyleId=#{fileStyleId}")
+     Integer updateFileStyleName(@Param("fileStyleId")Integer fileStyleId,@Param("fileStyleName")String fileStyleName);
+
     /**
      * 统计某一文档类型的文件数量
      *

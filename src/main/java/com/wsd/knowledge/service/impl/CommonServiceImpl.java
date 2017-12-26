@@ -6,6 +6,7 @@ import com.wsd.knowledge.entity.FileKind;
 import com.wsd.knowledge.entity.NewDepartment;
 import com.wsd.knowledge.entity.SystemUser;
 import com.wsd.knowledge.mapper.CommonMapper;
+import com.wsd.knowledge.mapper.FileMapper;
 import com.wsd.knowledge.mapper1.UserRepositoty;
 import com.wsd.knowledge.service.CommonService;
 import com.wsd.knowledge.util.DateUtil;
@@ -30,6 +31,8 @@ public class CommonServiceImpl implements CommonService {
     private CommonMapper commonMapper;
     @Autowired
     private UserRepositoty userRepositoty;
+    @Autowired
+    private FileMapper fileMapper;
 
     /**
      * 部门树形结构
@@ -49,7 +52,6 @@ public class CommonServiceImpl implements CommonService {
         Map<String, Object> map = new HashMap<>();
         map.put("pid", department.getPid());
         return bulidDep(userRepositoty.findList(map), department.getPid());
-
     }
 
     /**
@@ -86,6 +88,7 @@ public class CommonServiceImpl implements CommonService {
 
     /**
      * 删除目录
+     *
      * @param object
      * @return
      */
@@ -113,10 +116,12 @@ public class CommonServiceImpl implements CommonService {
         String fileName = String.valueOf(jsonObject.get("fileName"));
         Integer result = commonMapper.updateDocRule(fileStyleId, fileName);
         if (result != 0) {
+            fileMapper.updateFileStyleName(fileStyleId, fileName);
             return new JsonResult(0, 0, "修改成功", 0);
         }
         return new JsonResult(2, 0, "修改失败", 0);
     }
+
     /**
      * 部门树形操作
      *
@@ -176,6 +181,7 @@ public class CommonServiceImpl implements CommonService {
         }
         return trees;
     }
+
     /**
      * 文档目录树形操作
      *
