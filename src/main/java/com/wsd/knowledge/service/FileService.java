@@ -21,7 +21,7 @@ public interface FileService {
      * @param limit
      * @return
      */
-    JsonResult showAllFile(String departmentName, String fileStyleId, String title, String startDate, String endDate, Integer page, Integer limit);
+    JsonResult showAllFile( String fileStyleId, String title, String startDate, String endDate, Integer page, Integer limit);
 
     /**
      * 添加文件

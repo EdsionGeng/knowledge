@@ -52,10 +52,8 @@ public class FileServiceImpl implements FileService {
      * @return
      */
     @Override
-    public JsonResult showAllFile(String departmentName, String fileStyleId, String title, String startDate, String endDate, Integer current, Integer pageSize) {
-        if (departmentName == "null") {
-            departmentName = "";
-        }
+    public JsonResult showAllFile( String fileStyleId, String title, String startDate, String endDate, Integer current, Integer pageSize) {
+
         if (fileStyleId.equals("")) {
             fileStyleId = "";
         }
@@ -68,12 +66,15 @@ public class FileServiceImpl implements FileService {
         if (endDate.equals("")) {
             endDate = "";
         }
+        if(fileStyleId.equals("0")){
+            fileStyleId="";
+        }
         if (current == null || pageSize == null) {
             current = 1;
             pageSize = 20;
         }
         int startSize = (current - 1) * pageSize;
-        if (departmentName.equals("") && fileStyleId.equals("") && title.equals("") && startDate.equals("2017-11-01 13:30") && endDate.equals("")) {
+        if ( fileStyleId.equals("") && title.equals("") && startDate.equals("2017-11-01 13:30") && endDate.equals("")) {
             List<Map> map = fileMapper.showAllFile(startSize, pageSize);
             Integer sum = fileMapper.countFile();
             if (sum == null) {
@@ -87,7 +88,7 @@ public class FileServiceImpl implements FileService {
             return new JsonResult(0, map, "查询结果", page);
         } else {
             Map<String, Object> map = new HashMap<>();
-            map.put("departmentName", departmentName);
+
             map.put("fileStyleId", fileStyleId);
             map.put("title", title);
             map.put("startDate", startDate);
@@ -374,7 +375,7 @@ public class FileServiceImpl implements FileService {
         if (current == null || pageSize == null || userId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
-        int startSize = (current - 1) * pageSize;
+//        int startSize = (current - 1) * pageSize;
         RdPage page = new RdPage();
         List<Map> map = null;
         Integer sum = null;
@@ -423,13 +424,11 @@ public class FileServiceImpl implements FileService {
         } else {
             Map<String, Object> params = new HashMap<>();
             params.put("userId", userId);
-            params.put("startSize", startSize);
-            params.put("limit", pageSize);
             params.put("departmentName", departmentName);
             params.put("fileStyleId", fileStyleId);
             map = fileMapper.showUserIfLookFile(params);
             if (map != null) {
-                sum = fileMapper.showUserIfFilePcs(params);
+//                sum = fileMapper.showUserIfFilePcs(params);
                 page.setTotal(sum);
                 page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
                 page.setCurrent(current);

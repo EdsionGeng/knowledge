@@ -51,11 +51,11 @@ public class FileController {
         String title = String.valueOf(jsonObject.get("title"));
         String startDate = String.valueOf(jsonObject.get("startDate"));
         String endDate = String.valueOf(jsonObject.get("endDate"));
-        String departmentName = String.valueOf(jsonObject.get("departmentName"));
+
         String fileStyleId = String.valueOf(jsonObject.get("fileStyleId"));
         Integer current = Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
-        return fileService.showAllFile(departmentName, fileStyleId, title, startDate, endDate, current, pageSize);
+        return fileService.showAllFile( fileStyleId, title, startDate, endDate, current, pageSize);
     }
     /**
      * 用户添加文件
