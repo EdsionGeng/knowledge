@@ -312,13 +312,13 @@ public class FileServiceImpl implements FileService {
                 sum = fileMapper.countUserLookFile(userId, res);
             }
             List<Map> newList = new ArrayList(new HashSet(map));
-            for (Map newlist : newList) {
-                try {
-                    newlist.put("fileContent",new String ((byte[]) newlist.get("fileContent"),"UTF-8"));
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-            }
+//            for (Map newlist : newList) {
+//                try {
+//                    newlist.put("fileContent",new String ((byte[]) newlist.get("fileContent"),"UTF-8"));
+//                } catch (UnsupportedEncodingException e) {
+//                    e.printStackTrace();
+//                }
+//            }
              // productDetail.put("conctent", new String((byte[]) productDetail.get("conctent"),"UTF-8"));
             //productDetail.get("conctent"),"UTF-8"));
             page.setTotal(sum);
