@@ -347,7 +347,15 @@ public interface FileMapper {
             if (StringUtils.isNotEmpty((String) map.get("title"))) {
                 sql.append(" AND o.title like concat('%',#{title},'%')");
             }
-            sql.append("  order by o.addFileTime ${sortType}  limit #{startSize},#{limit}");
+            if (StringUtils.isNotEmpty((String) map.get("sortType"))) {
+                if(map.get("sortType").equals("desc")){
+                    sql.append("  order by o.addFileTime desc ");
+                }
+                if(map.get("sortType").equals("asc")){
+                    sql.append("  order by o.addFileTime asc ");
+                }
+            }
+            sql.append("   limit #{startSize},#{limit}");
             return sql.toString();
         }
 

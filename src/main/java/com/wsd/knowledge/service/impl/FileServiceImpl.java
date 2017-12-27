@@ -679,6 +679,12 @@ public class FileServiceImpl implements FileService {
         JSONObject jsonObject = JSONObject.parseObject(object);
         Integer fileId = Integer.parseInt(String.valueOf(jsonObject.get("fileId")));
         Map map = fileMapper.showSingleFile(fileId);
+                try {
+        map.put("fileContent",new String ((byte[]) map.get("fileContent"),"UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                   e.printStackTrace();
+               }
+
         if (map != null) {
             return new JsonResult(0, map, "查询结果", 0);
         }
