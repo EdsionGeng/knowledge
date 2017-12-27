@@ -92,7 +92,7 @@ public class MyRecAdServiceImpl implements MyRecAdService {
             UserRecAdvertisement userRecAdvertisement = new UserRecAdvertisement(commonId, departmentId.get(i), 0, new DateUtil().getSystemTime());
             result = userRecAdMapper.insertUserRecAd(userRecAdvertisement);
             String postUrl="{\"Uid\":"+departmentId.get(i)+",\"Content\":\"创建人:"+commonAdvertisement.getAddUser()+"\\n标题:"+commonAdvertisement.getAdTitle()+"\\n"+"类型:"+commonAdvertisement.getAdStyle()+"\\n"+"发送部门："+commonAdvertisement.getDepartmentName()+"\\n"+"发送时间："+commonAdvertisement.getSendTime()+"\\n"
-                    +"内容:"+commonAdvertisement.getAdContent()+"\\n\",\"" + "AgentId\":1000003,\"Title\":\"知识库系统：消息通知\",\"Url\":\"http://report.wsloan.com:8888/gd-mobile//#/?id="+departmentId.get(i)+"\"}";
+                    +"内容:"+commonAdvertisement.getAdContent()+"\\n\",\"" + "AgentId\":1000003,\"Title\":\"知识库系统：消息通知\",}";
             //logger.info(postUrl);
             try {
                 String s = new WeiXinPushUtil().httpPostWithJSON(postUrl);

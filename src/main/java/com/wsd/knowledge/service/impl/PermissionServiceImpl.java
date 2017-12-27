@@ -42,8 +42,6 @@ public class PermissionServiceImpl implements PermissionService {
 //        if (str.equals("full")) {
 //            return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
 //        }
-
-
         List<Integer> userlist = new ArrayList<>();
         for (String id : userIds.split(",")) {
             userlist.add(Integer.parseInt(id));

@@ -1,15 +1,14 @@
 package com.wsd.knowledge.entity;
 
+import java.util.Comparator;
+
 /**
  * @Author EdsionGeng
  * @Description 文件具体信息实体类
  * @Date:10:56 2017/11/1
  */
-
-import java.io.Serializable;
-
 //@Entity
-public class FileDetail implements Serializable {
+public class FileDetail implements Comparable<FileDetail> {
 
     // @Id
     //@GeneratedValue
@@ -68,6 +67,7 @@ public class FileDetail implements Serializable {
 
     //人员组别id
     private int userGroupId;
+
 
     public String getUsername() {
         return username;
@@ -250,6 +250,37 @@ public class FileDetail implements Serializable {
         this.fileSpecies = fileSpecies;
         this.userGroupId = userGroupId;
     }
+//    f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime
+
+    public FileDetail(int id, String departmentName, String username, String fileNo, String title, String fileSize, String fileUrl, String photoUrl, String addFileTime, String enclosureInfo) {
+        this.id = id;
+        this.departmentName = departmentName;
+        this.username = username;
+        this.fileNo = fileNo;
+        this.title = title;
+        this.fileSize = fileSize;
+        this.fileUrl = fileUrl;
+        this.photoUrl = photoUrl;
+        this.addFileTime = addFileTime;
+        this.enclosureInfo = enclosureInfo;
+    }
+
     public FileDetail() {
+    }
+
+
+
+    @Override
+    public int compareTo(FileDetail o) {
+        //按创建时间排序
+        if (o.getAddFileTime().compareTo(this.getAddFileTime()) > 0) {
+
+            return 1;
+        }
+        if (o.getAddFileTime().compareTo(this.getAddFileTime()) < 0) {
+
+            return -1;
+        }
+        return 0;
     }
 }
