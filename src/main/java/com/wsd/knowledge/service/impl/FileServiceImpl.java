@@ -275,7 +275,7 @@ public class FileServiceImpl implements FileService {
                 return new JsonResult(0, 0, "操作成功", 0);
             }
         }
-        return new JsonResult(2, 0, "操作失败", 0);
+                return new JsonResult(2, 0, "操作失败", 0);
     }
 
 
