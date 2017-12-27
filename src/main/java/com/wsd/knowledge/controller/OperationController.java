@@ -80,9 +80,10 @@ public class OperationController {
     public JsonResult showAllUpload(@RequestBody String object) {
         JSONObject jsonObject = JSONObject.parseObject(object);
         Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
+        String  sorType = String.valueOf(jsonObject.get("sortType"));
         Integer current = Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
-        return operationService.showUserUp(userId, current, pageSize);
+        return operationService.showUserUp(userId,sorType,current, pageSize);
     }
 
     /**

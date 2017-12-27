@@ -21,7 +21,7 @@ public interface FileService {
      * @param limit
      * @return
      */
-    JsonResult showAllFile( String fileStyleId, String title, String startDate, String endDate, Integer page, Integer limit);
+    JsonResult showAllFile( String fileStyleId, String title, String startDate, String endDate,String sortType, Integer page, Integer limit);
 
     /**
      * 添加文件
@@ -85,7 +85,7 @@ public interface FileService {
      * @param pageSize
      * @return
      */
-    JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize,String fileStyleId,String departmentName,Integer userGroupId);
+    JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize,String fileStyleId,String departmentName,Integer userGroupId,String sortType);
 
 
     /**

@@ -52,8 +52,8 @@ public interface FileMapper {
      * @param limit
      * @return
      */
-    @Select("select * from FileDetail  where fileDisplay = 1 Order By addFileTime DESC limit #{startSize},#{limit} ")
-    List<Map> showAllFile(@Param("startSize") int startSize, @Param("limit") int limit);
+    @Select("select * from FileDetail  where fileDisplay = 1 Order By addFileTime ${sortType} limit #{startSize},#{limit} ")
+    List<Map> showAllFile(@Param("startSize") int startSize, @Param("limit") int limit,@Param("sortType")String sortType);
 
     /**
      * 统计数量
@@ -127,9 +127,10 @@ public interface FileMapper {
 //     */
 //    @Select("select  distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileSpecies=0 and f.fileDisplay=1 and  u.userId=#{userId} order by f.addFileTime Desc  ")
 
-    @Select("select f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from  ((select  distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileSpecies=0 and f.fileDisplay=1 and  u.userId=#{userId})UNION \n" +
-        " (select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f    where f.fileSpecies=2 and f.fileDisplay = 1) UNION  (select distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId in (#{result})))  as f order by f.addFileTime desc limit #{startSize},#{pageSize}")
-    List<FileDetail> showUserLookFile(@Param("userId") Integer userId,@Param("result")String result,@Param("startSize")Integer startSize,@Param("pageSize")Integer pageSize);
+    @Select("select f.id,f.departmentName,f.fileStyle,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from  ((select  distinct  f.id,f.departmentName,f.username,f.fileStyle,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileSpecies=0 and f.fileDisplay=1 and  u.userId=#{userId})UNION \n" +
+        " (select  distinct f.id,f.fileStyle,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f    where f.fileSpecies=2 and f.fileDisplay = 1) UNION  (select distinct  f.id,f.departmentName,f.fileStyle,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId in (#{result})))  as f order by f.addFileTime ${sortType} limit #{startSize},#{pageSize}")
+    List<Map> showUserLookFile(@Param("userId") Integer userId,@Param("result")String result,@Param("sortType")String sortType,@Param("startSize")Integer startSize,@Param("pageSize")Integer pageSize);
+
 
     /**
      * 统计用户能看的全部文件数量
@@ -137,8 +138,8 @@ public interface FileMapper {
      * @param userId
      * @return
      */
-    @Select("select count(f.id) from  ((select  distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileSpecies=0 and f.fileDisplay=1 and  u.userId=#{userId})UNION \n" +
-            " (select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f    where f.fileSpecies=2 and f.fileDisplay = 1) UNION  (select distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId in(#{result})))  as f ")
+    @Select("select count(f.id) from  ((select f.id from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileSpecies=0 and f.fileDisplay=1 and  u.userId=#{userId})UNION \n" +
+            " (select f.id from FileDetail f    where f.fileSpecies=2 and f.fileDisplay = 1) UNION  (select   f.id from FileDetail f where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId in(#{result})))  as f ")
     Integer countUserLookFile(@Param("userId") Integer userId,@Param("result")String result);
 
     /**
@@ -346,7 +347,7 @@ public interface FileMapper {
             if (StringUtils.isNotEmpty((String) map.get("title"))) {
                 sql.append(" AND o.title like concat('%',#{title},'%')");
             }
-            sql.append("  order by o.addFileTime Desc  limit #{startSize},#{limit}");
+            sql.append("  order by o.addFileTime ${sortType}  limit #{startSize},#{limit}");
             return sql.toString();
         }
 

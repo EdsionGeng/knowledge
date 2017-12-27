@@ -128,8 +128,9 @@ public interface OperationMapper {
      * @param limit
      * @return
      */
-    @Select("select f.* from FileDetail f  where f.fileDisplay= 1 and userId=#{userId} order by f.addFileTime DESC limit #{startSize},#{limit}")
-    List<Map> showUserUpFile(@Param("userId") Integer userId, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
+    @Select("select f.* from FileDetail f  where f.fileDisplay= 1 and userId=#{userId} order by f.addFileTime ${sortType} limit #{startSize},#{limit}")
+    List<Map> showUserUpFile(@Param("userId") Integer userId,@Param("sortType")String sortType, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
+
 
     /**
      * 统计个人上传文件 总数

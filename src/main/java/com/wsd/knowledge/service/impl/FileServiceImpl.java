@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 /**
@@ -51,7 +52,7 @@ public class FileServiceImpl implements FileService {
      * @return
      */
     @Override
-    public JsonResult showAllFile(String fileStyleId, String title, String startDate, String endDate, Integer current, Integer pageSize) {
+    public JsonResult showAllFile(String fileStyleId, String title, String startDate, String endDate,String sortType, Integer current, Integer pageSize) {
 
         if (fileStyleId.equals("")) {
             fileStyleId = "";
@@ -68,13 +69,16 @@ public class FileServiceImpl implements FileService {
         if (fileStyleId.equals("0")) {
             fileStyleId = "";
         }
+        if (!sortType.equals("desc")&&!sortType.equals("asc")) {
+            sortType = "desc";
+        }
         if (current == null || pageSize == null) {
             current = 1;
             pageSize = 20;
         }
         int startSize = (current - 1) * pageSize;
         if (fileStyleId.equals("") && title.equals("") && startDate.equals("2017-11-01 13:30") && endDate.equals("")) {
-            List<Map> map = fileMapper.showAllFile(startSize, pageSize);
+            List<Map> map = fileMapper.showAllFile(startSize, pageSize,sortType);
             Integer sum = fileMapper.countFile();
             if (sum == null) {
                 sum = 0;
@@ -87,11 +91,14 @@ public class FileServiceImpl implements FileService {
             return new JsonResult(0, map, "查询结果", page);
         } else {
             Map<String, Object> map = new HashMap<>();
-
+            String s1=endDate.substring(11,16);
+            endDate=endDate.replace(s1,"");
+            endDate=endDate.concat("23:59");
             map.put("fileStyleId", fileStyleId);
             map.put("title", title);
             map.put("startDate", startDate);
             map.put("endDate", endDate);
+            map.put("sortType",sortType);
             map.put("startSize", startSize);
             map.put("limit", pageSize);
             List<Map> maps = fileMapper.queryFileByIf(map);
@@ -275,13 +282,16 @@ public class FileServiceImpl implements FileService {
         return new JsonResult(2, 0, "操作失败", 0);
     }
 
-    public JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize, String fileStyleId, String departmentName, Integer userGroupId) {
+    public JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize, String fileStyleId, String departmentName, Integer userGroupId,String sortType) {
         if (current == null || pageSize == null || userId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         int startSize = (current - 1) * pageSize;
+        if(!sortType.equals("asc")&&!sortType.equals("desc")){
+            sortType="desc";
+        }
         RdPage page = new RdPage();
-        List<FileDetail> map = new ArrayList<>();
+        List<Map> map = new ArrayList<>();
         Integer sum = 0;
         List<Integer> groupList = userRepositoty.showPerGroupId(userGroupId);
         if (departmentName == "null" || fileStyleId == "null") {
@@ -293,17 +303,24 @@ public class FileServiceImpl implements FileService {
                     }
                     ss += "'" + groupList.get(i) + "'";
                 }
-                map = fileMapper.showUserLookFile(userId, ss, startSize, pageSize);
+                map = fileMapper.showUserLookFile(userId, ss,sortType, startSize, pageSize);
                 sum = fileMapper.countUserLookFile(userId, ss);
             } else {
                 Integer result = userRepositoty.queryPid(userGroupId);
                 String res = "'" + result + "'" + "," + "'" + userGroupId + "'";
-                map = fileMapper.showUserLookFile(userId, res, startSize, pageSize);
+                map = fileMapper.showUserLookFile(userId, res, sortType,startSize, pageSize);
                 sum = fileMapper.countUserLookFile(userId, res);
-
-
             }
-            List<FileDetail> newList = new ArrayList(new HashSet(map));
+            List<Map> newList = new ArrayList(new HashSet(map));
+            for (Map newlist : newList) {
+                try {
+                    newlist.put("fileContent",new String ((byte[]) newlist.get("fileContent"),"UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+             // productDetail.put("conctent", new String((byte[]) productDetail.get("conctent"),"UTF-8"));
+            //productDetail.get("conctent"),"UTF-8"));
             page.setTotal(sum);
             page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
             page.setCurrent(current);

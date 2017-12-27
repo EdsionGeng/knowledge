@@ -37,7 +37,7 @@ public interface OperationService {
      * @param pageSize
      * @return
      */
-    JsonResult showUserUp(Integer userId, Integer current, Integer pageSize);
+    JsonResult showUserUp(Integer userId,String sortType, Integer current, Integer pageSize);
 
     /**
      * 展示当天数据

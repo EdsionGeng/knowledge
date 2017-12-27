@@ -75,13 +75,17 @@ public class OperationServiceImpl implements OperationService {
      * @return
      */
     @Override
-    public JsonResult showUserUp(Integer userId, Integer current, Integer pageSize) {
+    public JsonResult showUserUp(Integer userId,String sortType, Integer current, Integer pageSize) {
         if (current == null || pageSize == null||userId==null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         int startSize = (current - 1) * pageSize;
-        List<Map> map = operationMapper.showUserUpFile(userId, startSize, pageSize);
+        if(!sortType.equals("asc")&&!sortType.equals("desc")){
+            sortType="desc";
+        }
+        List<Map> map = operationMapper.showUserUpFile(userId,sortType, startSize, pageSize);
         Integer sum = operationMapper.countAllFilePcs(userId);
+
         if (sum != null) {
             RdPage page =new RdPage();
             page.setTotal(sum);

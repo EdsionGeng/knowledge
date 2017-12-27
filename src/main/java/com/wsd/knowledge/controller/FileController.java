@@ -51,11 +51,11 @@ public class FileController {
         String title = String.valueOf(jsonObject.get("title"));
         String startDate = String.valueOf(jsonObject.get("startDate"));
         String endDate = String.valueOf(jsonObject.get("endDate"));
-
+        String sortType= String.valueOf(jsonObject.get("sortType"));
         String fileStyleId = String.valueOf(jsonObject.get("fileStyleId"));
         Integer current = Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
-        return fileService.showAllFile( fileStyleId, title, startDate, endDate, current, pageSize);
+        return fileService.showAllFile( fileStyleId, title, startDate, endDate,sortType, current, pageSize);
     }
     /**
      * 用户添加文件
@@ -202,9 +202,10 @@ public class FileController {
         Integer current  = Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
         String fileStyleId = String.valueOf(jsonObject.get("fileStyleId"));
+        String sortType = String.valueOf(jsonObject.get("sortType"));
         String departmentName = String.valueOf(jsonObject.get("departmentName"));
         Integer  userGroupId =Integer.parseInt(String.valueOf(jsonObject.get("userGroupId")));
-        return fileService.showUserLookFile(userId, current, pageSize, fileStyleId, departmentName,userGroupId);
+        return fileService.showUserLookFile(userId, current, pageSize, fileStyleId, departmentName,userGroupId,sortType);
     }
 
     /**
