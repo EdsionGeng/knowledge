@@ -98,8 +98,8 @@ public class MyRecAdServiceImpl implements MyRecAdService {
 //                    + "\\n\\n发送部门:" + commonAdvertisement.getDepartmentName()
 //                    + "\\n\\发送时间:" + commonAdvertisement.getSendTime()
 //                    + "\",\"AgentId\":1000011,\"Title\":\"知识库\",\"Url\":\"\"}";
-//String postUrl="{\"Uid\":"+departmentId.get(i)+",\"Content\":\"创建人:"+commonAdvertisement.getAddUser()+"\\n标题:"+commonAdvertisement.getAdTitle()+"\\n"+"内容:"+commonAdvertisement.getAdContent()+"发送部门："+commonAdvertisement.getDepartmentName()+"\\n"+"发送时间："+commonAdvertisement.getSendTime()+"\\n"+"\\n\",\"" + "AgentId\":1000014,\"Title\":\"【通知】:"+commonAdvertisement.getAdTitle()+"\"\"}";
-//logger.info(postUrl);
+//                   String postUrl="{\"Uid\":"+departmentId.get(i)+",\"Content\":\"创建人:"+commonAdvertisement.getAddUser()+"\\n标题:"+commonAdvertisement.getAdTitle()+"\\n"+"内容:"+commonAdvertisement.getAdContent()+"发送部门："+commonAdvertisement.getDepartmentName()+"\\n"+"发送时间："+commonAdvertisement.getSendTime()+"\\n"+"\\n\",\"" + "AgentId\":1000014,\"Title\":\"【通知】:"+commonAdvertisement.getAdTitle()+"\"\"}";
+//                   logger.info(postUrl);
             try {
                 String s = new WeiXinPushUtil().httpPostWithJSON(postUrl);
                 System.out.print(s);

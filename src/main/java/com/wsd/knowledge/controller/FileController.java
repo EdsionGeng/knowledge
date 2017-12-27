@@ -202,8 +202,9 @@ public class FileController {
         Integer current  = Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
         String fileStyleId = String.valueOf(jsonObject.get("fileStyleId"));
+       // String  groupId= String.valueOf(jsonObject.get("groupId"));
         String sortType = String.valueOf(jsonObject.get("sortType"));
-        String departmentName = String.valueOf(jsonObject.get("departmentName"));
+       String departmentName = String.valueOf(jsonObject.get("departmentName"));
         Integer  userGroupId =Integer.parseInt(String.valueOf(jsonObject.get("userGroupId")));
         return fileService.showUserLookFile(userId, current, pageSize, fileStyleId, departmentName,userGroupId,sortType);
     }
