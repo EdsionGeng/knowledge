@@ -34,7 +34,7 @@ public interface UserRepositoty {
      * @return
      */
     @Select("select username,userGroup,UserGroupId from SystemUser where id=#{id} ")
-    SystemUser findInfo(@Param("id") Integer  id);
+    SystemUser findInfo(@Param("id") Integer id);
 
     /**
      * 获取个人信息
@@ -43,7 +43,7 @@ public interface UserRepositoty {
      * @return
      */
     @Select("select id from Department_new where Deptno=#{name} ")
-    Integer queryGroupIdByName(@Param("name")String name);
+    Integer queryGroupIdByName(@Param("name") String name);
 
 //    /**
 //     * 查找同一组别下的人
@@ -73,12 +73,14 @@ public interface UserRepositoty {
     List<NewDepartment> queryByGroupId(@Param("id") Integer id);
 
 
-    @Select("select Uid from UserRoles where Rid=2013 ")
+     @Select("select Uid from UserRoles where Rid=2013 ")
+    //@Select("select Uid from UserRoles where Rid=3031 ")
     List<Integer> queryAdmin();
 
 
-    @Select("select id  from UserRoles where  Uid=#{userId} and Rid=2013")
-    Integer ifAdmin(@Param("userId")Object userId);
+  //  @Select("select id  from UserRoles where  Uid=#{userId} and Rid=3031")
+        @Select("select id  from UserRoles where  Uid=#{userId} and Rid=2013")
+    Integer ifAdmin(@Param("userId") Object userId);
 //    @Select("select userGroupId from SystemUser where id=#{userId}")
 //    Integer queryGroupId(@Param("userId")Integer userId);
 
