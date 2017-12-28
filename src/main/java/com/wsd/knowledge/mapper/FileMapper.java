@@ -379,12 +379,14 @@ public interface FileMapper {
             StringBuffer sql = new StringBuffer();
             sql.append("select distinct o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where  o.fileDisplay=1 and o.fileSpecies=0 and u.userId=#{userId} ");
             if (StringUtils.isNotEmpty((String) map.get("groupId"))) {
-                sql.append(" AND o.userGroupId in (#{groupId}) ");
+
+                sql.append(" AND o.userGroupId in ("+(String) map.get("groupId")+")");
             }
             if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
                 sql.append(" AND o.fileStyleId = #{fileStyleId} ");
             }
             sql.append("  order by o.addFileTime Desc  ");
+            System.out.print(sql);
             return sql.toString();
         }
 
@@ -392,7 +394,7 @@ public interface FileMapper {
          StringBuffer sql = new StringBuffer();
          sql.append("select distinct o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where  o.fileDisplay=1 and o.fileSpecies=2 ");
          if (StringUtils.isNotEmpty((String) map.get("groupId"))) {
-             sql.append(" AND o.userGroupId in (#{groupId}) ");
+             sql.append(" AND o.userGroupId in ("+(String) map.get("groupId")+")");
          }
          if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
              sql.append(" AND o.fileStyleId = #{fileStyleId} ");
@@ -404,9 +406,10 @@ public interface FileMapper {
         public String showUserIfGroupFile(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
             sql.append("select distinct o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where  o.fileDisplay=1 and o.fileSpecies=1  ");
-           if (StringUtils.isNotEmpty((String) map.get("groupId"))) {
-                sql.append(" AND o.userGroupId in (#{groupId}) ");
+            if (StringUtils.isNotEmpty((String) map.get("groupId"))) {
+                sql.append(" AND o.userGroupId in ("+(String) map.get("groupId")+")");
             }
+
             if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
                 sql.append(" AND o.fileStyleId = #{fileStyleId} ");
             }

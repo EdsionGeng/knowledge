@@ -395,10 +395,9 @@ public class FileServiceImpl implements FileService {
         if (departmentName == "null") {
             departmentName = "";
         }
-//        List<Integer> groupList = userRepositoty.showPerGroupId(userGroupId)
+        String ss = getGroupArray(userGroupId);
         if (departmentName.equals("") && fileStyleId == "null") {
             Integer sum = 0;
-            String ss = getGroupArray(userGroupId);
             map = fileMapper.showUserLookFile(userId, ss, sortType, startSize, pageSize);
             sum = fileMapper.countUserLookFile(userId, ss);
             List<Map> newList = new ArrayList(new HashSet(map));
@@ -414,10 +413,14 @@ public class FileServiceImpl implements FileService {
                 fileStyleId = "";
             }
             params.put("fileStyleId", fileStyleId);
+
             if (!departmentName.equals("")) {
                 Integer groupId = userRepositoty.queryGroupIdByName(departmentName);
                 String results = getGroupArray(groupId);
                 params.put("groupId", results);
+            }
+            else {
+                params.put("groupId", ss);
             }
             Integer result = 0;
             List<Map> searchmap = fileMapper.showUserIfLookFile(params);
