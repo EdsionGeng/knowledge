@@ -91,7 +91,7 @@ public class MyRecAdServiceImpl implements MyRecAdService {
             }
             UserRecAdvertisement userRecAdvertisement = new UserRecAdvertisement(commonId, departmentId.get(i), 0, new DateUtil().getSystemTime());
             result = userRecAdMapper.insertUserRecAd(userRecAdvertisement);
-            String postUrl="{\"Uid\":"+departmentId.get(i)+",\"Content\":\"【通知】:"+commonAdvertisement.getAdTitle()+"\\n标题:"+commonAdvertisement.getAdTitle()+"\\n内容:"+commonAdvertisement.getAdContent()+"\\n发送部门:"+commonAdvertisement.getDepartmentName()+"\\n发送时间:"+commonAdvertisement.getSendTime()+"\",\"AgentId\":1000014,\"Title\":\"知识库系统：消息通知\"}";
+            String postUrl="{\"Uid\":"+departmentId.get(i)+",\"Content\":\"【"+commonAdvertisement.getAdStyle()+"】:"+commonAdvertisement.getAdTitle()+"\\n标题:"+commonAdvertisement.getAdTitle()+"\\n内容:"+commonAdvertisement.getAdContent()+"\\n发送部门:"+commonAdvertisement.getDepartmentName()+"\\n发送时间:"+commonAdvertisement.getSendTime()+"\",\"AgentId\":1000014,\"Title\":\"知识库系统：消息通知\"}";
            // String postUrl = "{\"Uid\":" + departmentId.get(i) + ",\"Content\":\"【 通知】" + commonAdvertisement.getAdTitle() + ""
 //                    + "\\n\\标题:" +commonAdvertisement.getAdTitle()
 //                    + "\\n\\内容:" + commonAdvertisement.getAdContent()

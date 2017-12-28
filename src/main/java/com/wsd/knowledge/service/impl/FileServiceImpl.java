@@ -413,7 +413,6 @@ public class FileServiceImpl implements FileService {
                 fileStyleId = "";
             }
             params.put("fileStyleId", fileStyleId);
-
             if (!departmentName.equals("")) {
                 Integer groupId = userRepositoty.queryGroupIdByName(departmentName);
                 String results = getGroupArray(groupId);
