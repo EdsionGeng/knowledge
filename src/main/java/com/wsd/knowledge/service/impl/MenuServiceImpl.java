@@ -29,7 +29,7 @@ public class MenuServiceImpl implements MenuService {
     public JsonResult getMenus( Integer id) {
         Map param = new HashMap();
         param.put("id", id);
-        param.put("systemId", "2004");
+        param.put("systemId", "2006");
         List<String> rids = menuMapper.getRoleIds(param);
         if (rids != null && rids.size() > 0) {
             param.put("rids", rids);
