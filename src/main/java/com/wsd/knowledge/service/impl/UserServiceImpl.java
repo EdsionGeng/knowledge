@@ -67,6 +67,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public JsonResult queryAdmin() {
         List<Integer> list = userRepositoty.queryAdmin();
+        if(list==null){
+            list.add(1);
+
+
+
+
+
+        }
         return new JsonResult(0, list, "查询结果", 0);
     }
 

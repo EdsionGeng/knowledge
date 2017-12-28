@@ -52,8 +52,8 @@ public class UserController {
             // RememberMe这个参数设置为true后，在登陆的时候就会在客户端设置remenberme的相应cookie
             Map map=(Map) SecurityUtils.getSubject().getPrincipal();
             token.setRememberMe(true);
-            //Integer isAdmin=userService.isAdmin(map.get("id"));
-            return new JsonResult(0, map, "登录成功",0);
+            Integer isAdmin=userService.isAdmin(map.get("id"));
+            return new JsonResult(0, map, "登录成功",isAdmin);
         } catch (Exception e) {
             e.printStackTrace();
             return new JsonResult(2, 0, "登录失败", 0);
