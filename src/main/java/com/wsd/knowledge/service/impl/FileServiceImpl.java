@@ -281,7 +281,6 @@ public class FileServiceImpl implements FileService {
         }
         return new JsonResult(2, 0, "操作失败", 0);
     }
-
     //    public JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize, String fileStyleId, Integer groupId, Integer userGroupId, String sortType) {
 //        if (current == null || pageSize == null || userId == null) {
 //            return new JsonResult(2, 0, "参数为空", 0);
@@ -393,16 +392,15 @@ public class FileServiceImpl implements FileService {
         }
         RdPage page = new RdPage();
         List<Map> map = new ArrayList<>();
-        if(departmentName=="null") {
-            departmentName="";
+        if (departmentName == "null") {
+            departmentName = "";
         }
 //        List<Integer> groupList = userRepositoty.showPerGroupId(userGroupId)
-
-        if (departmentName .equals("")  && fileStyleId == "null") {
+        if (departmentName.equals("") && fileStyleId == "null") {
             Integer sum = 0;
-            String ss=getGroupArray(userGroupId);
-                map = fileMapper.showUserLookFile(userId, ss, sortType, startSize, pageSize);
-                sum = fileMapper.countUserLookFile(userId, ss);
+            String ss = getGroupArray(userGroupId);
+            map = fileMapper.showUserLookFile(userId, ss, sortType, startSize, pageSize);
+            sum = fileMapper.countUserLookFile(userId, ss);
             List<Map> newList = new ArrayList(new HashSet(map));
             page.setTotal(sum);
             page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
@@ -416,7 +414,7 @@ public class FileServiceImpl implements FileService {
                 fileStyleId = "";
             }
             params.put("fileStyleId", fileStyleId);
-            if(!departmentName.equals("")) {
+            if (!departmentName.equals("")) {
                 Integer groupId = userRepositoty.queryGroupIdByName(departmentName);
                 String results = getGroupArray(groupId);
                 params.put("groupId", results);
@@ -455,9 +453,9 @@ public class FileServiceImpl implements FileService {
             page.setPageSize(pageSize);
             return new JsonResult(0, listResult, "查询结果", page);
 
-    }
+        }
 
-}
+    }
 
     /**
      * 展示搜寻结果

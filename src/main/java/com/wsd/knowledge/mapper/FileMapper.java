@@ -403,10 +403,10 @@ public interface FileMapper {
        // select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f    where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId  in (#{result}) and f.title like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%')  order by f.addFileTime desc
         public String showUserIfGroupFile(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select distinct o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where  o.fileDisplay=1 and o.fileSpecies=1 and o.userGroupId  in (#{result}) ");
-//            if (StringUtils.isNotEmpty((String) map.get("concatGroupId"))) {
-//                sql.append(" AND o.userGroupId in (#{groupId}) ");
-//            }
+            sql.append("select distinct o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where  o.fileDisplay=1 and o.fileSpecies=1  ");
+           if (StringUtils.isNotEmpty((String) map.get("groupId"))) {
+                sql.append(" AND o.userGroupId in (#{groupId}) ");
+            }
             if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
                 sql.append(" AND o.fileStyleId = #{fileStyleId} ");
             }
