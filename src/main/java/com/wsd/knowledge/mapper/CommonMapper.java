@@ -52,6 +52,15 @@ public interface CommonMapper {
      */
     @Update(" update FileKind set fileKindName=#{fileName} where id = #{fileStyleId}")
     Integer updateDocRule(@Param("fileStyleId") Integer fileStyleId,@Param("fileName")String fileName);
+
+    /**
+     * 修改目录名称及父id
+     * @param fileStyleId
+     * @return
+     */
+    @Update(" update FileKind set fileKindName=#{fileName},fileParentId=#{parentId} where id = #{fileStyleId}")
+    Integer updateDocStyle(@Param("fileStyleId") Integer fileStyleId,@Param("fileName")String fileName,@Param("parentId")Integer parentId);
+
     class KindTree {
         public String showKindTree(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();

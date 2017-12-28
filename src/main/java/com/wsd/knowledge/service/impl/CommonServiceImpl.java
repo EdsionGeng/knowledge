@@ -106,6 +106,11 @@ public class CommonServiceImpl implements CommonService {
         return new JsonResult(2, 0, "删除失败", 0);
     }
 
+    /**
+     * 修改文档类型
+     * @param object
+     * @return
+     */
     @Override
     public JsonResult updateRule(String object) {
         if (object.equals("")) {
@@ -114,7 +119,15 @@ public class CommonServiceImpl implements CommonService {
         JSONObject jsonObject = JSONObject.parseObject(object);
         Integer fileStyleId = Integer.parseInt(String.valueOf(jsonObject.get("fileStyleId")));
         String fileName = String.valueOf(jsonObject.get("fileName"));
-        Integer result = commonMapper.updateDocRule(fileStyleId, fileName);
+        String upStyleId = String.valueOf(jsonObject.get("upStyleId"));
+        Integer result =0;
+        if(upStyleId=="null"){
+           result = commonMapper.updateDocRule(fileStyleId, fileName);
+        }
+        else{
+            result = commonMapper.updateDocStyle(fileStyleId, fileName,Integer.parseInt(upStyleId));
+        }
+
         if (result != 0) {
             fileMapper.updateFileStyleName(fileStyleId, fileName);
             return new JsonResult(0, 0, "修改成功", 0);

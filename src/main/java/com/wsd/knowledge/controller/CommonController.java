@@ -102,7 +102,7 @@ public class CommonController {
      * @param object
      * @return
      */
-    @ApiOperation(value = "添加文档目录", notes = "传递必要参数")
+    @ApiOperation(value = "删除文档目录", notes = "传递必要参数")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "parentId", value = "父ID"),
             @ApiImplicitParam(paramType = "query", dataType = " String", name = "docName", value = "目录名称")
@@ -112,9 +112,10 @@ public class CommonController {
         return commonService.deleteRule(object);
     }
 
-    @ApiOperation(value = "添加文档目录", notes = "传递必要参数")
+    @ApiOperation(value = "修改文档目录", notes = "传递必要参数")
     @ApiImplicitParams({
-            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileStyleId", value = "父ID"),
+            @ApiImplicitParam(paramType = "query", dataType = " String", name = "upStyleId", value = "上级Id"),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileStyleId", value = "文件类型Id"),
             @ApiImplicitParam(paramType = "query", dataType = " String", name = "fileName", value = "目录名称")
     })
     @RequestMapping(value = "update/docname.htmls", method = RequestMethod.POST)
