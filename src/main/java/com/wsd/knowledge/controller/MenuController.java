@@ -33,16 +33,10 @@ public class MenuController {
     @ApiOperation(value = "得到用户菜单", notes = "传递必要参数")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户"),
-
     })
     public JsonResult getMenusList(@RequestBody String object) {
-//        List<Menu> list = (List<Menu>) request.getSession().getAttribute("menus");
-//        if (list != null) {
-//            return new JsonResult(0, list);
-//        }
         JSONObject jsonObject = JSONObject.parseObject(object);
         Integer id = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
-        //Integer id = (Integer) request.getSession().getAttribute("LOGIN_USER_ID");
         return menuService.getMenus( id);
     }
 
