@@ -393,10 +393,13 @@ public class FileServiceImpl implements FileService {
         }
         RdPage page = new RdPage();
         List<Map> map = new ArrayList<>();
-        Integer sum = 0;
-//        List<Integer> groupList = userRepositoty.showPerGroupId(userGroupId);
+        if(departmentName=="null") {
+            departmentName="";
+        }
+//        List<Integer> groupList = userRepositoty.showPerGroupId(userGroupId)
 
-        if (departmentName == "null" && fileStyleId == "null") {
+        if (departmentName .equals("")  && fileStyleId == "null") {
+            Integer sum = 0;
             String ss=getGroupArray(userGroupId);
                 map = fileMapper.showUserLookFile(userId, ss, sortType, startSize, pageSize);
                 sum = fileMapper.countUserLookFile(userId, ss);
@@ -413,9 +416,11 @@ public class FileServiceImpl implements FileService {
                 fileStyleId = "";
             }
             params.put("fileStyleId", fileStyleId);
-            Integer groupId = userRepositoty.queryGroupIdByName(departmentName);
-            String results = getGroupArray(groupId);
-            params.put("groupId", results);
+            if(!departmentName.equals("")) {
+                Integer groupId = userRepositoty.queryGroupIdByName(departmentName);
+                String results = getGroupArray(groupId);
+                params.put("groupId", results);
+            }
             Integer result = 0;
             List<Map> searchmap = fileMapper.showUserIfLookFile(params);
             result += searchmap.size();
