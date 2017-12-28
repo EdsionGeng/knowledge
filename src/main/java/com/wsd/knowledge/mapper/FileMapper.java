@@ -102,7 +102,7 @@ public interface FileMapper {
      * @param id
      * @return
      */
-     @Select("select f.id,f.departmentName,f.fileStyle,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime,f.fileContent  from  FileDetail f where f.id=#{id} ")
+     @Select("select f.id,f.departmentName,f.fileStyle,f.fileStyleId,f.fileSpecies,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime,f.fileContent  from  FileDetail f where f.id=#{id} ")
      Map showSingleFile(@Param("id") Integer id);
 
     /**
@@ -175,12 +175,12 @@ public interface FileMapper {
 //    @Select("select distinct f.id, f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f where  f.fileDisplay = 1 and f.fileSpecies=1  and f.userGroupId in (#{result}) order by f.addFileTime desc  ")
 //    List<FileDetail> showGroupIdFile(@Param("result")String  result);
 
-    /**
-     * 展示部门公司性质的文件
-     * @return
-     */
-    @Select("select count(f.id) from FileDetail f  where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId in (#{result})")
-    Integer countGroupIdFile(@Param("result")String  result,@Param("userId")Integer userId);
+//    /**
+//     * 展示部门公司性质的文件
+//     * @return
+//     */
+//    @Select("select count(f.id) from FileDetail f  where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId in (#{result})")
+//    Integer countGroupIdFile(@Param("result")String  result,@Param("userId")Integer userId);
 
     @SelectProvider(type = FileQuery.class, method = "showUserIfLookFile")
     List<Map> showUserIfLookFile(Map<String, Object> map);

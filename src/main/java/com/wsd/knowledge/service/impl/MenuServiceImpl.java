@@ -37,7 +37,7 @@ public class MenuServiceImpl implements MenuService {
           //  request.getSession().setAttribute("menus", list);
             return new JsonResult(0, list, "菜单列表", 0);
         }
-        return new JsonResult(0, null, "该用户没有任何访问权限", 0);
+        return new JsonResult(2, 0, "该用户没有任何访问权限", 0);
     }
 
     public List<Menu> build(List<Menu> menus) {
