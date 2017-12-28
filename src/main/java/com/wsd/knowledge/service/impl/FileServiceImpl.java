@@ -394,11 +394,14 @@ public class FileServiceImpl implements FileService {
         }
         RdPage page = new RdPage();
         List<Map> map = new ArrayList<>();
-        if (departmentName.equals("")) {
+        if (departmentName=="null") {
             departmentName = "";
         }
+        if (fileStyleId=="null") {
+            fileStyleId = "";
+        }
         String ss = getGroupArray(userGroupId);
-        if (departmentName.equals("") && fileStyleId .equals("")) {
+        if (departmentName.equals("") && fileStyleId.equals("") ) {
             Integer sum = 0;
             map = fileMapper.showUserLookFile(userId, ss, sortType, startSize, pageSize);
             sum = fileMapper.countUserLookFile(userId, ss);
