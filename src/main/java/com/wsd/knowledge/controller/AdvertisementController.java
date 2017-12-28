@@ -112,9 +112,10 @@ public class AdvertisementController {
     public JsonResult showUserRecCommon( @RequestBody String object) {
         jsonObject = JSONObject.parseObject(object);
         Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
+        String sortType=String.valueOf(jsonObject.get("sortType"));
         Integer current= Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
-        return myRecAdService.showAllRecAd(current, pageSize, userId);
+        return myRecAdService.showAllRecAd(current, pageSize, userId,sortType);
     }
 
     /**

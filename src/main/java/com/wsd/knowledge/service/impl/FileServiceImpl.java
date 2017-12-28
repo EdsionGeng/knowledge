@@ -135,7 +135,7 @@ public class FileServiceImpl implements FileService {
         //生成实体类
         FileDetail fileDetail = new FileDetail(systemUser.getUsergroup(), systemUser.getUsername(), userId, fileStyleId, fileNo, title
                 , fileKind.getFileKindName(), content, fileurl, photourl, 0, 0, 0, filesize, 1,
-                describe, new DateUtil().getSystemTime(), fileSpecies, systemUser.getUserGroupId());
+                describe, new DateUtil().getTime(), fileSpecies, systemUser.getUserGroupId());
         String re = new DateUtil().cacheExist(fileNo);
         if (re.equals("full")) {
             return new JsonResult(2, 0, "并发问题", 0);
@@ -394,11 +394,11 @@ public class FileServiceImpl implements FileService {
         }
         RdPage page = new RdPage();
         List<Map> map = new ArrayList<>();
-        if (departmentName == "null") {
+        if (departmentName.equals("")) {
             departmentName = "";
         }
         String ss = getGroupArray(userGroupId);
-        if (departmentName.equals("") && fileStyleId == "null") {
+        if (departmentName.equals("") && fileStyleId .equals("")) {
             Integer sum = 0;
             map = fileMapper.showUserLookFile(userId, ss, sortType, startSize, pageSize);
             sum = fileMapper.countUserLookFile(userId, ss);

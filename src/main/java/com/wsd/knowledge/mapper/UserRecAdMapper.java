@@ -31,8 +31,9 @@ public interface UserRecAdMapper {
      * @param limit
      * @return
      */
-    @Select("select  u.commonId, c.adContent ad ,c.adTitle at,c.addUser addUser,u.recAdtime re,u.commonId ,u.ifRead ifRead from UserRecAdvertisement u left join CommonAdvertisement c on u.commonId=c.id  where u.userId=#{userId} order by u.recAdtime DESC limit #{startSize},#{limit}")
-    List<Map> showUserRecAd(@Param("userId") int userId,@Param("startSize")int startSize,@Param("limit")int limit);
+    @Select("select  u.commonId, c.adContent ad ,c.adTitle at,c.addUser addUser,u.recAdtime re,u.commonId ,u.ifRead ifRead from UserRecAdvertisement u left join CommonAdvertisement c on u.commonId=c.id  where u.userId=#{userId} order by u.recAdtime ${sortType} limit #{startSize},#{limit}")
+    List<Map> showUserRecAd(@Param("userId") int userId,@Param("sortType")String sortType,@Param("startSize")int startSize,@Param("limit")int limit);
+
 
     /**
      * 统计总数量

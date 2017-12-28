@@ -39,12 +39,15 @@ public class MyRecAdServiceImpl implements MyRecAdService {
      * @return
      */
     @Override
-    public JsonResult showAllRecAd(Integer current, Integer pageSize, Integer userId) {
+    public JsonResult showAllRecAd(Integer current, Integer pageSize, Integer userId,String sortType) {
         if (userId == null || current == null || pageSize == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
+        if (!sortType.equals("asc") && !sortType.equals("desc")) {
+            sortType = "desc";
+        }
         int startSize = (current - 1) * pageSize;
-        List<Map> map = userRecAdMapper.showUserRecAd(userId, startSize, pageSize);
+        List<Map> map = userRecAdMapper.showUserRecAd(userId,sortType,startSize, pageSize);
 
         RdPage page = new RdPage();
         Integer sum = userRecAdMapper.countUserAdPcs(userId);

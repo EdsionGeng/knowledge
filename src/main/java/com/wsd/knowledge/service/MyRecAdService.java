@@ -18,7 +18,7 @@ public interface MyRecAdService {
      * @param userId
      * @return
      */
-    JsonResult showAllRecAd(Integer current, Integer pageSize, Integer userId);
+    JsonResult showAllRecAd(Integer current, Integer pageSize, Integer userId,String sortType);
     /**
      * 发送公告给相应的人
      *

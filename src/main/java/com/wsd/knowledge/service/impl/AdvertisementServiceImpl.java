@@ -52,7 +52,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 
         SystemUser systemUser = userRepositoty.findInfo(userId);
         CommonAdvertisement commonAdvertisement = new CommonAdvertisement(title, content, systemUser.getDepartment(), systemUser.getUsername(),
-                userId, new DateUtil().getSystemTime(), sendDepartmentName,adStyle);
+                userId, new DateUtil().getTime(), sendDepartmentName,adStyle);
         String str = new DateUtil().cacheExist(String.valueOf(userId));
         if (str.equals("full")) {
             return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
