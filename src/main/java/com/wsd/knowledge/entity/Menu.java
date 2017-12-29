@@ -8,7 +8,6 @@ import java.util.List;
 *@Date:9:10 2017/11/8
 */
 public class Menu implements Serializable{
-
     private Integer id;
     private String name;
     private String menuurl;
@@ -19,16 +18,13 @@ public class Menu implements Serializable{
     private List<Menu> menuList;
     private List<Menu> children;
     private int checked;//是否选中
-
     public Menu(){
 
     }
-
     public Menu(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
-
     public Integer getId() {
         return id;
     }

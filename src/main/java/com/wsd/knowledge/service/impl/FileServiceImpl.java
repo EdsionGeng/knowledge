@@ -434,20 +434,6 @@ public class FileServiceImpl implements FileService {
                 result += groupFileList.size();
             }
 
-//            } else {
-//                Integer resultId = userRepositoty.queryPid(userGroupId);
-//                String res = "'" + resultId + "'" + "," + "'" + userGroupId + "'";
-//                Map<String, Object> param = new HashMap<>();
-//                param.put("userId", userId);
-//                param.put("fileStyleId", fileStyleId);
-//                param.put("result", res);
-//                List<Map> groupFilelist = fileMapper.showUserLookGroupFile(param);
-//                if (groupFilelist.size() != 0) {
-//                    searchmap.addAll(groupFilelist);
-//                    result += groupFilelist.size();
-//                    //sum += fileMapper.countGroupIdFile(res, userId);
-//                }
-//            }
             List<Map> newList = new ArrayList(new HashSet(searchmap));
             List<Map> listResult = listSplit3(current, pageSize, newList);
             page.setTotal(result);
@@ -478,20 +464,12 @@ public class FileServiceImpl implements FileService {
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
         String searchContent = String.valueOf(jsonObject.get("searchContent"));
         String userGroupId = String.valueOf(jsonObject.get("userGroupId"));
-//        String departmentName = String.valueOf(jsonObject.get("departmentName"));
-//        String fileStyleId = String.valueOf(jsonObject.get("fileStyleId"));
         if (userId == null || current == null || pageSize == null || searchContent.equals("")) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
-        //   int startSize = (current - 1) * pageSize;
         RdPage rdPage = new RdPage();
         List<Map> map = fileMapper.showSearchFile1(userId, searchContent);
-//        List<Map> map1 = fileMapper.showSearchFile2(userId, searchContent);
-//        List<Map> map2 = fileMapper.showSearchFile3(userId, searchContent);
         List<Map> companyFileList = fileMapper.searchCompanyFile1(searchContent);
-//        List<Map> map4 = fileMapper.searchCompanyFile2(searchContent);
-//        List<Map> map5 = fileMapper.searchCompanyFile3(searchContent);
-        //List<Integer> groupList = userRepositoty.showPerGroupId(Integer.parseInt(userGroupId));
         String ss = getGroupArray(Integer.parseInt(userGroupId));
         List<Map> groupFileList = fileMapper.searchGroupFile1(searchContent, ss);
         if (map != null) {

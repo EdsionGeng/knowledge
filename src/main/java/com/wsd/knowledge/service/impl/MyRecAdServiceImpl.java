@@ -90,7 +90,7 @@ public class MyRecAdServiceImpl implements MyRecAdService {
             //生成实体类，进行插入语句执行
             String results = new DateUtil().cacheExist(String.valueOf(departmentId.get(i)));
             if (results.equals("full")) {
-                return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
+                return new JsonResult(2, 0, "并发出现", 0);
             }
             UserRecAdvertisement userRecAdvertisement = new UserRecAdvertisement(commonId, departmentId.get(i), 0, new DateUtil().getSystemTime());
             result = userRecAdMapper.insertUserRecAd(userRecAdvertisement);

@@ -73,13 +73,13 @@ public interface UserRepositoty {
     List<NewDepartment> queryByGroupId(@Param("id") Integer id);
 
 
-     @Select("select Uid from UserRoles where Rid=2013 ")
+    @Select("select Uid from UserRoles where Rid=2013 ")
     //@Select("select Uid from UserRoles where Rid=3031 ")
     List<Integer> queryAdmin();
 
 
-  //  @Select("select id  from UserRoles where  Uid=#{userId} and Rid=3031")
-        @Select("select id  from UserRoles where  Uid=#{userId} and Rid=2013")
+   //@Select("select id  from UserRoles where  Uid=#{userId} and Rid=3031")
+   @Select("select id  from UserRoles where  Uid=#{userId} and Rid=2013")
     Integer ifAdmin(@Param("userId") Object userId);
 //    @Select("select userGroupId from SystemUser where id=#{userId}")
 //    Integer queryGroupId(@Param("userId")Integer userId);

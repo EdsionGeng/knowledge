@@ -44,7 +44,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
      */
     @Override
     @Transactional(readOnly = false)
-    public JsonResult insertCommonAd(String title, String content, String sendDepartmentName, Integer userId,String adStyle) {
+    public  synchronized JsonResult insertCommonAd(String title, String content, String sendDepartmentName, Integer userId,String adStyle) {
         if (title .equals("") || content .equals("")|| sendDepartmentName .equals("")|| userId == null||adStyle.equals("")) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
@@ -55,7 +55,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
                 userId, new DateUtil().getTime(), sendDepartmentName,adStyle);
         String str = new DateUtil().cacheExist(String.valueOf(userId));
         if (str.equals("full")) {
-            return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
+            return new JsonResult(2, 0, "并发", 0);
         }
         if (advertisementMapper.insertAd(commonAdvertisement) != 0) {
             //发送公告给相应的人
@@ -84,7 +84,6 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             j=advertisementMapper.deleteAd(id);
             advertisementMapper.deleteRecAd(id);
         }
-
         if (j != 0) {
 
             return new JsonResult(0, 0, "操作成功", 0);
@@ -142,7 +141,6 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         if(!sortType.equals("asc")&&!sortType.equals("desc")){
             sortType="desc";
         }
-
         List<Map> map = new ArrayList<>();
         int sum = 0;
         RdPage rdPage =new RdPage();
@@ -157,8 +155,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             rdPage.setPageSize(pageSize);
         } else {
             //组合查询
-             date2=DateUtil.getAfterDate(date2,1);
-
+            date2=DateUtil.getAfterDate(date2,1);
             Map<String, Object> maps = new HashMap<>();
             maps.put("title", title);
             maps.put("date1", date1);
@@ -197,7 +194,6 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             isRead = 0;
         }
         Integer noRead = pcs - isRead;//未读数量
-
         Map<String,Object> map=new HashMap<>();
         map.put("isRead",isRead);
         map.put("noRead",noRead);
