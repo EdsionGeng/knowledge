@@ -157,9 +157,8 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             rdPage.setPageSize(pageSize);
         } else {
             //组合查询
-            String s1=date2.substring(11,16);
-             date2=date2.replace(s1,"");
-             date2=date2.concat("23:59");
+             date2=DateUtil.getAfterDate(date2,1);
+
             Map<String, Object> maps = new HashMap<>();
             maps.put("title", title);
             maps.put("date1", date1);

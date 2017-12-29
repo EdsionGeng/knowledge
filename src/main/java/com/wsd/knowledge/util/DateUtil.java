@@ -2,6 +2,7 @@ package com.wsd.knowledge.util;
 import com.wsd.knowledge.cache.Cache;
 import com.wsd.knowledge.cache.CacheManager;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 public class DateUtil {
@@ -15,7 +16,18 @@ public class DateUtil {
         String str = df.format(new Date());// new Date()为获取当前系统时间
         return str;
     }
-
+    //当前日期加上day天
+    public static String getAfterDate(String date,int day) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        try {
+            Date d=format.parse(date);
+            Date date2 = new Date(d.getTime() + day * 24 * 60 * 60 * 1000);
+            return format.format(date2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
 //    public static String getSystemSmallTime() {
 //        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
 //        String str = df.format(new Date());// new Date()为获取当前系统时间

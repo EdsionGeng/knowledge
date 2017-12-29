@@ -91,9 +91,7 @@ public class FileServiceImpl implements FileService {
             return new JsonResult(0, map, "查询结果", page);
         } else {
             Map<String, Object> map = new HashMap<>();
-            String s1 = endDate.substring(11, 16);
-            endDate = endDate.replace(s1, "");
-            endDate = endDate.concat("23:59");
+            endDate = DateUtil.getAfterDate(endDate, 1);
             map.put("fileStyleId", fileStyleId);
             map.put("title", title);
             map.put("startDate", startDate);
@@ -113,7 +111,6 @@ public class FileServiceImpl implements FileService {
             page.setPageSize(pageSize);
             return new JsonResult(0, maps, "查询结果", page);
         }
-
     }
 
     /**
@@ -394,14 +391,14 @@ public class FileServiceImpl implements FileService {
         }
         RdPage page = new RdPage();
         List<Map> map = new ArrayList<>();
-        if (departmentName=="null") {
+        if (departmentName == "null") {
             departmentName = "";
         }
-        if (fileStyleId=="null") {
+        if (fileStyleId == "null") {
             fileStyleId = "";
         }
         String ss = getGroupArray(userGroupId);
-        if (departmentName.equals("") && fileStyleId.equals("") ) {
+        if (departmentName.equals("") && fileStyleId.equals("")) {
             Integer sum = 0;
             map = fileMapper.showUserLookFile(userId, ss, sortType, startSize, pageSize);
             sum = fileMapper.countUserLookFile(userId, ss);
