@@ -433,7 +433,6 @@ public class FileServiceImpl implements FileService {
                 searchmap.addAll(groupFileList);
                 result += groupFileList.size();
             }
-
             List<Map> newList = new ArrayList(new HashSet(searchmap));
             List<Map> listResult = listSplit3(current, pageSize, newList);
             page.setTotal(result);
