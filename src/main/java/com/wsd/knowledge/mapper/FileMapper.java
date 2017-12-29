@@ -204,7 +204,7 @@ public interface FileMapper {
      * @return
      */
     @Select("select distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileDisplay=1 and " +
-            " u.userId=#{userId} and   f.fileContent like concat('%',#{searchContent},'%') or  f.title like concat('%',#{searchContent},'%')   order by f.addFileTime desc")
+            " u.userId=#{userId} and  ( f.fileContent like concat('%',#{searchContent},'%') or  f.title like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%'))  order by f.addFileTime desc")
     List<Map> showSearchFile1(@Param("userId") Integer userId, @Param("searchContent") String searchContent);
 
 
@@ -212,7 +212,7 @@ public interface FileMapper {
      * 搜索所有公司性质的文件
      * @return
      */
-    @Select("select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f    where f.fileSpecies=2 and f.fileDisplay = 1 and f.title like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%') order by f.addFileTime desc ")
+    @Select("select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f    where f.fileSpecies=2 and f.fileDisplay = 1 and (f.title like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%')) order by f.addFileTime desc ")
     List<Map> searchCompanyFile1(@Param("searchContent")String searchContent );
 
 
@@ -220,7 +220,7 @@ public interface FileMapper {
      * 展示部门性质的文件
      * @return
      */
-    @Select("select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f    where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId  in (#{result}) and f.title like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%')  order by f.addFileTime desc ")
+    @Select("select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId  in (#{result}) and (f.title like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%'))  order by f.addFileTime desc ")
     List<Map> searchGroupFile1(@Param("searchContent")String searchContent,@Param("result")String result);
     /**
 
