@@ -128,7 +128,7 @@ public interface OperationMapper {
      * @param limit
      * @return
      */
-    @Select("select f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where f.fileDisplay= 1 and userId=#{userId} order by f.addFileTime ${sortType} limit #{startSize},#{limit}")
+    @Select("select f.id,f.departmentName,f.username,f.fileStyle,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where f.fileDisplay= 1 and userId=#{userId} order by f.addFileTime ${sortType} limit #{startSize},#{limit}")
     List<Map> showUserUpFile(@Param("userId") Integer userId,@Param("sortType")String sortType, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
 
 

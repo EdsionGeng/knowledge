@@ -78,7 +78,7 @@ public interface UserRepositoty {
     List<Integer> queryAdmin();
 
 
-  // @Select("select id  from UserRoles where  Uid=#{userId} and Rid=3031")
+   //@Select("select id  from UserRoles where  Uid=#{userId} and Rid=3031")
    @Select("select id  from UserRoles where  Uid=#{userId} and Rid=2013")
     Integer ifAdmin(@Param("userId") Object userId);
 //    @Select("select userGroupId from SystemUser where id=#{userId}")

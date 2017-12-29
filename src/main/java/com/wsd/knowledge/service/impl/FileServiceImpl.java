@@ -403,6 +403,7 @@ public class FileServiceImpl implements FileService {
             map = fileMapper.showUserLookFile(userId, ss, sortType, startSize, pageSize);
             sum = fileMapper.countUserLookFile(userId, ss);
             List<Map> newList = new ArrayList(new HashSet(map));
+            System.out.println(newList);
             page.setTotal(sum);
             page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
             page.setCurrent(current);
