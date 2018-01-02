@@ -140,8 +140,10 @@ public interface FileMapper {
      * @param userId
      * @return
      */
-    @Select("select count(f.id) from  ((select f.id from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileSpecies=0 and f.fileDisplay=1 and  u.userId=#{userId})UNION \n" +
-            " (select f.id from FileDetail f    where f.fileSpecies=2 and f.fileDisplay = 1) UNION  (select   f.id from FileDetail f where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId in(#{result})))  as f ")
+    @Select("select count(f.id) from  ((select  f.id from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileSpecies=0 and f.fileDisplay=1 and  u.userId=#{userId})UNION \n" +
+            " (select  f.id from FileDetail f    where f.fileSpecies=2 and f.fileDisplay = 1) " +
+            "UNION  (select   f.id from FileDetail f where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId in (#{result}))" +
+            "UNION  (select   f.id from FileDetail f where  f.fileDisplay = 1 and f.userId=#{userId}))  as f ")
     Integer countUserLookFile(@Param("userId") Integer userId,@Param("result")String result);
 
     /**
