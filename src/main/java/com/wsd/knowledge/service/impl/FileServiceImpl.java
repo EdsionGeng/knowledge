@@ -10,15 +10,13 @@ import com.wsd.knowledge.mapper1.UserRepositoty;
 import com.wsd.knowledge.service.FileService;
 import com.wsd.knowledge.util.DateUtil;
 import com.wsd.knowledge.util.JsonResult;
-import com.wsd.knowledge.util.StringUtils;
-import io.swagger.models.auth.In;
-import org.codehaus.groovy.runtime.dgmimpl.arrays.IntegerArrayGetAtMetaMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.io.UnsupportedEncodingException;
 import java.util.*;
+
+import org.apache.commons.codec.binary.Base64;
 
 /**
  * @Author EdsionGeng
@@ -39,6 +37,10 @@ public class FileServiceImpl implements FileService {
     private OperationMapper operationMapper;
     @Autowired
     private UserPermissionMapper userPermissionMapper;
+
+//
+//    private static final Base64 BASE64 = new Base64();
+//    private static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
 
     /**
      * 组合查询和全部查询
@@ -125,11 +127,12 @@ public class FileServiceImpl implements FileService {
      */
     @Override
     @Transactional(readOnly = false)
-    public  synchronized  JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize, String describe, Integer fileSpecies) {
+    public synchronized JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize, String describe, Integer fileSpecies) {
         String fileNo = String.valueOf(new Date().getTime()).concat("888888");
         SystemUser systemUser = userRepositoty.findInfo(userId);
         FileKind fileKind = fileKindMapper.selectFileKind(fileStyleId);
         //生成实体类
+
         FileDetail fileDetail = new FileDetail(systemUser.getUsergroup(), systemUser.getUsername(), userId, fileStyleId, fileNo, title
                 , fileKind.getFileKindName(), content, fileurl, photourl, 0, 0, 0, filesize, 1,
                 describe, new DateUtil().getTime(), fileSpecies, systemUser.getUserGroupId());
@@ -260,6 +263,7 @@ public class FileServiceImpl implements FileService {
         if (id == null || content.equals("") || fileStyleId == null || userId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
+
         Integer result = fileMapper.updateFileContentUrl(id, content, fileurl, fileStyleId, fileSize, photourl, describle, fileStyleName, fileSpecies);
         if (result != 0) {
             SystemUser systemUser = userRepositoty.findInfo(userId);
@@ -280,107 +284,6 @@ public class FileServiceImpl implements FileService {
         return new JsonResult(2, 0, "操作失败", 0);
     }
 
-    //    public JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize, String fileStyleId, Integer groupId, Integer userGroupId, String sortType) {
-//        if (current == null || pageSize == null || userId == null) {
-//            return new JsonResult(2, 0, "参数为空", 0);
-//        }
-//        int startSize = (current - 1) * pageSize;
-//        if (!sortType.equals("asc") && !sortType.equals("desc")) {
-//            sortType = "desc";
-//        }
-//        RdPage page = new RdPage();
-//        List<Map> map = new ArrayList<>();
-//        Integer sum = 0;
-//        List<Integer> groupList = userRepositoty.showPerGroupId(userGroupId);
-//        if (groupId == null && fileStyleId == "null") {
-//            String ss = "";
-//            if (groupList.size() != 0) {
-//                for (int i = 0, len = groupList.size(); i < len; i++) {
-//                    if (i > 0) {
-//                        ss += ",";
-//                    }
-//                    ss += "'" + groupList.get(i) + "'";
-//                }
-//                map = fileMapper.showUserLookFile(userId, ss, sortType, startSize, pageSize);
-//                sum = fileMapper.countUserLookFile(userId, ss);
-//            } else {
-//                Integer result = userRepositoty.queryPid(userGroupId);
-//                String res = "'" + result + "'" + "," + "'" + userGroupId + "'";
-//                map = fileMapper.showUserLookFile(userId, res, sortType, startSize, pageSize);
-//                sum = fileMapper.countUserLookFile(userId, res);
-//            }
-//            List<Map> newList = new ArrayList(new HashSet(map));
-//            page.setTotal(sum);
-//            page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
-//            page.setCurrent(current);
-//            page.setPageSize(pageSize);
-//            return new JsonResult(0, newList, "查询结果", page);
-//        } else {
-//            Map<String, Object> params = new HashMap<>();
-//            params.put("userId", userId);
-//            if (fileStyleId.equals("0")) {
-//                fileStyleId = "";
-//            }
-//            params.put("fileStyleId", fileStyleId);
-//            List<Integer> groupList = userRepositoty.showPerGroupId(userGroupId);
-//            List<Integer> group = userRepositoty.showPerGroupId(groupId);
-//            String concatUserGroupId = "";
-//            if (group.size() != 0) {
-//                for (int i = 0, len = groupList.size(); i < len; i++) {
-//                    if (i > 0) {
-//                        concatUserGroupId += ",";
-//                    }
-//                    concatUserGroupId += "'" + groupList.get(i) + "'";
-//                }
-//                params.put("concatGroupId", concatUserGroupId);
-//                Integer result = 0;
-//                List<Map> searchmap = fileMapper.showUserIfLookFile(params);
-//                result += searchmap.size();
-//                if (searchmap != null) {
-//                    List<Map> mapa = fileMapper.showUserLookCompanyFile(params);
-//                    searchmap.addAll(mapa);
-//                    result += mapa.size();
-//                    String ss = "";
-//                    if (groupList.size() != 0) {
-//                        for (int i = 0, len = groupList.size(); i < len; i++) {
-//                            if (i > 0) {
-//                                ss += ",";
-//                            }
-//                            ss += "'" + groupList.get(i) + "'";
-//                        }
-//                        Map<String, Object> param = new HashMap<>();
-//                        param.put("userId", userId);
-//                        param.put("fileStyleId", fileStyleId);
-//                        param.put("result", ss);
-//                        List<Map> groupFileList = fileMapper.showUserLookGroupFile(param);
-//                        searchmap.addAll(groupFileList);
-//                        result += groupFileList.size();
-//                    } else {
-//                        Integer resultId = userRepositoty.queryPid(userGroupId);
-//                        String res = "'" + resultId + "'" + "," + "'" + userGroupId + "'";
-//                        Map<String, Object> param = new HashMap<>();
-//                        param.put("userId", userId);
-//                        param.put("fileStyleId", fileStyleId);
-//                        param.put("result", res);
-//                        List<Map> groupFilelist = fileMapper.showUserLookGroupFile(param);
-//                        if (groupFilelist.size() != 0) {
-//                            searchmap.addAll(groupFilelist);
-//                            result += groupFilelist.size();
-//                            //sum += fileMapper.countGroupIdFile(res, userId);
-//                        }
-//                    }
-//                    List<Map> newList = new ArrayList(new HashSet(searchmap));
-//                    List<Map> listResult = listSplit3(current, pageSize, newList);
-//                    page.setTotal(result);
-//                    page.setPages(result % pageSize == 0 ? result / pageSize : result / pageSize + 1);
-//                    page.setCurrent(current);
-//                    page.setPageSize(pageSize);
-//                    return new JsonResult(0, listResult, "查询结果", page);
-//                }
-//            }
-//          return new JsonResult(2, 0, "查无此结果", 0);
-//        }
-//    }
     public JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize, String fileStyleId, String departmentName, Integer userGroupId, String sortType) {
         if (current == null || pageSize == null || userId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
@@ -403,7 +306,7 @@ public class FileServiceImpl implements FileService {
             map = fileMapper.showUserLookFile(userId, ss, sortType, startSize, pageSize);
             sum = fileMapper.countUserLookFile(userId, ss);
             List<Map> newList = new ArrayList(new HashSet(map));
-            System.out.println(newList);
+//            System.out.println(newList);
             page.setTotal(sum);
             page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
             page.setCurrent(current);
@@ -648,4 +551,18 @@ public class FileServiceImpl implements FileService {
         }
         return ss;
     }
+
+//    public static String encode(String source) {
+//        if (!isEmpty(source)) {new Base64();
+//
+//            byte[] bytes = BASE64.encode(source.getBytes(DEFAULT_CHARSET));
+//            return new String(bytes, DEFAULT_CHARSET);
+//        }
+//        return source;
+//    }
+//
+//
+//    private static boolean isEmpty(String str) {
+//        return str == null || str.length() == 0;
+//    }
 }
