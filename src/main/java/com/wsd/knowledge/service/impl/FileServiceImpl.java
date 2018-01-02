@@ -305,13 +305,13 @@ public class FileServiceImpl implements FileService {
             Integer sum = 0;
             map = fileMapper.showUserLookFile(userId, ss, sortType, startSize, pageSize);
             sum = fileMapper.countUserLookFile(userId, ss);
-            List<Map> newList = new ArrayList(new HashSet(map));
+//            List<Map> newList = new ArrayList(new HashSet(map));
 //            System.out.println(newList);
             page.setTotal(sum);
             page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
             page.setCurrent(current);
             page.setPageSize(pageSize);
-            return new JsonResult(0, newList, "查询结果", page);
+            return new JsonResult(0, map, "查询结果", page);
         } else {
             Map<String, Object> params = new HashMap<>();
             params.put("userId", userId);
