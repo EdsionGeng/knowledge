@@ -263,7 +263,6 @@ public class FileServiceImpl implements FileService {
         if (id == null || content.equals("") || fileStyleId == null || userId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
-
         Integer result = fileMapper.updateFileContentUrl(id, content, fileurl, fileStyleId, fileSize, photourl, describle, fileStyleName, fileSpecies);
         if (result != 0) {
             SystemUser systemUser = userRepositoty.findInfo(userId);

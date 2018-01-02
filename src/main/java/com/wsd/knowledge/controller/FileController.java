@@ -162,6 +162,7 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "fileStyleName", value = "文档类型名称"),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "photourl", value = "封面url"),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "describle", value = "附件描述"),
+            @ApiImplicitParam(paramType = "query", dataType = "", name = "fileSpecies", value = "文件所属类型"),
     })
     @RequestMapping(value = "updateFile.htmls", method = RequestMethod.POST)
     public JsonResult updateFileDetail(@RequestBody String object) {

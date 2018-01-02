@@ -112,10 +112,10 @@ public class OperationServiceImpl implements OperationService {
         if (dayLookPcs == null) {
             dayLookPcs = 0;
         }
-        Integer dayDownPcs = operationMapper.countDataDownloadPcs(startTime, endTime);
-        if (dayDownPcs == null) {
-            dayDownPcs = 0;
-        }
+//        Integer dayDownPcs = operationMapper.countDataDownloadPcs(startTime, endTime);
+//        if (dayDownPcs == null) {
+//            dayDownPcs = 0;
+//        }
         Integer dayDeletePcs = operationMapper.countDataDeletePcs(startTime, endTime);
         if (dayDeletePcs == null) {
             dayDeletePcs = 0;
@@ -129,7 +129,7 @@ public class OperationServiceImpl implements OperationService {
             dayAddPcs = 0;
         }
         map.put("lookpcs", dayLookPcs);
-        map.put("downpcs", dayDownPcs);
+  //   map.put("downpcs", dayDownPcs);
         map.put("deletepcs", dayDeletePcs);
         map.put("updatepcs", dayUpdatePcs);
         map.put("addpcs", dayAddPcs);
@@ -152,10 +152,10 @@ public class OperationServiceImpl implements OperationService {
         if (dayLookPcs == null) {
             dayLookPcs = 0;
         }
-        Integer dayDownPcs = operationMapper.countWeekDownloadPcs(startTime, endTime);
-        if (dayDownPcs == null) {
-            dayDownPcs = 0;
-        }
+//        Integer dayDownPcs = operationMapper.countWeekDownloadPcs(startTime, endTime);
+//        if (dayDownPcs == null) {
+//            dayDownPcs = 0;
+//        }
         Integer dayDeletePcs = operationMapper.countWeekDeletePcs(startTime, endTime);
         if (dayDeletePcs == null) {
             dayDeletePcs = 0;
@@ -169,7 +169,7 @@ public class OperationServiceImpl implements OperationService {
             dayAddPcs = 0;
         }
         map.put("lookpcs", dayLookPcs);
-        map.put("downpcs", dayDownPcs);
+       // map.put("downpcs", dayDownPcs);
         map.put("deletepcs", dayDeletePcs);
         map.put("updatepcs", dayUpdatePcs);
         map.put("addpcs", dayAddPcs);
@@ -193,10 +193,10 @@ public class OperationServiceImpl implements OperationService {
         if (dayLookPcs == null) {
             dayLookPcs = 0;
         }
-        Integer dayDownPcs = operationMapper.countMonthDownloadPcs(startTime, endTime);
-        if (dayDownPcs == null) {
-            dayDownPcs = 0;
-        }
+//        Integer dayDownPcs = operationMapper.countMonthDownloadPcs(startTime, endTime);
+//        if (dayDownPcs == null) {
+//            dayDownPcs = 0;
+//        }
         Integer dayDeletePcs = operationMapper.countMonthDeletePcs(startTime, endTime);
         if (dayDeletePcs == null) {
             dayDeletePcs = 0;
@@ -210,7 +210,7 @@ public class OperationServiceImpl implements OperationService {
             dayAddPcs = 0;
         }
         map.put("lookpcs", dayLookPcs);
-        map.put("downpcs", dayDownPcs);
+        //map.put("downpcs", dayDownPcs);
         map.put("deletepcs", dayDeletePcs);
         map.put("updatepcs", dayUpdatePcs);
         map.put("addpcs", dayAddPcs);

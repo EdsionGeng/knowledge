@@ -18,7 +18,7 @@ public class DateUtil {
     }
     //当前日期加上day天
     public static String getAfterDate(String date,int day) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             Date d=format.parse(date);
             Date date2 = new Date(d.getTime() + day * 24 * 60 * 60 * 1000);
@@ -52,7 +52,7 @@ public class DateUtil {
     public static Map<String, String> mondayToSunday() {
         Date now = new Date();
         Date time = new Date(now.getYear(), now.getMonth(), now.getDate());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // 设置时间格式
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // 设置时间格式
         Calendar cal = Calendar.getInstance();
         cal.setTime(time);
         // 判断要计算的日期是否是周日，如果是则减一天计算周六的，否则会出问题，计算到下一周去了
@@ -81,7 +81,7 @@ public class DateUtil {
         String imptimeEnd = sdf.format(cal.getTime());
         Date sundayDate = cal.getTime();
 //      System.out.println("所在周星期日的日期：" + imptimeEnd);
-        DateFormat datetimeDf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        DateFormat datetimeDf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //      System.out.println("星期一的开始："+datetimeDf.format(mondayDate));
 //      System.out.println("星期天的结束："+datetimeDf.format(sundayDate));
         Map<String, String> map = new HashMap<>();
@@ -96,7 +96,7 @@ public class DateUtil {
      * @return
      */
     public static String getMonthFirstDay() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm ");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
         Calendar c = Calendar.getInstance();
         c.add(Calendar.MONTH, 0);
         c.set(Calendar.DAY_OF_MONTH, 1);//设置为1号,当前日期既为本月第一天
@@ -110,7 +110,7 @@ public class DateUtil {
      * @return
      */
     public static String getMonthLastDay() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm ");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
         Calendar ca = Calendar.getInstance();
         ca.set(Calendar.DAY_OF_MONTH, ca.getActualMaximum(Calendar.DAY_OF_MONTH));
         String last = format.format(ca.getTime());
@@ -119,20 +119,22 @@ public class DateUtil {
     }
 
     public static String DayStartTime() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm ");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
         Calendar c1 = new GregorianCalendar();
         c1.set(Calendar.HOUR_OF_DAY, 0);
         c1.set(Calendar.MINUTE, 0);
+        c1.set(Calendar.SECOND, 0);
 
         String str1 = format.format(c1.getTime());
         return str1;
     }
 
     public static String DayEndTime() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm ");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
         Calendar c2 = new GregorianCalendar();
         c2.set(Calendar.HOUR_OF_DAY, 23);
         c2.set(Calendar.MINUTE, 59);
+        c2.set(Calendar.SECOND, 59);
         String str2 = format.format(c2.getTime());
         return str2;
     }
@@ -152,7 +154,12 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-
+        System.out.println(DateUtil.DayStartTime());
+        System.out.println(DateUtil.DayEndTime());
+        System.out.println(DateUtil.getMonthFirstDay());
+        System.out.println(DateUtil.getMonthLastDay());
+        System.out.println(DateUtil.mondayToSunday().get("beginDate"));
+        System.out.println(DateUtil.mondayToSunday().get("endDate"));
     }
 
 }

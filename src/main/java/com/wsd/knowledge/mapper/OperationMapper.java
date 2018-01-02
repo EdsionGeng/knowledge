@@ -128,7 +128,7 @@ public interface OperationMapper {
      * @param limit
      * @return
      */
-    @Select("select f.id,f.departmentName,f.username,f.fileStyle,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where f.fileDisplay= 1 and userId=#{userId} order by f.addFileTime ${sortType} limit #{startSize},#{limit}")
+    @Select("select f.id,f.departmentName,f.username,f.fileStyle,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where f.fileDisplay= 1 and f.userId=#{userId} order by f.addFileTime ${sortType} limit #{startSize},#{limit}")
     List<Map> showUserUpFile(@Param("userId") Integer userId,@Param("sortType")String sortType, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
 
 
@@ -146,17 +146,17 @@ public interface OperationMapper {
      * @param endTime
      * @return
      */
-    @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=4")
+    @Select("select count(id) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=4")
     Integer countDataLookPcs(@Param("startTime")String startTime,@Param("endTime")String endTime);
 
-    /**
-     * 查询当日下载次数
-     * @param startTime
-     * @param endTime
-     * @return
-     */
-    @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=5")
-    Integer countDataDownloadPcs(@Param("startTime")String startTime,@Param("endTime")String endTime);
+//    /**
+//     * 查询当日下载次数
+//     * @param startTime
+//     * @param endTime
+//     * @return
+//     */
+//    @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=5")
+//    Integer countDataDownloadPcs(@Param("startTime")String startTime,@Param("endTime")String endTime);
 
 
     /**
@@ -196,14 +196,14 @@ public interface OperationMapper {
     @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=4")
     Integer countWeekLookPcs(@Param("startTime")String startTime,@Param("endTime")String endTime);
 
-    /**
-     * 查询本周下载次数
-     * @param startTime
-     * @param endTime
-     * @return
-     */
-    @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=5")
-    Integer countWeekDownloadPcs(@Param("startTime")String startTime,@Param("endTime")String endTime);
+//    /**
+//     * 查询本周下载次数
+//     * @param startTime
+//     * @param endTime
+//     * @return
+//     */
+//    @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=5")
+//    Integer countWeekDownloadPcs(@Param("startTime")String startTime,@Param("endTime")String endTime);
 
 
     /**
@@ -244,14 +244,14 @@ public interface OperationMapper {
     @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=4")
     Integer countMonthLookPcs(@Param("startTime")String startTime,@Param("endTime")String endTime);
 
-    /**
-     * 查询本月下载次数
-     * @param startTime
-     * @param endTime
-     * @return
-     */
-    @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=5")
-    Integer countMonthDownloadPcs(@Param("startTime")String startTime,@Param("endTime")String endTime);
+//    /**
+//     * 查询本月下载次数
+//     * @param startTime
+//     * @param endTime
+//     * @return
+//     */
+//    @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=5")
+//    Integer countMonthDownloadPcs(@Param("startTime")String startTime,@Param("endTime")String endTime);
 
 
     /**
