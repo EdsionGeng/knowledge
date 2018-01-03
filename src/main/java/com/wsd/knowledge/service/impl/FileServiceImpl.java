@@ -13,6 +13,7 @@ import com.wsd.knowledge.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
@@ -127,7 +128,7 @@ public class FileServiceImpl implements FileService {
      */
     @Override
     @Transactional(readOnly = false)
-    public synchronized JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize, String describe, Integer fileSpecies) {
+    public synchronized JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize, String describe, Integer fileSpecies, Integer companyId) {
         String fileNo = String.valueOf(new Date().getTime()).concat("888888");
         SystemUser systemUser = userRepositoty.findInfo(userId);
         FileKind fileKind = fileKindMapper.selectFileKind(fileStyleId);
@@ -135,7 +136,7 @@ public class FileServiceImpl implements FileService {
 
         FileDetail fileDetail = new FileDetail(systemUser.getUsergroup(), systemUser.getUsername(), userId, fileStyleId, fileNo, title
                 , fileKind.getFileKindName(), content, fileurl, photourl, 0, 0, 0, filesize, 1,
-                describe, new DateUtil().getTime(), fileSpecies, systemUser.getUserGroupId());
+                describe, new DateUtil().getTime(), fileSpecies, systemUser.getUserGroupId(), companyId);
         String re = new DateUtil().cacheExist(fileNo);
         if (re.equals("full")) {
             return new JsonResult(2, 0, "并发问题", 0);
@@ -361,7 +362,10 @@ public class FileServiceImpl implements FileService {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         JSONObject jsonObject = JSONObject.parseObject(object);
-        Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
+        String userId = String.valueOf(jsonObject.get("userId"));
+        if (userId.equals("null")) {
+            return new JsonResult(2, 0, "请登陆", 0);
+        }
         Integer current = Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
         String searchContent = String.valueOf(jsonObject.get("searchContent"));
@@ -370,7 +374,7 @@ public class FileServiceImpl implements FileService {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         RdPage rdPage = new RdPage();
-        List<Map> map = fileMapper.showSearchFile1(userId, searchContent);
+        List<Map> map = fileMapper.showSearchFile1(Integer.parseInt(userId), searchContent);
         List<Map> companyFileList = fileMapper.searchCompanyFile1(searchContent);
         String ss = getGroupArray(Integer.parseInt(userGroupId));
         List<Map> groupFileList = fileMapper.searchGroupFile1(searchContent, ss);
@@ -387,7 +391,6 @@ public class FileServiceImpl implements FileService {
             return new JsonResult(0, pageMap, "查询结果", rdPage);
         }
         return new JsonResult(2, 0, "查无结果", 0);
-
     }
 
     /**
@@ -403,13 +406,16 @@ public class FileServiceImpl implements FileService {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         JSONObject jsonObject = JSONObject.parseObject(object);
-        Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
+        String userId = String.valueOf(jsonObject.get("userId"));
+        if (userId.equals("null")) {
+            return new JsonResult(2, 0, "请登陆", 0);
+        }
         Integer fileStyleId = Integer.parseInt(String.valueOf(jsonObject.get("fileStyleId")));
         String fileIds = String.valueOf(jsonObject.get("fileIds"));
         if (userId == null || fileStyleId == null || fileIds.equals("")) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
-        SystemUser systemUser = userRepositoty.findInfo(userId);
+        SystemUser systemUser = userRepositoty.findInfo(Integer.parseInt(userId));
         FileKind fileKind = fileKindMapper.selectFileKind(fileStyleId);
         Integer result = null;
         for (String id : fileIds.split(",")) {
@@ -418,11 +424,11 @@ public class FileServiceImpl implements FileService {
 //                return new JsonResult(2, 0, "并发情况", 0);
 //            }
             result = fileMapper.updateFileStyle(Integer.parseInt(id), fileStyleId, fileKind.getFileKindName());
-            String str = new DateUtil().cacheExist(String.valueOf(userId));
+            String str = new DateUtil().cacheExist(id);
             if (str.equals("full")) {
                 return new JsonResult(2, 0, "出现并发", 0);
             }
-            OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, Integer.parseInt(id), 3, new DateUtil().getTime());
+            OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), Integer.parseInt(userId), Integer.parseInt(id), 3, new DateUtil().getTime());
             operationMapper.insertOperationLog(operationLog);
         }
         if (result != 0) {
@@ -465,11 +471,14 @@ public class FileServiceImpl implements FileService {
         }
         JSONObject jsonObject = JSONObject.parseObject(object);
         String fileId = String.valueOf(jsonObject.get("fileId"));
-        Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
+        String  userId =String.valueOf( jsonObject.get("userId"));
+        if (userId.equals("null")) {
+            return new JsonResult(2, 0, "请登陆", 0);
+        }
         Integer result = fileMapper.updateFileShow(fileId);
         if (result != 0) {
-            SystemUser systemUser = userRepositoty.findInfo(userId);
-            OperationLog operationLog = new OperationLog(systemUser.getUsergroup(), systemUser.getUsername(), userId, Integer.parseInt(fileId), 2, new DateUtil().getTime());
+            SystemUser systemUser = userRepositoty.findInfo(Integer.parseInt(userId));
+            OperationLog operationLog = new OperationLog(systemUser.getUsergroup(), systemUser.getUsername(), Integer.parseInt(userId), Integer.parseInt(fileId), 2, new DateUtil().getTime());
             String str = new DateUtil().cacheExist(String.valueOf(userId));
             if (str.equals("full")) {
                 return new JsonResult(2, 0, "出现并发", 0);
@@ -501,7 +510,6 @@ public class FileServiceImpl implements FileService {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
         if (map != null) {
             return new JsonResult(0, map, "查询结果", 0);
         }

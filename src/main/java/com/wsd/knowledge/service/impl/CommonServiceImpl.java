@@ -147,7 +147,7 @@ public class CommonServiceImpl implements CommonService {
             if (StringUtils.equals(pid, treeNode.getId())) {
                 treeNode.setChecked(1);
             }
-            if (StringUtils.equals("3", treeNode.getId())) {
+            if (StringUtils.equals("1", treeNode.getId())) {
                 trees.add(treeNode);
             }
             List<NewDepartment> treeChildrenNode = userRepositoty.queryByGroupId(Integer.parseInt(treeNode.getId()));

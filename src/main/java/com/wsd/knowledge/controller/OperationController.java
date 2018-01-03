@@ -79,11 +79,14 @@ public class OperationController {
     @RequestMapping(value = "show/allupload.htmls", method = RequestMethod.POST)
     public JsonResult showAllUpload(@RequestBody String object) {
         JSONObject jsonObject = JSONObject.parseObject(object);
-        Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
+        String  userId = String.valueOf(jsonObject.get("userId"));
+        if(userId.equals("null")){
+            return new JsonResult(2,0,"请登陆" ,0);
+        }
         String  sorType = String.valueOf(jsonObject.get("sortType"));
         Integer current = Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
-        return operationService.showUserUp(userId,sorType,current, pageSize);
+        return operationService.showUserUp(Integer.parseInt(userId),sorType,current, pageSize);
     }
 
     /**

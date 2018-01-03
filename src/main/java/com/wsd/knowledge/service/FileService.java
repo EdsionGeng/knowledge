@@ -35,10 +35,10 @@ public interface FileService {
      * @param filesize
      * @return
      */
-    JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize, String describe,Integer fileSpecies);
+    JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize, String describe,Integer fileSpecies,Integer company);
 
     /**
-     * 批量删除文件
+     * 批量删除文件Id
      *
      * @param ids
      * @return

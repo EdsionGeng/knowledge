@@ -111,11 +111,14 @@ public class AdvertisementController {
     @RequestMapping(value = "show/userrecad.htmls", method = RequestMethod.POST)
     public JsonResult showUserRecCommon( @RequestBody String object) {
         jsonObject = JSONObject.parseObject(object);
-        Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
+        String  userId =String.valueOf( jsonObject.get("userId"));
+        if (userId.equals("null")) {
+            return new JsonResult(2, 0, "请登陆", 0);
+        }
         String sortType=String.valueOf(jsonObject.get("sortType"));
         Integer current= Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
-        return myRecAdService.showAllRecAd(current, pageSize, userId,sortType);
+        return myRecAdService.showAllRecAd(current, pageSize, Integer.parseInt(userId),sortType);
     }
 
     /**

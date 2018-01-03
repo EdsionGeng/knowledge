@@ -14,6 +14,8 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -35,13 +37,8 @@ public class UserController {
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "password", value = "密码", required = true)
     })
     @RequestMapping(value = "login.htmls", method = RequestMethod.POST)
-    public JsonResult login( @RequestBody String object) {
-       // req.getSession().setMaxInactiveInterval(3600);
-//        SystemUser systemUser = userService.login(username, HashAlorgithum.getSHA256StrJava(password));
-//        if (systemUser != null) {
-//            return new JsonResult(0,0,"登录成功",0);
-//        }
-//       return new JsonResult(2,0,"登录失败",0);
+    public JsonResult login(@RequestBody String object, HttpServletRequest req ) {
+        req.getSession().setMaxInactiveInterval(3600);
         JSONObject jsonObject = JSONObject.parseObject(object);
         String username = String.valueOf(jsonObject.get("username"));
         String password = String.valueOf(jsonObject.get("password"));

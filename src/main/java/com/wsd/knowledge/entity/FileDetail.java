@@ -68,6 +68,16 @@ public class FileDetail implements Comparable<FileDetail> {
     //人员组别id
     private int userGroupId;
 
+    //各公司Id
+    private int companyId;
+
+    public int getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
+    }
 
     public String getUsername() {
         return username;
@@ -229,7 +239,7 @@ public class FileDetail implements Comparable<FileDetail> {
         this.userGroupId = userGroupId;
     }
 
-    public FileDetail(String departmentName, String username, int userId, int fileStyleId, String fileNo, String title, String fileStyle, String fileContent, String fileUrl, String photoUrl, int lookPcs, int downloadPcs, int updatePcs, String fileSize, int fileDisplay, String enclosureInfo, String addFileTime, int fileSpecies, int userGroupId) {
+    public FileDetail(String departmentName, String username, int userId, int fileStyleId, String fileNo, String title, String fileStyle, String fileContent, String fileUrl, String photoUrl, int lookPcs, int downloadPcs, int updatePcs, String fileSize, int fileDisplay, String enclosureInfo, String addFileTime, int fileSpecies, int userGroupId,int companyId) {
         this.departmentName = departmentName;
         this.username = username;
         this.fileStyleId = fileStyleId;
@@ -249,6 +259,7 @@ public class FileDetail implements Comparable<FileDetail> {
         this.addFileTime = addFileTime;
         this.fileSpecies = fileSpecies;
         this.userGroupId = userGroupId;
+        this.companyId=companyId;
     }
 //    f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime
 

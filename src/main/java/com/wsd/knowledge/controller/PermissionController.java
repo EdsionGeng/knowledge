@@ -102,9 +102,12 @@ public class PermissionController {
     )
     public JsonResult showFilePermission(@RequestBody String object) {
         jsonObject = JSONObject.parseObject(object);
-        Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
+        String  userId =String.valueOf( jsonObject.get("userId"));
+        if (userId.equals("null")) {
+            return new JsonResult(2, 0, "请登陆", 0);
+        }
         Integer fileId = Integer.parseInt(String.valueOf(jsonObject.get("fileId")));
-        return permissionService.showFilePermission(userId, fileId);
+        return permissionService.showFilePermission(Integer.parseInt(userId), fileId);
     }
 
 

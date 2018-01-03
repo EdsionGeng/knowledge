@@ -1,11 +1,12 @@
 package com.wsd.knowledge.entity;
 
 import java.io.Serializable;
+
 /**
-*@Author EdsionGeng
-*@Description 用户实体类
-*@Date:9:21 2017/10/31
-*/
+ * @Author EdsionGeng
+ * @Description 用户实体类
+ * @Date:9:21 2017/10/31
+ */
 public class SystemUser implements Serializable {
     private int id;
     private String username;
@@ -17,9 +18,18 @@ public class SystemUser implements Serializable {
     private String email;
     private String duty;
     private int isAdmin;
-    private Integer  userGroupId;
+    private Integer userGroupId;
     private int job;
     private String tDate;
+    private int companyId;
+
+    public int getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
+    }
 
     public String gettDate() {
         return tDate;
@@ -130,10 +140,11 @@ public class SystemUser implements Serializable {
         this.password = password;
     }
 
-    public SystemUser(String username, String department, Integer userGroupId) {
+    public SystemUser(String username, String department, Integer userGroupId, int companyId) {
         this.username = username;
         this.department = department;
         this.userGroupId = userGroupId;
+        this.companyId = companyId;
     }
 
     @Override
@@ -141,7 +152,6 @@ public class SystemUser implements Serializable {
         return "SystemUser{" +
                 ", username='" + username + '\'' +
                 ", department='" + department + '\'' +
-
                 ", userGroupId=" + userGroupId +
                 '}';
     }

@@ -28,6 +28,7 @@ import java.util.UUID;
 public class FileController {
     @Autowired
     private FileService fileService;
+
     /**
      * 查询所有上传文件 组合查询 共用同一个接口
      * 个人
@@ -51,12 +52,13 @@ public class FileController {
         String title = String.valueOf(jsonObject.get("title"));
         String startDate = String.valueOf(jsonObject.get("startDate"));
         String endDate = String.valueOf(jsonObject.get("endDate"));
-        String sortType= String.valueOf(jsonObject.get("sortType"));
+        String sortType = String.valueOf(jsonObject.get("sortType"));
         String fileStyleId = String.valueOf(jsonObject.get("fileStyleId"));
         Integer current = Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
-        return fileService.showAllFile( fileStyleId, title, startDate, endDate,sortType, current, pageSize);
+        return fileService.showAllFile(fileStyleId, title, startDate, endDate, sortType, current, pageSize);
     }
+
     /**
      * 用户添加文件
      *
@@ -78,17 +80,22 @@ public class FileController {
     @RequestMapping(value = "insertFile.htmls", method = RequestMethod.POST)
     public JsonResult insertFile(@RequestBody String object) {
         JSONObject jsonObject = JSONObject.parseObject(object);
+        String userId = String.valueOf(jsonObject.get("userId"));
+        if (userId.equals("null")) {
+            return new JsonResult(2, 0, "请登陆", 0);
+        }
         String title = String.valueOf(jsonObject.get("title"));
         String content = String.valueOf(jsonObject.get("content"));
         String photourl = String.valueOf(jsonObject.get("photourl"));
         String filesize = String.valueOf(jsonObject.get("filesize"));
         String fileurl = String.valueOf(jsonObject.get("fileurl"));
         String describle = String.valueOf(jsonObject.get("describle"));
-        Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
+        Integer companyId = Integer.parseInt(String.valueOf(jsonObject.get("companyId")));
         Integer fileStyleId = Integer.parseInt(String.valueOf(jsonObject.get("fileStyleId")));
         Integer fileSpecies = Integer.parseInt(String.valueOf(jsonObject.get("fileSpecies")));
-        return fileService.insertFile(title, content, photourl, fileurl, userId, fileStyleId, filesize, describle,fileSpecies);
+        return fileService.insertFile(title, content, photourl, fileurl, Integer.parseInt(userId), fileStyleId, filesize, describle, fileSpecies,companyId);
     }
+
     /**
      * 批量删除文件
      *
@@ -122,9 +129,12 @@ public class FileController {
     @RequestMapping(value = "readfile.htmls", method = RequestMethod.POST)
     public JsonResult readFile(@RequestBody String object) {
         JSONObject jsonObject = JSONObject.parseObject(object);
-        Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
-        Integer  fileId = Integer.parseInt(String.valueOf(jsonObject.get("fileId")));
-        return fileService.readFile(fileId, userId);
+        String  userId =String.valueOf( jsonObject.get("userId"));
+        if (userId.equals("null")) {
+            return new JsonResult(2, 0, "请登陆", 0);
+        }
+        Integer fileId = Integer.parseInt(String.valueOf(jsonObject.get("fileId")));
+        return fileService.readFile(fileId, Integer.parseInt(userId));
     }
 
 //    /**
@@ -170,15 +180,15 @@ public class FileController {
         Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
         Integer fileId = Integer.parseInt(String.valueOf(jsonObject.get("fileId")));
         Integer fileStyleId = Integer.parseInt(String.valueOf(jsonObject.get("fileStyleId")));
-        String  fileStyleName = String.valueOf(jsonObject.get("fileStyleName"));
-        String  content = String.valueOf(jsonObject.get("content"));
-        String  fileurl = String.valueOf(jsonObject.get("fileurl"));
-        String  chooseUser = String.valueOf(jsonObject.get("chooseUser"));
-        String  fileSize = String.valueOf(jsonObject.get("fileSize"));
-        String  photourl = String.valueOf(jsonObject.get("photourl"));
-        String  describle = String.valueOf(jsonObject.get("describle"));
-        Integer   fileSpecies =Integer.parseInt( String.valueOf(jsonObject.get("fileSpecies")));
-        return fileService.updateFileDetail(fileId, content, fileurl, fileStyleId, userId,chooseUser,fileSize,photourl,describle,fileStyleName,fileSpecies);
+        String fileStyleName = String.valueOf(jsonObject.get("fileStyleName"));
+        String content = String.valueOf(jsonObject.get("content"));
+        String fileurl = String.valueOf(jsonObject.get("fileurl"));
+        String chooseUser = String.valueOf(jsonObject.get("chooseUser"));
+        String fileSize = String.valueOf(jsonObject.get("fileSize"));
+        String photourl = String.valueOf(jsonObject.get("photourl"));
+        String describle = String.valueOf(jsonObject.get("describle"));
+        Integer fileSpecies = Integer.parseInt(String.valueOf(jsonObject.get("fileSpecies")));
+        return fileService.updateFileDetail(fileId, content, fileurl, fileStyleId, userId, chooseUser, fileSize, photourl, describle, fileStyleName, fileSpecies);
     }
 
     /**
@@ -197,17 +207,20 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userGroupId", value = "个人组别ID"),
     })
     @RequestMapping(value = "show/userlookfile", method = RequestMethod.POST)
-    public JsonResult showUserLookFile( @RequestBody String object) {
+    public JsonResult showUserLookFile(@RequestBody String object) {
         JSONObject jsonObject = JSONObject.parseObject(object);
-        Integer userId   =Integer.parseInt(String.valueOf(jsonObject.get("userId")));
-        Integer current  = Integer.parseInt(String.valueOf(jsonObject.get("current")));
+        String userId = String.valueOf(jsonObject.get("userId"));
+        if (userId.equals("null")) {
+            return new JsonResult(2, 0, "请登陆", 0);
+        }
+        Integer current = Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
         String fileStyleId = String.valueOf(jsonObject.get("fileStyleId"));
-       // String  groupId= String.valueOf(jsonObject.get("groupId"));
+        // String  groupId= String.valueOf(jsonObject.get("groupId"));
         String sortType = String.valueOf(jsonObject.get("sortType"));
-       String departmentName = String.valueOf(jsonObject.get("departmentName"));
-        Integer  userGroupId =Integer.parseInt(String.valueOf(jsonObject.get("userGroupId")));
-        return fileService.showUserLookFile(userId, current, pageSize, fileStyleId, departmentName,userGroupId,sortType);
+        String departmentName = String.valueOf(jsonObject.get("departmentName"));
+        Integer userGroupId = Integer.parseInt(String.valueOf(jsonObject.get("userGroupId")));
+        return fileService.showUserLookFile(Integer.parseInt(userId), current, pageSize, fileStyleId, departmentName, userGroupId, sortType);
     }
 
     /**
@@ -282,7 +295,6 @@ public class FileController {
     }
 
 
-
     /**
      * 修改文件类型
      *
@@ -291,10 +303,10 @@ public class FileController {
      */
     @ApiOperation(value = "单个文件详情", notes = "传递必要参数")
     @ApiImplicitParams({
-    @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileId", value = "文件ID", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileId", value = "文件ID", required = true),
     })
     @RequestMapping(value = "singledetail", method = RequestMethod.POST)
-    public JsonResult showSingleFile( @RequestBody String object) {
+    public JsonResult showSingleFile(@RequestBody String object) {
         return fileService.searchSingleFile(object);
     }
 //     /**
@@ -312,6 +324,7 @@ public class FileController {
 //    public JsonResult showSingleFile( String object) {
 //        return fileService.searchSingleFile(object);
 //    }
+
     /**
      * @param file
      * @return

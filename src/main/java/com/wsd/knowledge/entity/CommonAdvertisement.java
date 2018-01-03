@@ -36,6 +36,9 @@ public class CommonAdvertisement implements Serializable {
     //公告类型
     private String adStyle;
 
+    //公司Id
+    private int companyId;
+
     public String getDepartmentName() {
         return departmentName;
     }
@@ -108,7 +111,15 @@ public class CommonAdvertisement implements Serializable {
         this.sendObject = sendObject;
     }
 
-    public CommonAdvertisement(String adTitle, String adContent, String departmentName, String addUser, int userId, String sendTime, String sendObject,String adStyle) {
+    public int getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
+    }
+
+    public CommonAdvertisement(String adTitle, String adContent, String departmentName, String addUser, int userId, String sendTime, String sendObject, String adStyle) {
         this.adTitle = adTitle;
         this.adContent = adContent;
         this.departmentName = departmentName;

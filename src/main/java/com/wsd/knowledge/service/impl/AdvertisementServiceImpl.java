@@ -48,8 +48,6 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         if (title .equals("") || content .equals("")|| sendDepartmentName .equals("")|| userId == null||adStyle.equals("")) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
-
-
         SystemUser systemUser = userRepositoty.findInfo(userId);
         CommonAdvertisement commonAdvertisement = new CommonAdvertisement(title, content, systemUser.getDepartment(), systemUser.getUsername(),
                 userId, new DateUtil().getTime(), sendDepartmentName,adStyle);

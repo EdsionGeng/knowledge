@@ -1,15 +1,12 @@
 package com.wsd.knowledge.mapper1;
-
 import com.wsd.knowledge.entity.NewDepartment;
 import com.wsd.knowledge.entity.SystemUser;
 import com.wsd.knowledge.util.StringUtils;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectProvider;
-
 import java.util.List;
 import java.util.Map;
-
 /**
  * @Author EdsionGeng
  * @Description 用户模块持久层
@@ -24,7 +21,7 @@ public interface UserRepositoty {
      * @param password
      * @return
      */
-    @Select("select id,username,UserGroupId from SystemUser  where username = #{name} and password = #{password}")
+    @Select("select id,username,UserGroupId,companyId from SystemUser  where username = #{name} and password = #{password}")
     Map findUser(@Param("name") String name, @Param("password") String password);
 
     /**
@@ -33,7 +30,7 @@ public interface UserRepositoty {
      * @param id
      * @return
      */
-    @Select("select username,userGroup,UserGroupId from SystemUser where id=#{id} ")
+    @Select("select username,userGroup,UserGroupId,companyId from SystemUser where id=#{id} ")
     SystemUser findInfo(@Param("id") Integer id);
 
     /**
@@ -73,18 +70,17 @@ public interface UserRepositoty {
     List<NewDepartment> queryByGroupId(@Param("id") Integer id);
 
 
-   @Select("select Uid from UserRoles where Rid=2013 ")
-    //@Select("select Uid from UserRoles where Rid=3031 ")
+    @Select("select Uid from UserRoles where Rid=2013 ")
+        //@Select("select Uid from UserRoles where Rid=3031 ")
     List<Integer> queryAdmin();
 
 
-   //@Select("select id  from UserRoles where  Uid=#{userId} and Rid=3031")
-   @Select("select id  from UserRoles where  Uid=#{userId} and Rid=2013")
+   // @Select("select id  from UserRoles where  Uid=#{userId} and Rid=3031")
+    @Select("select id  from UserRoles where  Uid=#{userId} and Rid=2013")
     Integer ifAdmin(@Param("userId") Object userId);
-//    @Select("select userGroupId from SystemUser where id=#{userId}")
+
+    //    @Select("select userGroupId from SystemUser where id=#{userId}")
 //    Integer queryGroupId(@Param("userId")Integer userId);
-
-
     @Select("select  a.id,a.deptno,a.pid from Department_new a LEFT JOIN Department_new b ON b.id =a.Pid where b.pid=#{pid} OR b.id=#{pid}")
     List<Integer> showPerGroupId(@Param("pid") Integer pid);
 
