@@ -51,12 +51,16 @@ public class AdvertisementController {
     @RequestMapping(value = "insertAd.htmls", method = RequestMethod.POST)
     public JsonResult insertAd(@RequestBody String object) {
         jsonObject = JSONObject.parseObject(object);
+        String userId = String.valueOf(jsonObject.get("userId"));
+        if (userId.equals("null")) {
+            return new JsonResult(2, 0, "请登陆", 0);
+        }
         String title = String.valueOf(jsonObject.get("title"));
         String content = String.valueOf(jsonObject.get("content"));
         String adStyle = String.valueOf(jsonObject.get("adStyle"));
         String sendDepartmentName = String.valueOf(jsonObject.get("sendDepartmentName"));
-        Integer userId = Integer.parseInt(String.valueOf((jsonObject.get("userId"))));
-        return advertisementService.insertCommonAd(title, content, sendDepartmentName, userId,adStyle);
+        String companyId= String.valueOf(jsonObject.get("companyId"));
+        return advertisementService.insertCommonAd(title, content, sendDepartmentName, Integer.parseInt(userId),adStyle,companyId);
     }
 
     /**
@@ -151,6 +155,7 @@ public class AdvertisementController {
             @ApiImplicitParam(paramType = "query", dataType = "String ", name = "title", value = "标题"),
             @ApiImplicitParam(paramType = "query", dataType = "String ", name = "date1", value = "开始时间"),
             @ApiImplicitParam(paramType = "query", dataType = "String ", name = "date2", value = "结束时间"),
+            @ApiImplicitParam(paramType = "query", dataType = "String ", name = "companyId", value = "公司Id",required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "current", value = "页码数", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "pageSize", value = "页面数量", required = true),
     })
@@ -162,9 +167,10 @@ public class AdvertisementController {
         String date2 = String.valueOf(jsonObject.get("endDate"));
         String adStyle= String.valueOf(jsonObject.get("adStyle"));
         String sortType= String.valueOf(jsonObject.get("sortType"));
+        String companyId= String.valueOf(jsonObject.get("companyId"));
         Integer page = Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer limit= Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
-        return advertisementService.showAllAd(title, date1, date2,adStyle,sortType, page, limit);
+        return advertisementService.showAllAd(title, date1, date2,adStyle,sortType,companyId, page, limit);
     }
     /**
      * 统计某一公告已读未读人数

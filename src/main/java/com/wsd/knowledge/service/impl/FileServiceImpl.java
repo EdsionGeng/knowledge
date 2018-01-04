@@ -55,7 +55,7 @@ public class FileServiceImpl implements FileService {
      * @return
      */
     @Override
-    public JsonResult showAllFile(String fileStyleId, String title, String startDate, String endDate, String sortType, Integer current, Integer pageSize) {
+    public JsonResult showAllFile(String fileStyleId, String title, String startDate, String endDate, String sortType,String companyId, Integer current, Integer pageSize) {
 
         if (fileStyleId.equals("")) {
             fileStyleId = "";
@@ -81,8 +81,13 @@ public class FileServiceImpl implements FileService {
         }
         int startSize = (current - 1) * pageSize;
         if (fileStyleId.equals("") && title.equals("") && startDate.equals("2017-11-01 13:30") && endDate.equals("")) {
-            List<Map> map = fileMapper.showAllFile(startSize, pageSize, sortType);
-            Integer sum = fileMapper.countFile();
+            Map<String, Object> maps = new HashMap<>();
+            maps.put("sortType", sortType);
+            maps.put("companyId", companyId);
+            maps.put("startSize", startSize);
+            maps.put("limit", pageSize);
+            List<Map> map = fileMapper.showAllFile(maps);
+            Integer sum = fileMapper.countFile(companyId);
             if (sum == null) {
                 sum = 0;
             }
@@ -128,7 +133,7 @@ public class FileServiceImpl implements FileService {
      */
     @Override
     @Transactional(readOnly = false)
-    public synchronized JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize, String describe, Integer fileSpecies, Integer companyId) {
+    public synchronized JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize, String describe, Integer fileSpecies, String  companyId) {
         String fileNo = String.valueOf(new Date().getTime()).concat("888888");
         SystemUser systemUser = userRepositoty.findInfo(userId);
         FileKind fileKind = fileKindMapper.selectFileKind(fileStyleId);
@@ -284,27 +289,40 @@ public class FileServiceImpl implements FileService {
         return new JsonResult(2, 0, "操作失败", 0);
     }
 
-    public JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize, String fileStyleId, String departmentName, Integer userGroupId, String sortType) {
+    public JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize, String fileStyleId, String departmentName, Integer userGroupId, String sortType,String companyId) {
         if (current == null || pageSize == null || userId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
-        int startSize = (current - 1) * pageSize;
         if (!sortType.equals("asc") && !sortType.equals("desc")) {
             sortType = "desc";
         }
-        RdPage page = new RdPage();
-        List<Map> map = new ArrayList<>();
+
         if (departmentName == "null") {
             departmentName = "";
         }
         if (fileStyleId == "null") {
             fileStyleId = "";
         }
-        String ss = getGroupArray(userGroupId);
+
+        if(companyId.length()>1){
+            String[] arr = companyId.split(",");
+            String companyId_string = "";
+            for (int i = 0, len =arr.length; i < len; i++) {
+                if (i > 0) {
+                    companyId_string += ",";
+                }
+                companyId_string+= "'" + arr[i]+ "'";
+            }
+            companyId=companyId_string;
+        }
+        RdPage page = new RdPage();
+        int startSize = (current - 1) * pageSize;
+        List<Map> map = new ArrayList<>();
+        String userGroupIds = getGroupArray(userGroupId);
         if (departmentName.equals("") && fileStyleId.equals("")) {
             Integer sum = 0;
-            map = fileMapper.showUserLookFile(userId, ss, sortType, startSize, pageSize);
-            sum = fileMapper.countUserLookFile(userId, ss);
+            map = fileMapper.showUserLookFile(userId,companyId,userGroupIds, sortType, startSize, pageSize);
+            sum = fileMapper.countUserLookFile(userId,companyId, userGroupIds);
 //            List<Map> newList = new ArrayList(new HashSet(map));
 //            System.out.println(newList);
             page.setTotal(sum);
@@ -319,12 +337,13 @@ public class FileServiceImpl implements FileService {
                 fileStyleId = "";
             }
             params.put("fileStyleId", fileStyleId);
+            params.put("companyId", companyId);
             if (!departmentName.equals("")) {
                 Integer groupId = userRepositoty.queryGroupIdByName(departmentName);
                 String results = getGroupArray(groupId);
                 params.put("groupId", results);
             } else {
-                params.put("groupId", ss);
+                params.put("groupId",userGroupIds);
             }
             Integer result = 0;
             List<Map> searchmap = fileMapper.showUserIfLookFile(params);
@@ -344,9 +363,7 @@ public class FileServiceImpl implements FileService {
             page.setCurrent(current);
             page.setPageSize(pageSize);
             return new JsonResult(0, listResult, "查询结果", page);
-
         }
-
     }
 
     /**

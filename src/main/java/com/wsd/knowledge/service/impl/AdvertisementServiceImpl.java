@@ -44,13 +44,13 @@ public class AdvertisementServiceImpl implements AdvertisementService {
      */
     @Override
     @Transactional(readOnly = false)
-    public  synchronized JsonResult insertCommonAd(String title, String content, String sendDepartmentName, Integer userId,String adStyle) {
+    public  synchronized JsonResult insertCommonAd(String title, String content, String sendDepartmentName, Integer userId,String adStyle,String  companyId) {
         if (title .equals("") || content .equals("")|| sendDepartmentName .equals("")|| userId == null||adStyle.equals("")) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         SystemUser systemUser = userRepositoty.findInfo(userId);
-        CommonAdvertisement commonAdvertisement = new CommonAdvertisement(title, content, systemUser.getDepartment(), systemUser.getUsername(),
-                userId, new DateUtil().getTime(), sendDepartmentName,adStyle);
+        CommonAdvertisement commonAdvertisement = new CommonAdvertisement(title, content, systemUser.getUsergroup(), systemUser.getUsername(),
+                userId, new DateUtil().getTime(), sendDepartmentName,adStyle,companyId);
         String str = new DateUtil().cacheExist(String.valueOf(userId));
         if (str.equals("full")) {
             return new JsonResult(2, 0, "并发", 0);
@@ -119,7 +119,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
      * @return
      */
     @Override
-    public JsonResult showAllAd(String title, String date1, String date2,String adStyle,String sortType ,Integer current, Integer pageSize) {
+    public JsonResult showAllAd(String title, String date1, String date2,String adStyle,String sortType ,String  companyId,Integer current, Integer pageSize) {
         if (current == null || pageSize == null) {
             current = 1;
             pageSize = 20;
@@ -145,21 +145,30 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         int startSize = (current - 1) * pageSize;
         if (title.equals("")  && date2.equals("")&&adStyle.equals("")) {
             //展示所有
-            map = advertisementMapper.showAllCommon(startSize, pageSize,sortType);
-            sum = advertisementMapper.countAdPcs();
+            Map<String, Object> maps = new HashMap<>();
+
+            maps.put("companyId", companyId);
+            maps.put("startSize", startSize);
+            maps.put("limit", pageSize);
+            maps.put("sortType", sortType);
+            map = advertisementMapper.showAllCommon(maps);
+            sum = advertisementMapper.countAdPcs(maps);
             rdPage.setTotal(sum);
             rdPage.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
             rdPage.setCurrent(current);
             rdPage.setPageSize(pageSize);
         } else {
             //组合查询
-            date2=DateUtil.getAfterDate(date2,1);
+            if(!date2.equals("")) {
+                date2 = DateUtil.getAfterDate(date2, 1);
+            }
             Map<String, Object> maps = new HashMap<>();
             maps.put("title", title);
             maps.put("date1", date1);
             maps.put("date2", date2);
             maps.put("adStyle", adStyle);
             maps.put("sortType", sortType);
+            maps.put("companyId", companyId);
             maps.put("startSize", startSize);
             maps.put("limit", pageSize);
             map = advertisementMapper.showAllCommonByIf(maps);

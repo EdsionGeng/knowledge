@@ -37,7 +37,7 @@ public class CommonAdvertisement implements Serializable {
     private String adStyle;
 
     //公司Id
-    private int companyId;
+    private String  companyId;
 
     public String getDepartmentName() {
         return departmentName;
@@ -111,15 +111,15 @@ public class CommonAdvertisement implements Serializable {
         this.sendObject = sendObject;
     }
 
-    public int getCompanyId() {
+    public String getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(int companyId) {
+    public void setCompanyId(String companyId) {
         this.companyId = companyId;
     }
 
-    public CommonAdvertisement(String adTitle, String adContent, String departmentName, String addUser, int userId, String sendTime, String sendObject, String adStyle) {
+    public CommonAdvertisement(String adTitle, String adContent, String departmentName, String addUser, int userId, String sendTime, String sendObject, String adStyle, String  companyId) {
         this.adTitle = adTitle;
         this.adContent = adContent;
         this.departmentName = departmentName;
@@ -128,6 +128,7 @@ public class CommonAdvertisement implements Serializable {
         this.sendTime = sendTime;
         this.sendObject = sendObject;
         this.adStyle=adStyle;
+        this.companyId=companyId;
     }
 
     public CommonAdvertisement(String adTitle, String adContent, String addUser, String sendTime, String adStyle,String departmentName) {

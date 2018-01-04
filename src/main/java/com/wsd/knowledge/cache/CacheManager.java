@@ -9,11 +9,11 @@ import java.util.Iterator;
  */
 public class CacheManager {
 
-    //key唯一名称
-    public static final String strFormDict = "formDictformMain";
-
-    /************************************************后台 缓存 ********************************************************/
-    public static final String FINDUSERTIME = "findAllEstate";//所有房地产信息
+//    //key唯一名称
+//    public static final String strFormDict = "formDictformMain";
+//
+//    /************************************************后台 缓存 ********************************************************/
+//    public static final String FINDUSERTIME = "findAllEstate";//所有房地产信息
 
     /************************************************后台 缓存  end********************************************************/
 

@@ -17,7 +17,7 @@ public interface AdvertisementService {
      * @param userId
      * @return
      */
-    JsonResult insertCommonAd(String title,String content,String sendDepartmentName,Integer userId,String adStyle);
+    JsonResult insertCommonAd(String title,String content,String sendDepartmentName,Integer userId,String adStyle,String  companyId);
 
     /**
      * 删除公告
@@ -43,7 +43,7 @@ public interface AdvertisementService {
      * @param pageSize
      * @return
      */
-    JsonResult showAllAd(String title,String date1,String date2,String adStyle,String sortType,Integer current,Integer pageSize);
+    JsonResult showAllAd(String title,String date1,String date2,String adStyle,String sortType,String  companyId,Integer current,Integer pageSize);
 
 
     /**

@@ -69,13 +69,13 @@ public class FileDetail implements Comparable<FileDetail> {
     private int userGroupId;
 
     //各公司Id
-    private int companyId;
+    private String  companyId;
 
-    public int getCompanyId() {
+    public String getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(int companyId) {
+    public void setCompanyId(String companyId) {
         this.companyId = companyId;
     }
 
@@ -239,7 +239,7 @@ public class FileDetail implements Comparable<FileDetail> {
         this.userGroupId = userGroupId;
     }
 
-    public FileDetail(String departmentName, String username, int userId, int fileStyleId, String fileNo, String title, String fileStyle, String fileContent, String fileUrl, String photoUrl, int lookPcs, int downloadPcs, int updatePcs, String fileSize, int fileDisplay, String enclosureInfo, String addFileTime, int fileSpecies, int userGroupId,int companyId) {
+    public FileDetail(String departmentName, String username, int userId, int fileStyleId, String fileNo, String title, String fileStyle, String fileContent, String fileUrl, String photoUrl, int lookPcs, int downloadPcs, int updatePcs, String fileSize, int fileDisplay, String enclosureInfo, String addFileTime, int fileSpecies, int userGroupId,String companyId) {
         this.departmentName = departmentName;
         this.username = username;
         this.fileStyleId = fileStyleId;

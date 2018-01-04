@@ -43,6 +43,7 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "title", value = "文件标题"),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "startDate", value = "开始时间"),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "endDate", value = "结束时间"),
+            @ApiImplicitParam(paramType = "query", dataType = "String ", name = "companyId", value = "公司Id",required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "current", value = "页码", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "pageSize", value = "页面信息数量", required = true)
     })
@@ -54,9 +55,10 @@ public class FileController {
         String endDate = String.valueOf(jsonObject.get("endDate"));
         String sortType = String.valueOf(jsonObject.get("sortType"));
         String fileStyleId = String.valueOf(jsonObject.get("fileStyleId"));
+        String companyId = String.valueOf(jsonObject.get("companyId"));
         Integer current = Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
-        return fileService.showAllFile(fileStyleId, title, startDate, endDate, sortType, current, pageSize);
+        return fileService.showAllFile(fileStyleId, title, startDate, endDate, sortType,companyId, current, pageSize);
     }
 
     /**
@@ -76,6 +78,7 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "filesize", value = "文件大小", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileSpecies", value = "文件种类", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "describle", value = "文件描述", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "companyId", value = "公司Id", required = true),
     })
     @RequestMapping(value = "insertFile.htmls", method = RequestMethod.POST)
     public JsonResult insertFile(@RequestBody String object) {
@@ -90,7 +93,7 @@ public class FileController {
         String filesize = String.valueOf(jsonObject.get("filesize"));
         String fileurl = String.valueOf(jsonObject.get("fileurl"));
         String describle = String.valueOf(jsonObject.get("describle"));
-        Integer companyId = Integer.parseInt(String.valueOf(jsonObject.get("companyId")));
+        String  companyId =String.valueOf(jsonObject.get("companyId"));
         Integer fileStyleId = Integer.parseInt(String.valueOf(jsonObject.get("fileStyleId")));
         Integer fileSpecies = Integer.parseInt(String.valueOf(jsonObject.get("fileSpecies")));
         return fileService.insertFile(title, content, photourl, fileurl, Integer.parseInt(userId), fileStyleId, filesize, describle, fileSpecies,companyId);
@@ -110,9 +113,12 @@ public class FileController {
     @RequestMapping(value = "deletefile.htmls", method = RequestMethod.POST)
     public JsonResult deleteFile(@RequestBody String object) {
         JSONObject jsonObject = JSONObject.parseObject(object);
+        String userId = String.valueOf(jsonObject.get("userId"));
+        if (userId.equals("null")) {
+            return new JsonResult(2, 0, "请登陆", 0);
+        }
         String ids = String.valueOf(jsonObject.get("fileIds"));
-        Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
-        return fileService.deleteFile(ids, userId);
+        return fileService.deleteFile(ids, Integer.parseInt(userId));
     }
 
     /**
@@ -172,12 +178,15 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "fileStyleName", value = "文档类型名称"),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "photourl", value = "封面url"),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "describle", value = "附件描述"),
-            @ApiImplicitParam(paramType = "query", dataType = "", name = "fileSpecies", value = "文件所属类型"),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileSpecies", value = "文件所属类型"),
     })
     @RequestMapping(value = "updateFile.htmls", method = RequestMethod.POST)
     public JsonResult updateFileDetail(@RequestBody String object) {
         JSONObject jsonObject = JSONObject.parseObject(object);
-        Integer userId = Integer.parseInt(String.valueOf(jsonObject.get("userId")));
+        String userId = String.valueOf(jsonObject.get("userId"));
+        if (userId.equals("null")) {
+            return new JsonResult(2, 0, "请登陆", 0);
+        }
         Integer fileId = Integer.parseInt(String.valueOf(jsonObject.get("fileId")));
         Integer fileStyleId = Integer.parseInt(String.valueOf(jsonObject.get("fileStyleId")));
         String fileStyleName = String.valueOf(jsonObject.get("fileStyleName"));
@@ -188,7 +197,7 @@ public class FileController {
         String photourl = String.valueOf(jsonObject.get("photourl"));
         String describle = String.valueOf(jsonObject.get("describle"));
         Integer fileSpecies = Integer.parseInt(String.valueOf(jsonObject.get("fileSpecies")));
-        return fileService.updateFileDetail(fileId, content, fileurl, fileStyleId, userId, chooseUser, fileSize, photourl, describle, fileStyleName, fileSpecies);
+        return fileService.updateFileDetail(fileId, content, fileurl, fileStyleId, Integer.parseInt(userId), chooseUser, fileSize, photourl, describle, fileStyleName, fileSpecies);
     }
 
     /**
@@ -204,7 +213,8 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "pageSize", value = "每页数量", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "departmentName", value = "部门名字"),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileStyleId", value = "文件类型ID"),
-            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userGroupId", value = "个人组别ID"),
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userGroupId", value = "个人组别ID", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "companyId", value = "公司Id", required = true),
     })
     @RequestMapping(value = "show/userlookfile", method = RequestMethod.POST)
     public JsonResult showUserLookFile(@RequestBody String object) {
@@ -216,11 +226,11 @@ public class FileController {
         Integer current = Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
         String fileStyleId = String.valueOf(jsonObject.get("fileStyleId"));
-        // String  groupId= String.valueOf(jsonObject.get("groupId"));
         String sortType = String.valueOf(jsonObject.get("sortType"));
+        String companyId = String.valueOf(jsonObject.get("companyId"));
         String departmentName = String.valueOf(jsonObject.get("departmentName"));
         Integer userGroupId = Integer.parseInt(String.valueOf(jsonObject.get("userGroupId")));
-        return fileService.showUserLookFile(Integer.parseInt(userId), current, pageSize, fileStyleId, departmentName, userGroupId, sortType);
+        return fileService.showUserLookFile(Integer.parseInt(userId), current, pageSize, fileStyleId, departmentName, userGroupId, sortType,companyId);
     }
 
     /**

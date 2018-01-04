@@ -11,17 +11,17 @@ public interface FileService {
 
     /**
      * 查询所有文件，组合查询
-     *
-     * @param departmentName
      * @param fileStyleId
      * @param title
      * @param startDate
      * @param endDate
+     * @param sortType
+     * @param companyId
      * @param page
      * @param limit
      * @return
      */
-    JsonResult showAllFile( String fileStyleId, String title, String startDate, String endDate,String sortType, Integer page, Integer limit);
+    JsonResult showAllFile( String fileStyleId, String title, String startDate, String endDate,String sortType,String companyId, Integer page, Integer limit);
 
     /**
      * 添加文件
@@ -35,7 +35,7 @@ public interface FileService {
      * @param filesize
      * @return
      */
-    JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize, String describe,Integer fileSpecies,Integer company);
+    JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize, String describe,Integer fileSpecies,String  companyId);
 
     /**
      * 批量删除文件Id
@@ -85,7 +85,7 @@ public interface FileService {
      * @param pageSize
      * @return
      */
-    JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize,String fileStyleId,String  groupId,Integer userGroupId,String sortType);
+    JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize,String fileStyleId,String  groupId,Integer userGroupId,String sortType,String companyId);
 
 
     /**

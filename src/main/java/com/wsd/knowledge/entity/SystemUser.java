@@ -21,13 +21,13 @@ public class SystemUser implements Serializable {
     private Integer userGroupId;
     private int job;
     private String tDate;
-    private int companyId;
+    private String  companyId;
 
-    public int getCompanyId() {
+    public String getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(int companyId) {
+    public void setCompanyId(String companyId) {
         this.companyId = companyId;
     }
 
@@ -140,19 +140,12 @@ public class SystemUser implements Serializable {
         this.password = password;
     }
 
-    public SystemUser(String username, String department, Integer userGroupId, int companyId) {
+    public SystemUser(String username, String department, Integer userGroupId, String  companyId) {
         this.username = username;
         this.department = department;
         this.userGroupId = userGroupId;
         this.companyId = companyId;
     }
 
-    @Override
-    public String toString() {
-        return "SystemUser{" +
-                ", username='" + username + '\'' +
-                ", department='" + department + '\'' +
-                ", userGroupId=" + userGroupId +
-                '}';
-    }
+
 }
