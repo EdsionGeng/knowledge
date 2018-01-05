@@ -246,6 +246,7 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = " Integer", name = "current", value = "当前页", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "pageSize", value = "页码", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userGroupId", value = "组别Id", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "companyId", value = "公司Id", required = true),
 
     })
     @RequestMapping(value = "show/searchresult", method = RequestMethod.POST)

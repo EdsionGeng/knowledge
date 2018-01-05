@@ -249,14 +249,11 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         if (s == null) {
             return null;
         }
-
         s = s.toLowerCase();
-
         StringBuilder sb = new StringBuilder(s.length());
         boolean upperCase = false;
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-
             if (c == SEPARATOR) {
                 upperCase = true;
             } else if (upperCase) {
@@ -266,7 +263,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
                 sb.append(c);
             }
         }
-
         return sb.toString();
     }
 
@@ -296,7 +292,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         if (s == null) {
             return null;
         }
-
         StringBuilder sb = new StringBuilder();
         boolean upperCase = false;
         for (int i = 0; i < s.length(); i++) {

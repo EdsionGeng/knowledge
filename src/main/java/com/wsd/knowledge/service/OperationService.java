@@ -43,19 +43,19 @@ public interface OperationService {
      * 展示当天数据
      * @return
      */
-    JsonResult showDayData();
+    JsonResult showDayData(String object);
 
     /**
      * 展示本周数据
      * @return
      */
-    JsonResult showWeekData();
+    JsonResult showWeekData(String object);
 
     /**
      * 展示当月数据
      * @return
      */
-    JsonResult showMonthData();
+    JsonResult showMonthData(String object);
 
     /**
      * 查看某一文件操作日志记录

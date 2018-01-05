@@ -25,8 +25,11 @@ public class OperationLog implements Serializable {
     //@Column(name = "username", nullable = false, columnDefinition=" '用户ID'")
     private String username;//用户ID
 
+    private String companyId;
+
    // @Column(name = "fileId", nullable = false, columnDefinition=" '文件ID'")
     private int fileId;//文件ID
+
 
    // @Column(name = "operationStyle", nullable = false, columnDefinition=" '操作文档动作类型'")
     private int operationStyle;//操作类型 1添加文档 2删除文档  3更改文档 4 查阅文档 5下载附件
@@ -86,17 +89,26 @@ public class OperationLog implements Serializable {
         return operationTime;
     }
 
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+
     public void setOperationTime(String operationTime) {
         this.operationTime = operationTime;
     }
 
-    public OperationLog(String departmentName,String username, int userId, int fileId, int operationStyle, String operationTime) {
+    public OperationLog(String departmentName,String username, int userId, int fileId, int operationStyle, String operationTime,String companyId) {
         this.departmentName = departmentName;
         this.username=username;
         this.userId = userId;
         this.fileId = fileId;
         this.operationStyle = operationStyle;
         this.operationTime = operationTime;
+        this.companyId=companyId;
     }
 
 }

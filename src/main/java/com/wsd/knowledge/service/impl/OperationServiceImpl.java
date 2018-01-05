@@ -1,5 +1,7 @@
 package com.wsd.knowledge.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.wsd.knowledge.entity.RdPage;
 import com.wsd.knowledge.mapper.OperationMapper;
 import com.wsd.knowledge.service.OperationService;
@@ -104,11 +106,17 @@ public class OperationServiceImpl implements OperationService {
      * @return
      */
     @Override
-    public JsonResult showDayData() {
+    public JsonResult showDayData(String object) {
         Map<String, Object> map = new HashMap<>();
         String startTime = DateUtil.DayStartTime();
         String endTime = DateUtil.DayEndTime();
-        Integer dayLookPcs = operationMapper.countDataLookPcs(startTime, endTime);
+        JSONObject jsonObject=JSONObject.parseObject(object);
+        String companyId=jsonObject.getString("companyId");
+        if(companyId.equals("null")){
+            return new JsonResult(2,0,"请登陆",0);
+        }
+        companyId=DateUtil.getCompanyResult(companyId);
+        Integer dayLookPcs = operationMapper.countDataLookPcs(startTime, endTime,companyId);
         if (dayLookPcs == null) {
             dayLookPcs = 0;
         }
@@ -116,15 +124,15 @@ public class OperationServiceImpl implements OperationService {
 //        if (dayDownPcs == null) {
 //            dayDownPcs = 0;
 //        }
-        Integer dayDeletePcs = operationMapper.countDataDeletePcs(startTime, endTime);
+        Integer dayDeletePcs = operationMapper.countDataDeletePcs(startTime, endTime,companyId);
         if (dayDeletePcs == null) {
             dayDeletePcs = 0;
         }
-        Integer dayUpdatePcs = operationMapper.countDataUpdatePcs(startTime, endTime);
+        Integer dayUpdatePcs = operationMapper.countDataUpdatePcs(startTime, endTime,companyId);
         if (dayUpdatePcs == null) {
             dayUpdatePcs = 0;
         }
-        Integer dayAddPcs = operationMapper.countDataAddPcs(startTime, endTime);
+        Integer dayAddPcs = operationMapper.countDataAddPcs(startTime, endTime,companyId);
         if (dayAddPcs == null) {
             dayAddPcs = 0;
         }
@@ -142,13 +150,20 @@ public class OperationServiceImpl implements OperationService {
      * @return
      */
     @Override
-    public JsonResult showWeekData() {
+    public JsonResult showWeekData(String object) {
+        JSONObject jsonObject=JSONObject.parseObject(object);
+        String companyId=jsonObject.getString("companyId");
+        if(companyId.equals("null")){
+            return new JsonResult(2,0,"请登陆",0);
+        }
+        companyId=DateUtil.getCompanyResult(companyId);
         Map<String, Object> map = new HashMap<>();
         String startTime = DateUtil.mondayToSunday().get("beginDate");
-        System.out.print(startTime);
+        //System.out.print(startTime);
         String endTime = DateUtil.mondayToSunday().get("endDate");
-        System.out.print(endTime);
-        Integer dayLookPcs = operationMapper.countWeekLookPcs(startTime, endTime);
+        //System.out.print(endTime);
+
+        Integer dayLookPcs = operationMapper.countDataLookPcs(startTime, endTime,companyId);
         if (dayLookPcs == null) {
             dayLookPcs = 0;
         }
@@ -156,20 +171,20 @@ public class OperationServiceImpl implements OperationService {
 //        if (dayDownPcs == null) {
 //            dayDownPcs = 0;
 //        }
-        Integer dayDeletePcs = operationMapper.countWeekDeletePcs(startTime, endTime);
+        Integer dayDeletePcs = operationMapper.countDataDeletePcs(startTime, endTime,companyId);
         if (dayDeletePcs == null) {
             dayDeletePcs = 0;
         }
-        Integer dayUpdatePcs = operationMapper.countWeekUpdatePcs(startTime, endTime);
+        Integer dayUpdatePcs = operationMapper.countDataUpdatePcs(startTime, endTime,companyId);
         if (dayUpdatePcs == null) {
             dayUpdatePcs = 0;
         }
-        Integer dayAddPcs = operationMapper.countWeekAddPcs(startTime, endTime);
+        Integer dayAddPcs = operationMapper.countDataAddPcs(startTime, endTime,companyId);
         if (dayAddPcs == null) {
             dayAddPcs = 0;
         }
         map.put("lookpcs", dayLookPcs);
-       // map.put("downpcs", dayDownPcs);
+       //map.put("downpcs", dayDownPcs);
         map.put("deletepcs", dayDeletePcs);
         map.put("updatepcs", dayUpdatePcs);
         map.put("addpcs", dayAddPcs);
@@ -184,12 +199,16 @@ public class OperationServiceImpl implements OperationService {
      * @return
      */
     @Override
-    public JsonResult showMonthData() {
-
-        Map<String, Object> map = new HashMap<>();
+    public JsonResult showMonthData(String object) {
+        JSONObject jsonObject=JSONObject.parseObject(object);
+        String companyId=jsonObject.getString("companyId");
+        if(companyId.equals("null")){
+            return new JsonResult(2,0,"请登陆",0);
+        }
+        companyId=DateUtil.getCompanyResult(companyId);
         String startTime = DateUtil.getMonthFirstDay();
         String endTime = DateUtil.getMonthLastDay();
-        Integer dayLookPcs = operationMapper.countMonthLookPcs(startTime, endTime);
+        Integer dayLookPcs = operationMapper.countDataLookPcs(startTime, endTime,companyId);
         if (dayLookPcs == null) {
             dayLookPcs = 0;
         }
@@ -197,18 +216,19 @@ public class OperationServiceImpl implements OperationService {
 //        if (dayDownPcs == null) {
 //            dayDownPcs = 0;
 //        }
-        Integer dayDeletePcs = operationMapper.countMonthDeletePcs(startTime, endTime);
+        Integer dayDeletePcs = operationMapper.countDataDeletePcs(startTime, endTime,companyId);
         if (dayDeletePcs == null) {
             dayDeletePcs = 0;
         }
-        Integer dayUpdatePcs = operationMapper.countMonthUpdatePcs(startTime, endTime);
+        Integer dayUpdatePcs = operationMapper.countDataUpdatePcs(startTime, endTime,companyId);
         if (dayUpdatePcs == null) {
             dayUpdatePcs = 0;
         }
-        Integer dayAddPcs = operationMapper.countMonthAddPcs(startTime, endTime);
+        Integer dayAddPcs = operationMapper.countDataAddPcs(startTime, endTime,companyId);
         if (dayAddPcs == null) {
             dayAddPcs = 0;
         }
+        Map<String, Object> map = new HashMap<>();
         map.put("lookpcs", dayLookPcs);
         //map.put("downpcs", dayDownPcs);
         map.put("deletepcs", dayDeletePcs);
@@ -240,7 +260,7 @@ public class OperationServiceImpl implements OperationService {
         }
         int startSize = (current - 1) * pageSize;
         List<Map> map = null;
-        Integer sum = null;
+        Integer sum = 0;
         RdPage rdPage=new RdPage();
         if (operationStyle .equals("") && departmentName.equals("")) {
             map = operationMapper.showAllOperationLog(fileId, startSize, pageSize);

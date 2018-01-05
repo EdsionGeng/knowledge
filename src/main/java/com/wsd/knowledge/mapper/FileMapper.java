@@ -175,8 +175,8 @@ public interface FileMapper {
      *
      * @return
      */
-    @Select("select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f    where f.fileSpecies=2 and f.fileDisplay = 1 and (f.title like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%')) order by f.addFileTime desc ")
-    List<Map> searchCompanyFile1(@Param("searchContent") String searchContent);
+    @Select("select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f    where f.fileSpecies=2 and f.fileDisplay = 1 and f.companyId in (#{companyId}) and (f.title like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%')) order by f.addFileTime desc ")
+    List<Map> searchCompanyFile1(@Param("searchContent") String searchContent,@Param("companyId")String companyId);
 
 
     /**
@@ -224,6 +224,9 @@ public interface FileMapper {
         public String queryFileByDep(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
             sql.append("select   o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle from FileDetail  o  where o.fileDisplay=1 ");
+            if (StringUtils.isNotEmpty((String) map.get("companyId"))) {
+                sql.append(" AND o.companyId in (" + (String) map.get("companyId") + ")");
+            }
             if (StringUtils.isNotEmpty((String) map.get("startDate"))) {
 
                 sql.append(" AND o.addFileTime >= #{startDate} ");
@@ -252,8 +255,12 @@ public interface FileMapper {
         public String countFilePcs(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
             sql.append(" select  count(id ) from  FileDetail  o  where o.fileDisplay=1 and o.addFileTime >= #{startDate}");
+
             if (StringUtils.isNotEmpty((String) map.get("endDate"))) {
                 sql.append(" AND o.addFileTime = #{endDate} ");
+            }
+            if (StringUtils.isNotEmpty((String) map.get("companyId"))) {
+                sql.append(" AND o.companyId in (" + (String) map.get("companyId") + ")");
             }
             if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
                 sql.append(" AND o.fileStyleId = #{fileStyleId} ");

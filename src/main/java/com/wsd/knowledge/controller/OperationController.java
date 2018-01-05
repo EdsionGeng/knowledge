@@ -95,9 +95,10 @@ public class OperationController {
      * @return
      */
     @ApiOperation(value = "查看当天信息数据", notes = "传递必要参数")
-    @RequestMapping(value = "show/daydata.htmls", method = RequestMethod.GET)
-    public JsonResult showDayData() {
-        return operationService.showDayData();
+    @RequestMapping(value = "show/daydata.htmls", method = RequestMethod.POST)
+    @ApiImplicitParam(paramType = "query", dataType = "String", name = "companyId", value = "公司ID", required = true)
+    public JsonResult showDayData(@RequestBody String object) {
+        return operationService.showDayData(object);
     }
 
     /**
@@ -106,9 +107,10 @@ public class OperationController {
      * @return
      */
     @ApiOperation(value = "查看本周数据记录", notes = "传递必要参数")
-    @RequestMapping(value = "show/weekdata.htmls", method = RequestMethod.GET)
-    public JsonResult showWeekData() {
-        return operationService.showWeekData();
+    @RequestMapping(value = "show/weekdata.htmls", method = RequestMethod.POST)
+    @ApiImplicitParam(paramType = "query", dataType = "String", name = "companyId", value = "公司ID", required = true)
+    public JsonResult showWeekData(@RequestBody String object) {
+        return operationService.showWeekData(object);
     }
 
     /**
@@ -117,9 +119,10 @@ public class OperationController {
      * @return
      */
     @ApiOperation(value = "查看本月数据记录", notes = "传递必要参数")
-    @RequestMapping(value = "show/monthdata.htmls", method = RequestMethod.GET)
-    public JsonResult showMonthData() {
-        return operationService.showMonthData();
+    @RequestMapping(value = "show/monthdata.htmls", method = RequestMethod.POST)
+    @ApiImplicitParam(paramType = "query", dataType = "String", name = "companyId", value = "公司ID", required = true)
+    public JsonResult showMonthData(@RequestBody String object) {
+        return operationService.showMonthData(object);
     }
 
     /**

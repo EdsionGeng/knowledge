@@ -152,6 +152,21 @@ public class DateUtil {
             return "full";
         }
     }
+public static String getCompanyResult(String companyId){
+    if(companyId.length()>1){
+        String[] arr = companyId.split(",");
+        String companyId_string = "";
+        for (int i = 0, len =arr.length; i < len; i++) {
+            if (i > 0) {
+                companyId_string += ",";
+            }
+            companyId_string+= "'" + arr[i]+ "'";
+        }
+        companyId =companyId_string;
+    }
+    return companyId;
+}
+
 
     public static void main(String[] args) {
         System.out.println(DateUtil.DayStartTime());

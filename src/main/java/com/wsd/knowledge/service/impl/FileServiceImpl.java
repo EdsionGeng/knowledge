@@ -13,12 +13,8 @@ import com.wsd.knowledge.util.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.io.UnsupportedEncodingException;
 import java.util.*;
-
-import org.apache.commons.codec.binary.Base64;
-
 /**
  * @Author EdsionGeng
  * @Description 文件操作业务逻辑层实现类
@@ -55,7 +51,7 @@ public class FileServiceImpl implements FileService {
      * @return
      */
     @Override
-    public JsonResult showAllFile(String fileStyleId, String title, String startDate, String endDate, String sortType,String companyId, Integer current, Integer pageSize) {
+    public JsonResult showAllFile(String fileStyleId, String title, String startDate, String endDate, String sortType, String companyId, Integer current, Integer pageSize) {
 
         if (fileStyleId.equals("")) {
             fileStyleId = "";
@@ -80,6 +76,7 @@ public class FileServiceImpl implements FileService {
             pageSize = 20;
         }
         int startSize = (current - 1) * pageSize;
+        companyId=DateUtil.getCompanyResult(companyId);
         if (fileStyleId.equals("") && title.equals("") && startDate.equals("2017-11-01 13:30") && endDate.equals("")) {
             Map<String, Object> maps = new HashMap<>();
             maps.put("sortType", sortType);
@@ -99,12 +96,14 @@ public class FileServiceImpl implements FileService {
             return new JsonResult(0, map, "查询结果", page);
         } else {
             Map<String, Object> map = new HashMap<>();
-            endDate = DateUtil.getAfterDate(endDate, 1);
+            if(!endDate.equals("")){
+            endDate = DateUtil.getAfterDate(endDate, 1);}
             map.put("fileStyleId", fileStyleId);
             map.put("title", title);
             map.put("startDate", startDate);
             map.put("endDate", endDate);
             map.put("sortType", sortType);
+            map.put("companyId", companyId);
             map.put("startSize", startSize);
             map.put("limit", pageSize);
             List<Map> maps = fileMapper.queryFileByIf(map);
@@ -133,12 +132,11 @@ public class FileServiceImpl implements FileService {
      */
     @Override
     @Transactional(readOnly = false)
-    public synchronized JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize, String describe, Integer fileSpecies, String  companyId) {
+    public synchronized JsonResult insertFile(String title, String content, String photourl, String fileurl, Integer userId, Integer fileStyleId, String filesize, String describe, Integer fileSpecies, String companyId) {
         String fileNo = String.valueOf(new Date().getTime()).concat("888888");
         SystemUser systemUser = userRepositoty.findInfo(userId);
         FileKind fileKind = fileKindMapper.selectFileKind(fileStyleId);
         //生成实体类
-
         FileDetail fileDetail = new FileDetail(systemUser.getUsergroup(), systemUser.getUsername(), userId, fileStyleId, fileNo, title
                 , fileKind.getFileKindName(), content, fileurl, photourl, 0, 0, 0, filesize, 1,
                 describe, new DateUtil().getTime(), fileSpecies, systemUser.getUserGroupId(), companyId);
@@ -150,7 +148,7 @@ public class FileServiceImpl implements FileService {
             //添加文件成功 ，获得此文件ID返回前台，执行权限添加操作
             Integer fileId = fileMapper.selectIdByIf(fileNo);
 
-            OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, fileId, 1, new DateUtil().getTime());
+            OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, fileId, 1, new DateUtil().getTime(),systemUser.getCompanyId());
             operationMapper.insertOperationLog(operationLog);
             return new JsonResult(0, fileId, "添加成功", 0);
         }
@@ -174,7 +172,7 @@ public class FileServiceImpl implements FileService {
         Integer j = null;
         for (String id : ids.split(",")) {
             j = fileMapper.updateFileShow(id);
-            OperationLog operationLog = new OperationLog(systemUser.getUsergroup(), systemUser.getUsername(), userId, Integer.parseInt(id), 2, new DateUtil().getTime());
+            OperationLog operationLog = new OperationLog(systemUser.getUsergroup(), systemUser.getUsername(), userId, Integer.parseInt(id), 2, new DateUtil().getTime(),systemUser.getCompanyId());
             String re = new DateUtil().cacheExist(id);
             if (re.equals("full")) {
                 return new JsonResult(2, 0, "网络异常", 0);
@@ -211,7 +209,7 @@ public class FileServiceImpl implements FileService {
             SystemUser systemUser = userRepositoty.findInfo(userId);
             //添加操作日志
             if (operationMapper.queryLookLog(userId, fileId) == null) {
-                OperationLog operationLog = new OperationLog(systemUser.getUsergroup(), systemUser.getUsername(), userId, fileId, 4, new DateUtil().getTime());
+                OperationLog operationLog = new OperationLog(systemUser.getUsergroup(), systemUser.getUsername(), userId, fileId, 4, new DateUtil().getTime(),systemUser.getCompanyId());
                 j = operationMapper.insertOperationLog(operationLog);
             } else {
                 return new JsonResult(0, 0, "已查阅过日志", 0);
@@ -241,7 +239,7 @@ public class FileServiceImpl implements FileService {
             if (operationMapper.queryDownLog(userId, id) == null) {
                 SystemUser systemUser = userRepositoty.findInfo(userId);
                 //添加操作日志
-                OperationLog operationLog = new OperationLog(systemUser.getUsergroup(), systemUser.getUsername(), userId, id, 5, new DateUtil().getSystemTime());
+                OperationLog operationLog = new OperationLog(systemUser.getUsergroup(), systemUser.getUsername(), userId, id, 5, new DateUtil().getSystemTime(),systemUser.getCompanyId());
                 j = operationMapper.insertOperationLog(operationLog);
             } else {
                 return new JsonResult(0, 0, "已下载过日志", 0);
@@ -273,7 +271,7 @@ public class FileServiceImpl implements FileService {
         if (result != 0) {
             SystemUser systemUser = userRepositoty.findInfo(userId);
             //添加操作日志
-            OperationLog operationLog = new OperationLog(systemUser.getUsergroup(), systemUser.getUsername(), userId, id, 3, new DateUtil().getTime());
+            OperationLog operationLog = new OperationLog(systemUser.getUsergroup(), systemUser.getUsername(), userId, id, 3, new DateUtil().getTime(),systemUser.getCompanyId());
             String str = new DateUtil().cacheExist(String.valueOf(id));
             if (str.equals("full")) {
                 return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
@@ -289,7 +287,7 @@ public class FileServiceImpl implements FileService {
         return new JsonResult(2, 0, "操作失败", 0);
     }
 
-    public JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize, String fileStyleId, String departmentName, Integer userGroupId, String sortType,String companyId) {
+    public JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize, String fileStyleId, String departmentName, Integer userGroupId, String sortType, String companyId) {
         if (current == null || pageSize == null || userId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
@@ -303,26 +301,15 @@ public class FileServiceImpl implements FileService {
         if (fileStyleId == "null") {
             fileStyleId = "";
         }
-
-        if(companyId.length()>1){
-            String[] arr = companyId.split(",");
-            String companyId_string = "";
-            for (int i = 0, len =arr.length; i < len; i++) {
-                if (i > 0) {
-                    companyId_string += ",";
-                }
-                companyId_string+= "'" + arr[i]+ "'";
-            }
-            companyId=companyId_string;
-        }
+        companyId = DateUtil.getCompanyResult(companyId);
         RdPage page = new RdPage();
         int startSize = (current - 1) * pageSize;
         List<Map> map = new ArrayList<>();
         String userGroupIds = getGroupArray(userGroupId);
         if (departmentName.equals("") && fileStyleId.equals("")) {
             Integer sum = 0;
-            map = fileMapper.showUserLookFile(userId,companyId,userGroupIds, sortType, startSize, pageSize);
-            sum = fileMapper.countUserLookFile(userId,companyId, userGroupIds);
+            map = fileMapper.showUserLookFile(userId, companyId, userGroupIds, sortType, startSize, pageSize);
+            sum = fileMapper.countUserLookFile(userId, companyId, userGroupIds);
 //            List<Map> newList = new ArrayList(new HashSet(map));
 //            System.out.println(newList);
             page.setTotal(sum);
@@ -343,7 +330,7 @@ public class FileServiceImpl implements FileService {
                 String results = getGroupArray(groupId);
                 params.put("groupId", results);
             } else {
-                params.put("groupId",userGroupIds);
+                params.put("groupId", userGroupIds);
             }
             Integer result = 0;
             List<Map> searchmap = fileMapper.showUserIfLookFile(params);
@@ -387,14 +374,15 @@ public class FileServiceImpl implements FileService {
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
         String searchContent = String.valueOf(jsonObject.get("searchContent"));
         String userGroupId = String.valueOf(jsonObject.get("userGroupId"));
+        String companyId = String.valueOf(jsonObject.get("companyId"));
         if (userId == null || current == null || pageSize == null || searchContent.equals("")) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         RdPage rdPage = new RdPage();
         List<Map> map = fileMapper.showSearchFile1(Integer.parseInt(userId), searchContent);
-        List<Map> companyFileList = fileMapper.searchCompanyFile1(searchContent);
-        String ss = getGroupArray(Integer.parseInt(userGroupId));
-        List<Map> groupFileList = fileMapper.searchGroupFile1(searchContent, ss);
+        List<Map> companyFileList = fileMapper.searchCompanyFile1(searchContent,companyId);
+        String groupIds = getGroupArray(Integer.parseInt(userGroupId));
+        List<Map> groupFileList = fileMapper.searchGroupFile1(searchContent, groupIds);
         if (map != null) {
             map.addAll(companyFileList);
             map.addAll(groupFileList);
@@ -445,7 +433,7 @@ public class FileServiceImpl implements FileService {
             if (str.equals("full")) {
                 return new JsonResult(2, 0, "出现并发", 0);
             }
-            OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), Integer.parseInt(userId), Integer.parseInt(id), 3, new DateUtil().getTime());
+            OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), Integer.parseInt(userId), Integer.parseInt(id), 3, new DateUtil().getTime(),systemUser.getCompanyId());
             operationMapper.insertOperationLog(operationLog);
         }
         if (result != 0) {
@@ -482,20 +470,21 @@ public class FileServiceImpl implements FileService {
      */
     @Override
     @Transactional(readOnly = false)
-    public JsonResult deleteFileStyle(String object) {
+    public JsonResult deleteFileStyle (String object) {
+
         if (object.equals("")) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         JSONObject jsonObject = JSONObject.parseObject(object);
         String fileId = String.valueOf(jsonObject.get("fileId"));
-        String  userId =String.valueOf( jsonObject.get("userId"));
+        String userId = String.valueOf(jsonObject.get("userId"));
         if (userId.equals("null")) {
             return new JsonResult(2, 0, "请登陆", 0);
         }
         Integer result = fileMapper.updateFileShow(fileId);
         if (result != 0) {
             SystemUser systemUser = userRepositoty.findInfo(Integer.parseInt(userId));
-            OperationLog operationLog = new OperationLog(systemUser.getUsergroup(), systemUser.getUsername(), Integer.parseInt(userId), Integer.parseInt(fileId), 2, new DateUtil().getTime());
+            OperationLog operationLog = new OperationLog(systemUser.getUsergroup(), systemUser.getUsername(), Integer.parseInt(userId), Integer.parseInt(fileId), 2, new DateUtil().getTime(),systemUser.getCompanyId());
             String str = new DateUtil().cacheExist(String.valueOf(userId));
             if (str.equals("full")) {
                 return new JsonResult(2, 0, "出现并发", 0);
@@ -569,6 +558,7 @@ public class FileServiceImpl implements FileService {
                 }
                 ss += "'" + groupList.get(i) + "'";
             }
+            ss=ss+","+"'" + groupId + "'";
         } else {
             Integer result = userRepositoty.queryPid(groupId);
             ss = "'" + result + "'" + "," + "'" + groupId + "'";
