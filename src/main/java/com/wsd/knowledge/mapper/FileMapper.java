@@ -169,7 +169,6 @@ public interface FileMapper {
             " u.userId=#{userId} and  ( f.fileContent like concat('%',#{searchContent},'%') or  f.title like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%'))  order by f.addFileTime desc")
     List<Map> showSearchFile1(@Param("userId") Integer userId, @Param("searchContent") String searchContent);
 
-
     /**
      * 搜索所有公司性质的文件
      *
@@ -177,7 +176,6 @@ public interface FileMapper {
      */
     @Select("select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f    where f.fileSpecies=2 and f.fileDisplay = 1 and f.companyId in (#{companyId}) and (f.title like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%')) order by f.addFileTime desc ")
     List<Map> searchCompanyFile1(@Param("searchContent") String searchContent,@Param("companyId")String companyId);
-
 
     /**
      * 展示部门性质的文件
@@ -281,7 +279,7 @@ public interface FileMapper {
                 sql.append(" AND o.userGroupId in (" + (String) map.get("groupId") + ")");
             }
             if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
-                sql.append(" AND o.fileStyleId = #{fileStyleId} ");
+                sql.append(" AND o.fileStyleId in (" + (String) map.get("fileStyleId") + ")");
             }
             sql.append("  order by o.addFileTime Desc  ");
 //            System.out.print(sql);
@@ -298,7 +296,7 @@ public interface FileMapper {
 //                sql.append(" AND o.userGroupId in (" + (String) map.get("groupId") + ")");
 //            }
             if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
-                sql.append(" AND o.fileStyleId = #{fileStyleId} ");
+                sql.append(" AND o.fileStyleId in (" + (String) map.get("fileStyleId") + ")");
             }
             sql.append("  order by o.addFileTime Desc  ");
             System.out.print(sql);
@@ -313,7 +311,7 @@ public interface FileMapper {
                 sql.append(" AND o.userGroupId in (" + (String) map.get("groupId") + ")");
             }
             if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
-                sql.append(" AND o.fileStyleId = #{fileStyleId} ");
+                sql.append(" AND o.fileStyleId in (" + (String) map.get("fileStyleId") + ")");
             }
             sql.append("  order by o.addFileTime Desc  ");
             return sql.toString();

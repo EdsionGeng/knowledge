@@ -3,6 +3,15 @@
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
     <property name="LOG_HOME" value="./logs" />
     <!-- 控制台输出 -->
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <!-- 指定日志推送地址 -->
+        <destination>192.168.3.25:9222</destination>
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder" >
+            <!-- 项目名称必须全部小写 -->
+            <customFields>{"projectname":"knowledge"}</customFields>
+        </encoder>
+    </appender>
+    <!--<appender-ref ref="LOGSTASH" />-->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->

@@ -69,21 +69,22 @@ public interface UserRepositoty {
     @Select("select  id  as userId,userGroupId,username AS name  from SystemUser  where userGroupId=#{id} and job=1")
     List<NewDepartment> queryByGroupId(@Param("id") Integer id);
 
-
     @Select("select Uid from UserRoles where Rid=2013 ")
         //@Select("select Uid from UserRoles where Rid=3031 ")
     List<Integer> queryAdmin();
-
 
    // @Select("select id  from UserRoles where  Uid=#{userId} and Rid=3031")
     @Select("select id  from UserRoles where  Uid=#{userId} and Rid=2013")
     Integer ifAdmin(@Param("userId") Object userId);
 
-    //    @Select("select userGroupId from SystemUser where id=#{userId}")
-//    Integer queryGroupId(@Param("userId")Integer userId);
     @Select("select  a.id,a.deptno,a.pid from Department_new a LEFT JOIN Department_new b ON b.id =a.Pid where b.pid=#{pid} OR b.id=#{pid}")
     List<Integer> showPerGroupId(@Param("pid") Integer pid);
 
+    @Select("select id，deptno,pid from Department_new where pid=3")
+    List<Map> showSeniorDept();
+
+    @Select("select id，deptno,pid from Department_new where pid=#{pid}")
+    List<Map> showSonDept(@Param("pid")Integer pid);
 
     @Select("select pid from Department_new where id=#{id}")
     Integer queryPid(@Param("id") Integer id);

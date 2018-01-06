@@ -48,7 +48,6 @@ public class MyRecAdServiceImpl implements MyRecAdService {
         }
         int startSize = (current - 1) * pageSize;
         List<Map> map = userRecAdMapper.showUserRecAd(userId,sortType,startSize, pageSize);
-
         RdPage page = new RdPage();
         Integer sum = userRecAdMapper.countUserAdPcs(userId);
         page.setTotal(sum);

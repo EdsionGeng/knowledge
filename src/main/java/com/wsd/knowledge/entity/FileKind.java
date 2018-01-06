@@ -77,6 +77,12 @@ public class FileKind {
         this.operationTime = operationTime;
     }
 
+    public FileKind(int id, String fileKindName, int fileParentId) {
+        this.id = id;
+        this.fileKindName = fileKindName;
+        this.fileParentId = fileParentId;
+    }
+
     public FileKind() {
     }
 }
