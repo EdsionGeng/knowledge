@@ -85,7 +85,7 @@ public interface FileService {
      * @param pageSize
      * @return
      */
-    JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize,String fileStyleId,String  groupId,Integer userGroupId,String sortType,String companyId);
+    JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize,String fileStyleId,String  departmentId,Integer userGroupId,String sortType,String companyId,String sortmethod);
 
 
     /**

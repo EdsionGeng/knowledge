@@ -211,10 +211,11 @@ public class FileController {
             @ApiImplicitParam(paramType = "query", dataType = "Intege", name = "userId", value = "用户ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Intege", name = "current", value = "页数", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "pageSize", value = "每页数量", required = true),
-            @ApiImplicitParam(paramType = "query", dataType = "String", name = "departmentName", value = "部门名字"),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "departmentId", value = "部门Id"),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileStyleId", value = "文件类型ID"),
             @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userGroupId", value = "个人组别ID", required = true),
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "companyId", value = "公司Id", required = true),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "sortmethod", value = "排序方式 0按时间 1按浏览量", required = true),
     })
     @RequestMapping(value = "show/userlookfile", method = RequestMethod.POST)
     public JsonResult showUserLookFile(@RequestBody String object) {
@@ -228,9 +229,10 @@ public class FileController {
         String fileStyleId = String.valueOf(jsonObject.get("fileStyleId"));
         String sortType = String.valueOf(jsonObject.get("sortType"));
         String companyId = String.valueOf(jsonObject.get("companyId"));
-        String departmentName = String.valueOf(jsonObject.get("departmentName"));
+        String sortmethod = String.valueOf(jsonObject.get("sortmethod"));
+        String departmentId = String.valueOf(jsonObject.get("departmentId"));
         Integer userGroupId = Integer.parseInt(String.valueOf(jsonObject.get("userGroupId")));
-        return fileService.showUserLookFile(Integer.parseInt(userId), current, pageSize, fileStyleId, departmentName, userGroupId, sortType,companyId);
+        return fileService.showUserLookFile(Integer.parseInt(userId), current, pageSize, fileStyleId, departmentId, userGroupId, sortType,companyId,sortmethod);
     }
 
     /**

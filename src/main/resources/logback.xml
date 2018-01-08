@@ -5,10 +5,10 @@
     <!-- 控制台输出 -->
     <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
         <!-- 指定日志推送地址 -->
-        <destination>192.168.3.25:9222</destination>
+        <destination>192.168.3.26:9222</destination>
         <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder" >
             <!-- 项目名称必须全部小写 -->
-            <customFields>{"projectname":"knowledge"}</customFields>
+            <customFields>{"projectname":"knowledge-t"}</customFields>
         </encoder>
     </appender>
     <!--<appender-ref ref="LOGSTASH" />-->

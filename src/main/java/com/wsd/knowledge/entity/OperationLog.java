@@ -110,5 +110,4 @@ public class OperationLog implements Serializable {
         this.operationTime = operationTime;
         this.companyId=companyId;
     }
-
 }

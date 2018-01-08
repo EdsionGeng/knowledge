@@ -11,6 +11,8 @@ import org.springframework.context.annotation.PropertySource;
 @ComponentScan(basePackages = "com.wsd.knowledge")
 public class SystemApplication {
 
+
+
     public static void main(String[] args) {
         SpringApplication.run(SystemApplication.class, args);
 //		SpringApplication application = new SpringApplication(SystemApplication.class);

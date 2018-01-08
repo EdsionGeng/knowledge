@@ -1,13 +1,16 @@
 package com.wsd.knowledge.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.wsd.knowledge.entity.NewDepartment;
 import com.wsd.knowledge.mapper.FileKindMapper;
 import com.wsd.knowledge.mapper1.UserRepositoty;
 import com.wsd.knowledge.service.DepartmentService;
 import com.wsd.knowledge.util.JsonResult;
+import com.wsd.knowledge.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -86,4 +89,5 @@ public class DepartServiceImpl implements DepartmentService {
         }
         return new JsonResult(2, 0, "已是最低级目录", 0);
     }
+
 }

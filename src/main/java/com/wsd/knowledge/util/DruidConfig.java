@@ -19,7 +19,6 @@ import java.sql.SQLException;
  */
 @Configuration
 public class DruidConfig {
-
     private Logger logger = LoggerFactory.getLogger(DruidConfig.class);
 
     @Value("${spring.datasource.test1.url}")

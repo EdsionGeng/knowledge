@@ -50,8 +50,9 @@ public class DepartmentController {
 
     @ApiOperation(value = "展示层级目录", notes = "无需参数")
     @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "docId", value = "文档ID", required = true),
     })
-    @RequestMapping(value = "show/son/doc.htmls", method = RequestMethod.GET)
+    @RequestMapping(value = "show/son/doc.htmls", method = RequestMethod.POST)
     public JsonResult showSonDoc(@RequestBody String object) {
         return departmentService.showSonDoc(object);
     }

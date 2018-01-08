@@ -19,17 +19,17 @@ public interface FileKindMapper {
      * @param id
      * @return
      */
-    @Select("select id,fileKindName,fileParentId from FileKind where id=#{id}")
+    @Select("select id ,fileKindName,fileParentId from FileKind where id=#{id}")
     FileKind selectFileKind(@Param("id") Integer id);
 
 
     @Select("select  a.id from  FileKind a LEFT JOIN FileKind b ON b.id =a.fileParentId where b.fileParentId=#{id} OR b.id=#{id})")
     List<Integer> queryAllSonId(@Param("id") Integer id);
 
-    @Select("select id,fileKindName,fileParentId from FileKind where pid=0")
+    @Select("select id as fileStyleId,fileKindName,fileParentId from FileKind where fileParentId=0")
     List<Map> showSeniorDoc();
 
-    @Select("select id,fileKindName,fileParentId from FileKind where pid=#{pid}")
+    @Select("select id as fileStyleId,fileKindName,fileParentId from FileKind where fileParentId=#{pid}")
     List<Map> showSonDoc(@Param("pid")Integer pid);
 
 }

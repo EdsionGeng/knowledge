@@ -80,10 +80,10 @@ public interface UserRepositoty {
     @Select("select  a.id,a.deptno,a.pid from Department_new a LEFT JOIN Department_new b ON b.id =a.Pid where b.pid=#{pid} OR b.id=#{pid}")
     List<Integer> showPerGroupId(@Param("pid") Integer pid);
 
-    @Select("select id，deptno,pid from Department_new where pid=3")
+    @Select("select id as departmentId,deptno,pid from Department_new where pid=3")
     List<Map> showSeniorDept();
 
-    @Select("select id，deptno,pid from Department_new where pid=#{pid}")
+    @Select("select id as departmentId,deptno,pid from Department_new where pid=#{pid}")
     List<Map> showSonDept(@Param("pid")Integer pid);
 
     @Select("select pid from Department_new where id=#{id}")

@@ -290,7 +290,7 @@ public class FileServiceImpl implements FileService {
         return new JsonResult(2, 0, "操作失败", 0);
     }
 
-    public JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize, String fileStyleId, String departmentName, Integer userGroupId, String sortType, String companyId) {
+    public JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize, String fileStyleId, String departmentId, Integer userGroupId, String sortType, String companyId,String sortmethod) {
         if (current == null || pageSize == null || userId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
@@ -298,8 +298,8 @@ public class FileServiceImpl implements FileService {
             sortType = "desc";
         }
 
-        if (departmentName == "null") {
-            departmentName = "";
+        if (departmentId == "null") {
+            departmentId = "";
         }
         if (fileStyleId == "null") {
             fileStyleId = "";
@@ -308,10 +308,14 @@ public class FileServiceImpl implements FileService {
         RdPage page = new RdPage();
         int startSize = (current - 1) * pageSize;
         List<Map> map = new ArrayList<>();
-        String userGroupIds = getGroupArray(userGroupId);
-        if (departmentName.equals("") && fileStyleId.equals("")) {
+        String userGroupIds = getGroupArray(String.valueOf(userGroupId));
+        if (departmentId.equals("") && fileStyleId.equals("")) {
             Integer sum = 0;
-            map = fileMapper.showUserLookFile(userId, companyId, userGroupIds, sortType, startSize, pageSize);
+            if("0".equals(sortmethod)){
+            map = fileMapper.showUserLookFile(userId, companyId, userGroupIds, sortType, startSize, pageSize);}
+            else if("1".equals(sortmethod)){
+                map = fileMapper.showUserLookFile1(userId, companyId, userGroupIds, sortType, startSize, pageSize);
+            }
             sum = fileMapper.countUserLookFile(userId, companyId, userGroupIds);
 //            List<Map> newList = new ArrayList(new HashSet(map));
 //            System.out.println(newList);
@@ -329,9 +333,9 @@ public class FileServiceImpl implements FileService {
             String getStyleList=getFileStyleIdList(fileStyleId);
             params.put("fileStyleId",getStyleList);
             params.put("companyId", companyId);
-            if(!departmentName.equals("")) {
-                Integer groupId = userRepositoty.queryGroupIdByName(departmentName);
-                String results = getGroupArray(groupId);
+            if(!departmentId.equals("")) {
+             //   Integer groupId = userRepositoty.queryGroupIdByName(departmentName);
+                String results = getGroupArray(departmentId);
                 params.put("groupId", results);
             } else {
                 params.put("groupId", userGroupIds);
@@ -385,7 +389,7 @@ public class FileServiceImpl implements FileService {
         RdPage rdPage = new RdPage();
         List<Map> map = fileMapper.showSearchFile1(Integer.parseInt(userId), searchContent);
         List<Map> companyFileList = fileMapper.searchCompanyFile1(searchContent, companyId);
-        String groupIds = getGroupArray(Integer.parseInt(userGroupId));
+        String groupIds = getGroupArray(userGroupId);
         List<Map> groupFileList = fileMapper.searchGroupFile1(searchContent, groupIds);
         if (map != null) {
             map.addAll(companyFileList);
@@ -552,8 +556,8 @@ public class FileServiceImpl implements FileService {
     }
 
 
-    String getGroupArray(Integer groupId) {
-        List<Integer> groupList = userRepositoty.showPerGroupId(groupId);
+    String getGroupArray(String  groupId) {
+        List<Integer> groupList = userRepositoty.showPerGroupId(Integer.parseInt(groupId));
         String ss = "";
         if (groupList.size() != 0) {
             for (int i = 0, len = groupList.size(); i < len; i++) {
@@ -564,7 +568,7 @@ public class FileServiceImpl implements FileService {
             }
             ss = ss + "," + "'" + groupId + "'";
         } else {
-            Integer result = userRepositoty.queryPid(groupId);
+            Integer result = userRepositoty.queryPid(Integer.parseInt(groupId));
             ss = "'" + result + "'" + "," + "'" + groupId + "'";
         }
         return ss;
