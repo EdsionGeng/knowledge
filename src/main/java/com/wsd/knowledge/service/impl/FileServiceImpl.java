@@ -330,8 +330,13 @@ public class FileServiceImpl implements FileService {
             if (fileStyleId.equals("0")) {
                 fileStyleId = "";
             }
-            String getStyleList=getFileStyleIdList(fileStyleId);
-            params.put("fileStyleId",getStyleList);
+            if(!"".equals(fileStyleId)) {
+                String getStyleList = getFileStyleIdList(fileStyleId);
+                params.put("fileStyleId", getStyleList);
+            }
+            else{
+                params.put("fileStyleId", fileStyleId);
+            }
             params.put("companyId", companyId);
             if(!departmentId.equals("")) {
              //   Integer groupId = userRepositoty.queryGroupIdByName(departmentName);
@@ -479,7 +484,6 @@ public class FileServiceImpl implements FileService {
     @Override
     @Transactional(readOnly = false)
     public JsonResult deleteFileStyle(String object) {
-
         if (object.equals("")) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
@@ -534,7 +538,6 @@ public class FileServiceImpl implements FileService {
 
     //集合分页
     public static List<Map> listSplit3(int page, int limit, List<Map> list) {
-
         List<Map> result = new ArrayList<Map>();
         if (list != null && list.size() > 0) {
             int allCount = list.size();
@@ -552,10 +555,7 @@ public class FileServiceImpl implements FileService {
             }
         }
         return (result != null && result.size() > 0) ? result : new ArrayList<>();
-
     }
-
-
     String getGroupArray(String  groupId) {
         List<Integer> groupList = userRepositoty.showPerGroupId(Integer.parseInt(groupId));
         String ss = "";

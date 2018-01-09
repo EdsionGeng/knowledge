@@ -220,14 +220,14 @@ public class CommonServiceImpl implements CommonService {
             }
         }
         List<FileKind> list = Lists.newArrayList();
-        FileKind zero = new FileKind();
-        zero.setId(0);
-        zero.setFileKindName("聚财科技文档目录");
-        zero.setChildren(trees);
-        if (StringUtils.equals(pid, "0")) {
-            zero.setChecked(1);
-        }
-        list.add(zero);
+//        FileKind zero = new FileKind();
+//        zero.setId(0);
+//        zero.setFileKindName("聚财科技文档目录");
+//        zero.setChildren(trees);
+//        if (StringUtils.equals(pid, "0")) {
+//            zero.setChecked(1);
+//        }
+//        list.add(zero);
         return list;
     }
 

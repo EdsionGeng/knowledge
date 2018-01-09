@@ -1,5 +1,6 @@
 package com.wsd.knowledge.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.wsd.knowledge.entity.CommonAdvertisement;
 import com.wsd.knowledge.entity.RdPage;
 import com.wsd.knowledge.entity.SystemUser;
@@ -44,13 +45,13 @@ public class AdvertisementServiceImpl implements AdvertisementService {
      */
     @Override
     @Transactional(readOnly = false)
-    public  synchronized JsonResult insertCommonAd(String title, String content, String sendDepartmentName, Integer userId,String adStyle,String  companyId) {
-        if (title .equals("") || content .equals("")|| sendDepartmentName .equals("")|| userId == null||adStyle.equals("")) {
+    public synchronized JsonResult insertCommonAd(String title, String content, String sendDepartmentName, Integer userId, String adStyle, String companyId) {
+        if (title.equals("") || content.equals("") || sendDepartmentName.equals("") || userId == null || adStyle.equals("")) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
         SystemUser systemUser = userRepositoty.findInfo(userId);
         CommonAdvertisement commonAdvertisement = new CommonAdvertisement(title, content, systemUser.getUsergroup(), systemUser.getUsername(),
-                userId, new DateUtil().getTime(), sendDepartmentName,adStyle,companyId);
+                userId, new DateUtil().getTime(), sendDepartmentName, adStyle, companyId);
         String str = new DateUtil().cacheExist(String.valueOf(userId));
         if (str.equals("full")) {
             return new JsonResult(2, 0, "并发", 0);
@@ -79,7 +80,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         }
         Integer j = null;
         for (String id : ids.split(",")) {
-            j=advertisementMapper.deleteAd(id);
+            j = advertisementMapper.deleteAd(id);
             advertisementMapper.deleteRecAd(id);
         }
         if (j != 0) {
@@ -119,31 +120,31 @@ public class AdvertisementServiceImpl implements AdvertisementService {
      * @return
      */
     @Override
-    public JsonResult showAllAd(String title, String date1, String date2,String adStyle,String sortType ,String  companyId,Integer current, Integer pageSize) {
+    public JsonResult showAllAd(String title, String date1, String date2, String adStyle, String sortType, String companyId, Integer current, Integer pageSize) {
         if (current == null || pageSize == null) {
             current = 1;
             pageSize = 20;
         }
-        if (title=="") {
+        if (title == "") {
             title = "";
         }
         if (date1.equals("")) {
             date1 = "2016-11-01 00:00:00";
         }
-        if (date2 .equals("")) {
+        if (date2.equals("")) {
             date2 = "";
         }
-        if(adStyle.equals("")){
-            adStyle="";
+        if (adStyle.equals("")) {
+            adStyle = "";
         }
-        if(!sortType.equals("asc")&&!sortType.equals("desc")){
-            sortType="desc";
+        if (!sortType.equals("asc") && !sortType.equals("desc")) {
+            sortType = "desc";
         }
         List<Map> map = new ArrayList<>();
         int sum = 0;
-        RdPage rdPage =new RdPage();
+        RdPage rdPage = new RdPage();
         int startSize = (current - 1) * pageSize;
-        if (title.equals("")  && date2.equals("")&&adStyle.equals("")) {
+        if (title.equals("") && date2.equals("") && adStyle.equals("")) {
             //展示所有
             Map<String, Object> maps = new HashMap<>();
 
@@ -159,7 +160,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             rdPage.setPageSize(pageSize);
         } else {
             //组合查询
-            if(!date2.equals("")) {
+            if (!date2.equals("")) {
                 date2 = DateUtil.getAfterDate(date2, 1);
             }
             Map<String, Object> maps = new HashMap<>();
@@ -178,7 +179,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             rdPage.setCurrent(current);
             rdPage.setPageSize(pageSize);
         }
-            return new JsonResult(0, map, "查询结果", rdPage);
+        return new JsonResult(0, map, "查询结果", rdPage);
     }
 
     /**
@@ -201,9 +202,29 @@ public class AdvertisementServiceImpl implements AdvertisementService {
             isRead = 0;
         }
         Integer noRead = pcs - isRead;//未读数量
-        Map<String,Object> map=new HashMap<>();
-        map.put("isRead",isRead);
-        map.put("noRead",noRead);
-        return new JsonResult(0,map,"查询结果",0);
+        Map<String, Object> map = new HashMap<>();
+        map.put("isRead", isRead);
+        map.put("noRead", noRead);
+        return new JsonResult(0, map, "查询结果", 0);
+    }
+
+    /**
+     * 展示某一公告阅读人数具体详情
+     * @param object
+     * @return
+     */
+    @Override
+    public JsonResult showAdInfo(String object) {
+        JSONObject jsonObject = JSONObject.parseObject(object);
+        String commonId = jsonObject.getString("commonId");
+        if ("null".equals(commonId)) {
+            return new JsonResult(2, 0, "参数为空", 0);
+        }
+        List<Map> map1 = advertisementMapper.showAdPerInfo(Integer.parseInt(commonId));
+        List<Map> map2 = advertisementMapper.showAdPerNoInfo(Integer.parseInt(commonId));
+        List<List<Map>> map = new ArrayList<>();
+        map.add(map1);
+        map.add(map2);
+        return new JsonResult(0, map, "查询结果", 0);
     }
 }

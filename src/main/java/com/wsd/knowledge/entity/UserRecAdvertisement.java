@@ -19,6 +19,8 @@ public class UserRecAdvertisement implements Serializable {
    // @Column(name = "ifRead", nullable = false, columnDefinition = " '是否已查阅此公告 0未读 1 已读'")
     private int ifRead;//是否已查阅此公告 0未读 1 已读
    // @Column(name = "recAdTime", nullable = false, length = 96, columnDefinition = " '收到此公告时间 '")
+    private String departmentName;
+    private String username;
     private String recAdTime;//收到此公告时间
 
     public int getId() {
@@ -61,10 +63,28 @@ public class UserRecAdvertisement implements Serializable {
         this.recAdTime = recAdTime;
     }
 
-    public UserRecAdvertisement(int commonId, int userId, int ifRead, String recAdTime) {
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public UserRecAdvertisement(int commonId, int userId, int ifRead,String departmentName,String username,String recAdTime) {
         this.commonId = commonId;
         this.userId = userId;
         this.ifRead = ifRead;
+        this.departmentName=departmentName;
+        this.username=username;
         this.recAdTime = recAdTime;
     }
 

@@ -188,4 +188,24 @@ public class AdvertisementController {
         Integer commonId = Integer.parseInt(String.valueOf(jsonObject.get("commonId")));
         return advertisementService.showAdPcs(commonId);
     }
+
+    /**
+     * 统计某一公告已读未读人数
+     *
+     * @param object
+     * @return
+     */
+    @ApiOperation(value = "某公告具体信息", notes = "传递必要参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "Integer ", name = "commonId", value = "公告ID")
+    })
+    @RequestMapping(value = "show/adinfo.htmls", method = RequestMethod.POST)
+    public JsonResult showAdInfo( @RequestBody String object) {
+
+        return advertisementService.showAdInfo(object);
+    }
+
+
+
+
 }

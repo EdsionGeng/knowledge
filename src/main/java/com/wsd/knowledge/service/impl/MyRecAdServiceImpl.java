@@ -3,6 +3,7 @@ package com.wsd.knowledge.service.impl;
 
 import com.wsd.knowledge.entity.CommonAdvertisement;
 import com.wsd.knowledge.entity.RdPage;
+import com.wsd.knowledge.entity.SystemUser;
 import com.wsd.knowledge.entity.UserRecAdvertisement;
 import com.wsd.knowledge.mapper.AdvertisementMapper;
 import com.wsd.knowledge.mapper.UserRecAdMapper;
@@ -91,7 +92,8 @@ public class MyRecAdServiceImpl implements MyRecAdService {
             if (results.equals("full")) {
                 return new JsonResult(2, 0, "并发出现", 0);
             }
-            UserRecAdvertisement userRecAdvertisement = new UserRecAdvertisement(commonId, departmentId.get(i), 0, new DateUtil().getSystemTime());
+            SystemUser systemUser=userRepositoty.findInfo(departmentId.get(i));
+            UserRecAdvertisement userRecAdvertisement = new UserRecAdvertisement(commonId, departmentId.get(i), 0,systemUser.getDepartment(),systemUser.getUsername(), new DateUtil().getSystemTime());
             result = userRecAdMapper.insertUserRecAd(userRecAdvertisement);
             String postUrl="{\"Uid\":"+departmentId.get(i)+",\"Content\":\"【"+commonAdvertisement.getAdStyle()+"】:"+commonAdvertisement.getAdTitle()+"\\n标题:"+commonAdvertisement.getAdTitle()+"\\n内容:"+commonAdvertisement.getAdContent()+"\\n发送部门:"+commonAdvertisement.getDepartmentName()+"\\n发送时间:"+commonAdvertisement.getSendTime()+"\",\"AgentId\":1000014,\"Title\":\"知识库系统：消息通知\"}";
            // String postUrl = "{\"Uid\":" + departmentId.get(i) + ",\"Content\":\"【 通知】" + commonAdvertisement.getAdTitle() + ""

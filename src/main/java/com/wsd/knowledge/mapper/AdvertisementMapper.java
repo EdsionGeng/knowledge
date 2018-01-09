@@ -27,7 +27,7 @@ public interface AdvertisementMapper {
 
 
     @Select("select adTitle,sendTime,addUser,departmentName,adContent,adStyle from CommonAdvertisement where id=#{id}")
-    CommonAdvertisement queryComAd(@Param("id")int id);
+    CommonAdvertisement queryComAd(@Param("id") int id);
 
 
     /**
@@ -86,7 +86,7 @@ public interface AdvertisementMapper {
      * @return
      */
     @SelectProvider(type = CommonAd.class, method = "countAllAds")
-    Integer countAdPcs(Map<String,Object> map);
+    Integer countAdPcs(Map<String, Object> map);
 
 
     /**
@@ -125,83 +125,89 @@ public interface AdvertisementMapper {
     @Select("select count(id) from UserRecAdvertisement where commonId=#{commonId} and ifRead=1")
     Integer countAdNoRead(@Param("commonId") Integer commonId);
 
+    @Select("select departmentName,username,recAdTime from UserRecAdvertisement where commonId=#{commonId} and ifRead=1 ")
+    List<Map> showAdPerInfo(@Param("commonId") Integer commonId);
+
+    @Select("select departmentName,username,recAdTime from UserRecAdvertisement where commonId=#{commonId} and ifRead=0 ")
+    List<Map> showAdPerNoInfo(@Param("commonId") Integer commonId);
+
     class CommonAd {
-    public String queryAdByIf(Map<String, Object> map) {
-        StringBuffer sql = new StringBuffer();
-        sql.append("select distinct  o.id,o.adTitle,o.departmentName,o.addUser,o.sendTime,o.sendObject,o.adStyle from CommonAdvertisement o  ");
-        if (StringUtils.isNotEmpty((String) map.get("companyId"))) {
-            sql.append(" where o.companyId in (" + (String) map.get("companyId") + ")");
-        }
-        if (StringUtils.isNotEmpty((String) map.get("date1"))) {
-            sql.append(" AND o.sendtime >= #{date1} ");
-        }
-        if (StringUtils.isNotEmpty((String) map.get("date2"))) {
-            sql.append(" AND o.sendtime <= #{date2} ");
-        }
-        if (StringUtils.isNotEmpty((String) map.get("title"))) {
-            sql.append(" AND o.adtitle like concat('%',#{title},'%') ");
-        }
-        if (StringUtils.isNotEmpty((String) map.get("adStyle"))) {
-            sql.append(" AND o.adStyle =#{adStyle} ");
-        }
-        if (StringUtils.isNotEmpty((String) map.get("sortType"))) {
-            if (map.get("sortType").equals("desc")) {
-                sql.append("  order by o.sendtime desc ");
+        public String queryAdByIf(Map<String, Object> map) {
+            StringBuffer sql = new StringBuffer();
+            sql.append("select distinct  o.id,o.adTitle,o.departmentName,o.addUser,o.sendTime,o.sendObject,o.adStyle from CommonAdvertisement o  ");
+            if (StringUtils.isNotEmpty((String) map.get("companyId"))) {
+                sql.append(" where o.companyId in (" + (String) map.get("companyId") + ")");
             }
-            if (map.get("sortType").equals("asc")) {
-                sql.append("  order by o.sendtime asc ");
+            if (StringUtils.isNotEmpty((String) map.get("date1"))) {
+                sql.append(" AND o.sendtime >= #{date1} ");
             }
+            if (StringUtils.isNotEmpty((String) map.get("date2"))) {
+                sql.append(" AND o.sendtime <= #{date2} ");
+            }
+            if (StringUtils.isNotEmpty((String) map.get("title"))) {
+                sql.append(" AND o.adtitle like concat('%',#{title},'%') ");
+            }
+            if (StringUtils.isNotEmpty((String) map.get("adStyle"))) {
+                sql.append(" AND o.adStyle =#{adStyle} ");
+            }
+            if (StringUtils.isNotEmpty((String) map.get("sortType"))) {
+                if (map.get("sortType").equals("desc")) {
+                    sql.append("  order by o.sendtime desc ");
+                }
+                if (map.get("sortType").equals("asc")) {
+                    sql.append("  order by o.sendtime asc ");
+                }
+            }
+            sql.append("  limit #{startSize},#{limit} ");
+            return sql.toString();
         }
-        sql.append("  limit #{startSize},#{limit} ");
-        return sql.toString();
-    }
 
-    public String countAdByIf(Map<String, Object> map) {
-        StringBuffer sql = new StringBuffer();
-        sql.append("select count(o.id)  from CommonAdvertisement  o   ");
-        if (StringUtils.isNotEmpty((String) map.get("companyId"))) {
-            sql.append(" where o.companyId in (" + (String) map.get("companyId") + ")");
-        }
-        if (StringUtils.isNotEmpty((String) map.get("date1"))) {
-            sql.append(" AND o.sendtime >= #{date1} ");
-        }
-        if (StringUtils.isNotEmpty((String) map.get("date2"))) {
-            sql.append(" AND o.sendtime <= #{date2} ");
-        }
-        if (StringUtils.isNotEmpty((String) map.get("title"))) {
-            sql.append(" AND o.adtitle like concat('%',#{title},'%') ");
-        }
-        if (StringUtils.isNotEmpty((String) map.get("adStyle"))) {
-            sql.append(" AND o.adStyle= #{adStyle} ");
-        }
-        return sql.toString();
-    }
-
-    public String queryAllAds(Map<String, Object> map) {
-        StringBuffer sql = new StringBuffer();
-        sql.append("select distinct  o.id,o.adTitle,o.departmentName,o.addUser,o.sendTime,o.sendObject,o.adStyle  from CommonAdvertisement  o   ");
-        if (StringUtils.isNotEmpty((String) map.get("companyId"))) {
-            sql.append(" where o.companyId in (" + (String) map.get("companyId") + ")");
-        }
-        if (StringUtils.isNotEmpty((String) map.get("sortType"))) {
-            if (map.get("sortType").equals("desc")) {
-                sql.append("  order by o.sendtime desc ");
+        public String countAdByIf(Map<String, Object> map) {
+            StringBuffer sql = new StringBuffer();
+            sql.append("select count(o.id)  from CommonAdvertisement  o   ");
+            if (StringUtils.isNotEmpty((String) map.get("companyId"))) {
+                sql.append(" where o.companyId in (" + (String) map.get("companyId") + ")");
             }
-             if (map.get("sortType").equals("asc")) {
-                sql.append("  order by o.sendtime asc ");
+            if (StringUtils.isNotEmpty((String) map.get("date1"))) {
+                sql.append(" AND o.sendtime >= #{date1} ");
             }
+            if (StringUtils.isNotEmpty((String) map.get("date2"))) {
+                sql.append(" AND o.sendtime <= #{date2} ");
+            }
+            if (StringUtils.isNotEmpty((String) map.get("title"))) {
+                sql.append(" AND o.adtitle like concat('%',#{title},'%') ");
+            }
+            if (StringUtils.isNotEmpty((String) map.get("adStyle"))) {
+                sql.append(" AND o.adStyle= #{adStyle} ");
+            }
+            return sql.toString();
         }
-        sql.append("  limit #{startSize},#{limit} ");
-        return sql.toString();
-    }
 
-    public String countAllAds(Map<String, Object> map) {
-        StringBuffer sql = new StringBuffer();
-        sql.append("select count(o.id)  from CommonAdvertisement  o ");
-        if (StringUtils.isNotEmpty((String) map.get("companyId"))) {
-            sql.append(" where o.companyId in (" + (String) map.get("companyId") + ")");
+        public String queryAllAds(Map<String, Object> map) {
+            StringBuffer sql = new StringBuffer();
+            sql.append("select distinct  o.id,o.adTitle,o.departmentName,o.addUser,o.sendTime,o.sendObject,o.adStyle,o.adContent  from CommonAdvertisement  o   ");
+            if (StringUtils.isNotEmpty((String) map.get("companyId"))) {
+                sql.append(" where o.companyId in (" + (String) map.get("companyId") + ")");
+            }
+            if (StringUtils.isNotEmpty((String) map.get("sortType"))) {
+                if (map.get("sortType").equals("desc")) {
+                    sql.append("  order by o.sendtime desc ");
+                }
+                if (map.get("sortType").equals("asc")) {
+                    sql.append("  order by o.sendtime asc ");
+                }
+            }
+            sql.append("  limit #{startSize},#{limit} ");
+            return sql.toString();
         }
-        return sql.toString();
+
+        public String countAllAds(Map<String, Object> map) {
+            StringBuffer sql = new StringBuffer();
+            sql.append("select count(o.id)  from CommonAdvertisement  o ");
+            if (StringUtils.isNotEmpty((String) map.get("companyId"))) {
+                sql.append(" where o.companyId in (" + (String) map.get("companyId") + ")");
+            }
+            return sql.toString();
+        }
     }
-}
 }
