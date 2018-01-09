@@ -25,7 +25,7 @@ public class DepartmentController {
     @ApiOperation(value = "展示初始高级部门", notes = "无需参数")
     @ApiImplicitParams({
     })
-    @RequestMapping(value = "show/senior/dept.htmls", method = RequestMethod.GET)
+    @RequestMapping(value = "show/senior/dept.htmls", method = RequestMethod.POST)
     public JsonResult showSeniorDept() {
         return departmentService.showSeniorDept();
     }
@@ -43,7 +43,7 @@ public class DepartmentController {
     @ApiOperation(value = "展示初始高级目录", notes = "无需参数")
     @ApiImplicitParams({
     })
-    @RequestMapping(value = "show/senior/doc.htmls", method = RequestMethod.GET)
+    @RequestMapping(value = "show/senior/doc.htmls", method = RequestMethod.POST)
     public JsonResult showSeniorDoc() {
         return departmentService.showSeniorDoc();
     }
