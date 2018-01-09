@@ -128,7 +128,7 @@ public interface FileMapper {
 //     */
 //    @Select("select  distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileSpecies=0 and f.fileDisplay=1 and  u.userId=#{userId} order by f.addFileTime Desc  ")
 
-    @Select("select f.id,f.departmentName,f.fileStyle,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime,f.lookPcs from  ((select  distinct   f.id,f.departmentName,f.fileStyle,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime,f.lookPcs from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileSpecies=0 and f.fileDisplay=1 and  u.userId=#{userId})UNION \n" +
+    @Select("select f.id,f.departmentName,f.fileStyle,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime,f.lookPcs from  ((select    f.id,f.departmentName,f.fileStyle,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime,f.lookPcs from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileSpecies=0 and f.fileDisplay=1 and  u.userId=#{userId})UNION \n" +
             " (select  f.id,f.departmentName,f.fileStyle,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime ,f.lookPcs from FileDetail f    where f.fileSpecies=2 and f.fileDisplay = 1 and f.companyId in (#{companyId})) " +
             "UNION  (select  f.id,f.departmentName,f.fileStyle,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime ,f.lookPcs from FileDetail f where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId in (#{result}))" +
             "UNION  (select   f.id,f.departmentName,f.fileStyle,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime ,f.lookPcs from FileDetail f where  f.fileDisplay = 1 and f.userId=#{userId}))  as f order by f.addFileTime ${sortType} limit #{startSize},#{pageSize}")
@@ -170,7 +170,7 @@ public interface FileMapper {
      * @param searchContent
      * @return
      */
-    @Select("select distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime,f.lookpcs from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileDisplay=1 and " +
+    @Select("select distinct  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime,f.lookPcs from FileDetail f left join UserPermission  u on  f.id=u.fileId where f.fileDisplay=1 and " +
             " u.userId=#{userId} and  ( f.fileContent like concat('%',#{searchContent},'%') or  f.title like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%'))  order by f.addFileTime desc")
     List<Map> showSearchFile1(@Param("userId") Integer userId, @Param("searchContent") String searchContent);
 
@@ -179,7 +179,7 @@ public interface FileMapper {
      *
      * @return
      */
-    @Select("select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime,f.lookpcs from FileDetail f    where f.fileSpecies=2 and f.fileDisplay = 1 and f.companyId in (#{companyId}) and (f.title like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%')) order by f.addFileTime desc ")
+    @Select("select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime,f.lookPcs from FileDetail f    where f.fileSpecies=2 and f.fileDisplay = 1 and f.companyId in (#{companyId}) and (f.title like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%')) order by f.addFileTime desc ")
     List<Map> searchCompanyFile1(@Param("searchContent") String searchContent, @Param("companyId") String companyId);
 
     /**
@@ -187,7 +187,7 @@ public interface FileMapper {
      *
      * @return
      */
-    @Select("select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime,f.lookpcs from FileDetail f  where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId  in (#{result}) and (f.title like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%'))  order by f.addFileTime desc ")
+    @Select("select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime,f.lookPcs from FileDetail f  where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId  in (#{result}) and (f.title like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%'))  order by f.addFileTime desc ")
     List<Map> searchGroupFile1(@Param("searchContent") String searchContent, @Param("result") String result);
 
     /**
@@ -232,6 +232,8 @@ public interface FileMapper {
     @SelectProvider(type = FileQuery.class, method = "showUserIfUpFile")
     List<Map> showUserUpFile(Map<String, Object> map);
 
+    @SelectProvider(type = FileQuery.class, method = "showUserIfUpFile1")
+    List<Map> showUserUpFile1(Map<String, Object> map);
 
     /**
      * 统计个人上传文件 总数
@@ -246,7 +248,7 @@ public interface FileMapper {
     class FileQuery {
         public String queryFileByDep(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select   o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle from FileDetail  o  where o.fileDisplay=1 ");
+            sql.append("select   o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle,o.lookPcs from FileDetail  o  where o.fileDisplay=1 ");
             if (StringUtils.isNotEmpty((String) map.get("companyId"))) {
                 sql.append(" AND o.companyId in (" + (String) map.get("companyId") + ")");
             }
@@ -297,7 +299,7 @@ public interface FileMapper {
 
         public String showUserIfLookFile(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select distinct o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where  o.fileDisplay=1 and o.fileSpecies=0 and u.userId=#{userId} ");
+            sql.append("select  o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle,o.lookPcs from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where  o.fileDisplay=1 and o.fileSpecies=0 and u.userId=#{userId} ");
 
             if (StringUtils.isNotEmpty((String) map.get("groupId"))) {
 
@@ -313,7 +315,7 @@ public interface FileMapper {
 
         public String showUserIfCompanyFile(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select distinct o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where  o.fileDisplay=1 and o.fileSpecies=2 ");
+            sql.append("select distinct o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle,o.lookPcs from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where  o.fileDisplay=1 and o.fileSpecies=2 ");
             if (StringUtils.isNotEmpty((String) map.get("companyId"))) {
                 sql.append(" AND o.companyId in (" + (String) map.get("companyId") + ")");
             }
@@ -331,7 +333,7 @@ public interface FileMapper {
         //select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f    where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId  in (#{result}) and f.title like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%')  order by f.addFileTime desc
         public String showUserIfGroupFile(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select distinct o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where  o.fileDisplay=1 and o.fileSpecies=1  ");
+            sql.append("select  o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle,o.lookPcs from FileDetail  o  left join UserPermission  u on  o.id=u.fileId where  o.fileDisplay=1 and o.fileSpecies=1  ");
             if (StringUtils.isNotEmpty((String) map.get("groupId"))) {
                 sql.append(" AND o.userGroupId in (" + (String) map.get("groupId") + ")");
             }
@@ -340,12 +342,10 @@ public interface FileMapper {
             }
             sql.append("  order by o.addFileTime Desc  ");
             return sql.toString();
-
         }
-
         public String showAllFile(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select distinct o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle from FileDetail  o   where  o.fileDisplay=1   ");
+            sql.append("select  o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle ,o.lookPcs from FileDetail  o   where  o.fileDisplay=1   ");
             if (StringUtils.isNotEmpty((String) map.get("companyId"))) {
                 sql.append(" AND o.companyId in (" + (String) map.get("companyId") + ")");
             }
@@ -372,7 +372,7 @@ public interface FileMapper {
 
         public String showUserIfUpFile(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
-            sql.append("select distinct o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle from FileDetail  o   where  o.fileDisplay=1 and o.userId=#{userId}  ");
+            sql.append("select  o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle ,o.lookPcs  from FileDetail  o   where  o.fileDisplay=1 and o.userId=#{userId}  ");
                 if (StringUtils.isNotEmpty((String) map.get("departmentId"))) {
                     sql.append(" AND o.userGroupId in (" + (String) map.get("departmentId") + ")");
                 }
@@ -388,6 +388,18 @@ public interface FileMapper {
                 }
             }
             sql.append("  limit #{startSize},#{pageSize}  ");
+            return sql.toString();
+        }
+        public String showUserIfUpFile1(Map<String, Object> map) {
+            StringBuffer sql = new StringBuffer();
+            sql.append("select o.id, o.departmentName,o.username,o.fileSize,o.fileNo,o.title,o.fileUrl,o.photoUrl,o.enclosureInfo,o.addFileTime,o.fileStyle ,o.lookPcs from FileDetail  o   where  o.fileDisplay=1 and o.userId=#{userId}  ");
+            if (StringUtils.isNotEmpty((String) map.get("groupId"))) {
+                sql.append(" AND o.userGroupId in (" + (String) map.get("groupId") + ")");
+            }
+            if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
+                sql.append(" AND o.fileStyleId in (" + (String) map.get("fileStyleId") + ")");
+            }
+            sql.append("  order by o.addFileTime Desc  ");
             return sql.toString();
         }
         public String countUserIfUpFile(Map<String, Object> map) {

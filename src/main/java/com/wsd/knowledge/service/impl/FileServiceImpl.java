@@ -354,6 +354,9 @@ public class FileServiceImpl implements FileService {
                 List<Map> groupFileList = fileMapper.showUserLookGroupFile(params);
                 searchmap.addAll(groupFileList);
                 result += groupFileList.size();
+                List<Map> upFileList = fileMapper.showUserUpFile1(params);
+                searchmap.addAll(upFileList);
+                result += upFileList.size();
             }
             List<Map> newList = new ArrayList(new HashSet(searchmap));
             List<Map> listResult = listSplit3(current, pageSize, newList);
@@ -568,7 +571,6 @@ public class FileServiceImpl implements FileService {
         mapParams.put("pageSize", pageSize);
         mapParams.put("departmentId", departmentId);
         mapParams.put("fileStyleId", fileStyleId);
-
         List<Map> map = fileMapper.showUserUpFile(mapParams);
         Integer sum = fileMapper.countUpFilePcs(mapParams);
 
@@ -634,7 +636,7 @@ public class FileServiceImpl implements FileService {
                 }
                 ss += "'" + styleList.get(i) + "'";
             }
-            ss = ss + "," + "'" + styleList + "'";
+            ss = ss + "," + "'" + fileStyleId + "'";
         } else {
 
             ss = "'" + fileStyleId + "'";
