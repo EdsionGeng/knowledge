@@ -121,24 +121,7 @@ public interface OperationMapper {
     @SelectProvider(type = Operation.class, method = "countLogByDep")
     Integer countLogByIf(Map<String, Object> map);
 
-    /**
-     * 展示上传所有文件书面信息
-     *
-     * @param startSize
-     * @param limit
-     * @return
-     */
-    @Select("select f.id,f.departmentName,f.username,f.fileStyle,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime from FileDetail f  where f.fileDisplay= 1 and f.userId=#{userId} order by f.addFileTime ${sortType} limit #{startSize},#{limit}")
-    List<Map> showUserUpFile(@Param("userId") Integer userId,@Param("sortType")String sortType, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
 
-
-    /**
-     * 统计个人上传文件 总数
-     * @param userId
-     * @return
-     */
-    @Select("select count(f.id) from  FileDetail f  where f.fileDisplay= 1 and userId=#{userId}")
-    Integer countAllFilePcs(@Param("userId") Integer userId);
 
     /**
      * 查询当日查看文件日志次数

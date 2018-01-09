@@ -290,7 +290,7 @@ public class FileServiceImpl implements FileService {
         return new JsonResult(2, 0, "操作失败", 0);
     }
 
-    public JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize, String fileStyleId, String departmentId, Integer userGroupId, String sortType, String companyId,String sortmethod) {
+    public JsonResult showUserLookFile(Integer userId, Integer current, Integer pageSize, String fileStyleId, String departmentId, Integer userGroupId, String sortType, String companyId, String sortmethod) {
         if (current == null || pageSize == null || userId == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
@@ -311,9 +311,9 @@ public class FileServiceImpl implements FileService {
         String userGroupIds = getGroupArray(String.valueOf(userGroupId));
         if (departmentId.equals("") && fileStyleId.equals("")) {
             Integer sum = 0;
-            if("0".equals(sortmethod)){
-            map = fileMapper.showUserLookFile(userId, companyId, userGroupIds, sortType, startSize, pageSize);}
-            else if("1".equals(sortmethod)){
+            if ("0".equals(sortmethod)) {
+                map = fileMapper.showUserLookFile(userId, companyId, userGroupIds, sortType, startSize, pageSize);
+            } else if ("1".equals(sortmethod)) {
                 map = fileMapper.showUserLookFile1(userId, companyId, userGroupIds, sortType, startSize, pageSize);
             }
             sum = fileMapper.countUserLookFile(userId, companyId, userGroupIds);
@@ -330,16 +330,15 @@ public class FileServiceImpl implements FileService {
             if (fileStyleId.equals("0")) {
                 fileStyleId = "";
             }
-            if(!"".equals(fileStyleId)) {
+            if (!"".equals(fileStyleId)) {
                 String getStyleList = getFileStyleIdList(fileStyleId);
                 params.put("fileStyleId", getStyleList);
-            }
-            else{
+            } else {
                 params.put("fileStyleId", fileStyleId);
             }
             params.put("companyId", companyId);
-            if(!departmentId.equals("")) {
-             //   Integer groupId = userRepositoty.queryGroupIdByName(departmentName);
+            if (!departmentId.equals("")) {
+                //   Integer groupId = userRepositoty.queryGroupIdByName(departmentName);
                 String results = getGroupArray(departmentId);
                 params.put("groupId", results);
             } else {
@@ -535,6 +534,56 @@ public class FileServiceImpl implements FileService {
     }
 //
 
+    /**
+     * 用户历史上传业务逻辑层处理
+     *
+     * @param userId
+     * @param current
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public JsonResult showUserUp(Integer userId, String sortType, Integer current, Integer pageSize, String departmentId, String fileStyleId) {
+        if (current == null || pageSize == null || userId == null) {
+            return new JsonResult(2, 0, "参数为空", 0);
+        }
+        int startSize = (current - 1) * pageSize;
+        if (!sortType.equals("asc") && !sortType.equals("desc")) {
+            sortType = "desc";
+        }
+        if (!"".equals(departmentId) && !"null".equals(departmentId)) {
+            departmentId = getGroupArray(departmentId);
+        } else {
+            departmentId = "";
+        }
+        if (!"".equals(fileStyleId) && !"null".equals(fileStyleId)) {
+            fileStyleId = getFileStyleIdList(fileStyleId);
+        } else {
+            fileStyleId = "";
+        }
+        Map<String, Object> mapParams = new HashMap<>();
+        mapParams.put("userId", userId);
+        mapParams.put("sortType", sortType);
+        mapParams.put("startSize", startSize);
+        mapParams.put("pageSize", pageSize);
+        mapParams.put("departmentId", departmentId);
+        mapParams.put("fileStyleId", fileStyleId);
+
+        List<Map> map = fileMapper.showUserUpFile(mapParams);
+        Integer sum = fileMapper.countUpFilePcs(mapParams);
+
+        if (sum != null) {
+            RdPage page = new RdPage();
+            page.setTotal(sum);
+            page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
+            page.setCurrent(current);
+            page.setPageSize(pageSize);
+            return new JsonResult(0, map, "查询结果", page);
+        }
+        return new JsonResult(0, 0, "无数据", 0);
+
+    }
+
 
     //集合分页
     public static List<Map> listSplit3(int page, int limit, List<Map> list) {
@@ -556,7 +605,8 @@ public class FileServiceImpl implements FileService {
         }
         return (result != null && result.size() > 0) ? result : new ArrayList<>();
     }
-    String getGroupArray(String  groupId) {
+
+    String getGroupArray(String groupId) {
         List<Integer> groupList = userRepositoty.showPerGroupId(Integer.parseInt(groupId));
         String ss = "";
         if (groupList.size() != 0) {
@@ -587,7 +637,7 @@ public class FileServiceImpl implements FileService {
             ss = ss + "," + "'" + styleList + "'";
         } else {
 
-            ss = "'"+ fileStyleId + "'";
+            ss = "'" + fileStyleId + "'";
         }
         return ss;
 

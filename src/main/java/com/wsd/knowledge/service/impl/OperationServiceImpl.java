@@ -68,37 +68,6 @@ public class OperationServiceImpl implements OperationService {
         return new JsonResult(2, 0, "查询失败", 0);
     }
 
-    /**
-     * 用户历史上传业务逻辑层处理
-     *
-     * @param userId
-     * @param current
-     * @param pageSize
-     * @return
-     */
-    @Override
-    public JsonResult showUserUp(Integer userId,String sortType, Integer current, Integer pageSize) {
-        if (current == null || pageSize == null||userId==null) {
-            return new JsonResult(2, 0, "参数为空", 0);
-        }
-        int startSize = (current - 1) * pageSize;
-        if(!sortType.equals("asc")&&!sortType.equals("desc")){
-            sortType="desc";
-        }
-        List<Map> map = operationMapper.showUserUpFile(userId,sortType, startSize, pageSize);
-        Integer sum = operationMapper.countAllFilePcs(userId);
-
-        if (sum != null) {
-            RdPage page =new RdPage();
-            page.setTotal(sum);
-            page.setPages(sum % pageSize == 0 ? sum / pageSize : sum / pageSize + 1);
-            page.setCurrent(current);
-            page.setPageSize(pageSize);
-            return new JsonResult(0, map, "查询结果", page);
-        }
-        return new JsonResult(0, 0, "无数据", 0);
-
-    }
 
     /**
      * 获取当天信息数据

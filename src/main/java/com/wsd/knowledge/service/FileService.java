@@ -123,4 +123,15 @@ public interface FileService {
      * @return
      */
     JsonResult searchSingleFile(String object);
+
+
+    /**
+     * 用户历史上传
+     *
+     * @param userId
+     * @param current
+     * @param pageSize
+     * @return
+     */
+    JsonResult showUserUp(Integer userId,String sortType, Integer current, Integer pageSize,String departmentId,String fileStyleId);
 }

@@ -29,15 +29,7 @@ public interface OperationService {
      */
     JsonResult showAllDown(Integer page, Integer limit);
 
-    /**
-     * 用户历史上传
-     *
-     * @param userId
-     * @param current
-     * @param pageSize
-     * @return
-     */
-    JsonResult showUserUp(Integer userId,String sortType, Integer current, Integer pageSize);
+
 
     /**
      * 展示当天数据

@@ -1,6 +1,7 @@
 package com.wsd.knowledge.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.wsd.knowledge.service.FileService;
 import com.wsd.knowledge.service.OperationService;
 import com.wsd.knowledge.util.JsonResult;
 import io.swagger.annotations.Api;
@@ -27,7 +28,8 @@ public class OperationController {
 
     @Autowired
     private OperationService operationService;
-
+    @Autowired
+    private FileService fileService;
 //    /**
 //     * 展示个人历史下载
 //     *
@@ -84,11 +86,12 @@ public class OperationController {
             return new JsonResult(2,0,"请登陆" ,0);
         }
         String  sorType = String.valueOf(jsonObject.get("sortType"));
+        String departmentId=String.valueOf(jsonObject.get("departmentId"));
+        String fileStyleId=String.valueOf(jsonObject.get("fileStyleId"));
         Integer current = Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
-        return operationService.showUserUp(Integer.parseInt(userId),sorType,current, pageSize);
+        return fileService.showUserUp(Integer.parseInt(userId),sorType,current, pageSize,departmentId,fileStyleId);
     }
-
     /**
      * 展示当天信息数据
      *
