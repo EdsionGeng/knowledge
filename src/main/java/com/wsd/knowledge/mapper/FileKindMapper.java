@@ -30,6 +30,7 @@ public interface FileKindMapper {
     List<Map> showSeniorDoc();
 
     @Select("select id as fileStyleId,fileKindName,fileParentId from FileKind where fileParentId=#{pid}")
-    List<Map> showSonDoc(@Param("pid")Integer pid);
+    List<Map> showSonDoc(@Param("pid") Integer pid);
 
+    List<Map> getFileKind();
 }

@@ -90,4 +90,15 @@ public class DepartServiceImpl implements DepartmentService {
         return new JsonResult(2, 0, "已是最低级目录", 0);
     }
 
+    /**
+     * 展示级联目录
+     *
+     * @return
+     */
+    @Override
+    public JsonResult showAllDoc() {
+
+        return new JsonResult(0,fileKindMapper.getFileKind(),"查询结果",0);
+    }
+
 }

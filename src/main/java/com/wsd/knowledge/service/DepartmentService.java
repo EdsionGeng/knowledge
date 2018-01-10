@@ -20,6 +20,11 @@ public interface DepartmentService {
      */
     JsonResult showSonDept(String object);
 
+    /**
+     * 展示高级目录
+     * @return
+     */
+
     JsonResult showSeniorDoc();
 
     /**
@@ -28,4 +33,10 @@ public interface DepartmentService {
      * @return
      */
     JsonResult showSonDoc(String object);
+
+    /**
+     * 展示层级目录
+     * @return
+     */
+    JsonResult showAllDoc();
 }

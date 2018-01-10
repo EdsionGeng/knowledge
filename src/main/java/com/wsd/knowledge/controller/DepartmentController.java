@@ -56,4 +56,14 @@ public class DepartmentController {
     public JsonResult showSonDoc(@RequestBody String object) {
         return departmentService.showSonDoc(object);
     }
+
+    @ApiOperation(value = "展示级联目录", notes = "无需参数")
+    @ApiImplicitParams({
+
+    })
+    @RequestMapping(value = "show/all/doc.htmls", method = RequestMethod.POST)
+    public JsonResult showAllDoc() {
+        return departmentService.showAllDoc();
+    }
+
 }

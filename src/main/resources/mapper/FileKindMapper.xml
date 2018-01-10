@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wsd.knowledge.mapper.FileKindMapper" >
+    <resultMap id="BaseResultMap" type="com.wsd.knowledge.entity.FileKind" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="fileKindName" property="fileKindName" jdbcType="VARCHAR" />
+        <result column="fileParentId" property="fileParentId" jdbcType="INTEGER" />
+    </resultMap>
+
+    <resultMap id="fileTree" type="com.wsd.knowledge.entity.FileKind" >
+        <result column="id" property="id" jdbcType="INTEGER" />
+        <result column="fileParentId" property="fileParentId" jdbcType="INTEGER"/>
+        <result column="fileKindName" property="fileKindName" jdbcType="VARCHAR"/>
+        <collection column="id" property="children" select="getFileNo"/>
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, fileParentId,fileKindName
+    </sql>
+
+    <!-- 获取中心 一级 整合修改 -->
+    <select id="getFileKind" resultMap="fileTree" parameterType="int" >
+        select
+        id , fileKindName ,fileParentId
+        from FileKind where fileParentId = 0
+    </select>
+
+    <!-- 获取部门 二级 整合修改 -->
+    <select id="getFileNo" resultMap="fileTree" parameterType="int" >
+        SELECT  id  , fileKindName ,fileParentId
+        FROM FileKind
+        where fileParentId = #{id};
+    </select>
+
+</mapper>

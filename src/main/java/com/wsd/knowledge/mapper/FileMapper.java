@@ -179,7 +179,7 @@ public interface FileMapper {
      *
      * @return
      */
-    @Select("select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime,f.lookPcs from FileDetail f    where f.fileSpecies=2 and f.fileDisplay = 1 and f.companyId in (#{companyId}) and (f.title like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%')) order by f.addFileTime desc ")
+    @Select("select  f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime,f.lookPcs from FileDetail f    where f.fileSpecies=2 and f.fileDisplay = 1 and f.companyId in (#{companyId}) and (f.title like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%')) order by f.addFileTime desc ")
     List<Map> searchCompanyFile1(@Param("searchContent") String searchContent, @Param("companyId") String companyId);
 
     /**
@@ -187,8 +187,18 @@ public interface FileMapper {
      *
      * @return
      */
-    @Select("select  distinct f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime,f.lookPcs from FileDetail f  where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId  in (#{result}) and (f.title like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%'))  order by f.addFileTime desc ")
+    @Select("select   f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime,f.lookPcs from FileDetail f  where f.fileSpecies=1 and f.fileDisplay = 1 and f.userGroupId  in (#{result}) and (f.title like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%'))  order by f.addFileTime desc ")
     List<Map> searchGroupFile1(@Param("searchContent") String searchContent, @Param("result") String result);
+
+
+    /**
+     * 搜索自己上传文件
+     * @param searchContent
+     * @param userId
+     * @return
+     */
+    @Select("select   f.id,f.departmentName,f.username,f.fileSize,f.fileNo,f.title,f.fileUrl,f.photoUrl,f.enclosureInfo,f.addFileTime,f.lookPcs from FileDetail f  where  f.fileDisplay = 1 and f.userId=#{userId} and (f.title like concat('%',#{searchContent},'%') or f.fileUrl like concat('%',#{searchContent},'%') or f.fileContent like concat('%',#{searchContent},'%'))  order by f.addFileTime desc")
+    List<Map> searchUpFile(@Param("searchContent")String searchContent, @Param("userId")String userId);
 
     /**
      * 更新文档类型
@@ -411,7 +421,6 @@ public interface FileMapper {
             if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
                 sql.append(" AND o.fileStyleId in (" + (String) map.get("fileStyleId") + ")");
             }
-
             return sql.toString();
         }
     }

@@ -78,7 +78,9 @@ public class FileServiceImpl implements FileService {
             pageSize = 20;
         }
         int startSize = (current - 1) * pageSize;
-        companyId = DateUtil.getCompanyResult(companyId);
+      if(companyId.equals("1")){
+            companyId=getCompanyIds();
+        }
         if (fileStyleId.equals("") && title.equals("") && startDate.equals("2017-11-01 13:30") && endDate.equals("")) {
             Map<String, Object> maps = new HashMap<>();
             maps.put("sortType", sortType);
@@ -304,7 +306,9 @@ public class FileServiceImpl implements FileService {
         if (fileStyleId == "null") {
             fileStyleId = "";
         }
-        companyId = DateUtil.getCompanyResult(companyId);
+        if(companyId.equals("1")){
+            companyId=getCompanyIds();
+        }
         RdPage page = new RdPage();
         int startSize = (current - 1) * pageSize;
         List<Map> map = new ArrayList<>();
@@ -390,6 +394,9 @@ public class FileServiceImpl implements FileService {
         String searchContent = String.valueOf(jsonObject.get("searchContent"));
         String userGroupId = String.valueOf(jsonObject.get("userGroupId"));
         String companyId = String.valueOf(jsonObject.get("companyId"));
+        if(companyId.equals("1")){
+            companyId=getCompanyIds();
+        }
         if (userId == null || current == null || pageSize == null || searchContent.equals("")) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
@@ -401,6 +408,8 @@ public class FileServiceImpl implements FileService {
         if (map != null) {
             map.addAll(companyFileList);
             map.addAll(groupFileList);
+            List<Map> upFileList = fileMapper.searchUpFile(searchContent, userId);
+            map.addAll(upFileList);
             List<Map> newList = new ArrayList(new HashSet(map));
             int sum = newList.size();
             List<Map> pageMap = listSplit3(current, pageSize, newList);
@@ -607,6 +616,23 @@ public class FileServiceImpl implements FileService {
         }
         return (result != null && result.size() > 0) ? result : new ArrayList<>();
     }
+
+
+    String getCompanyIds() {
+        List<Integer> companyList = userRepositoty.queryCompanyIds();
+        String ss = "";
+        if (companyList.size() != 0) {
+            for (int i = 0, len = companyList.size(); i < len; i++) {
+                if (i > 0) {
+                    ss += ",";
+                }
+                ss += "'" + companyList.get(i) + "'";
+            }
+
+        }
+        return ss;
+    }
+
 
     String getGroupArray(String groupId) {
         List<Integer> groupList = userRepositoty.showPerGroupId(Integer.parseInt(groupId));

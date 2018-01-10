@@ -77,6 +77,10 @@ public interface UserRepositoty {
     @Select("select id  from UserRoles where  Uid=#{userId} and Rid=2013")
     Integer ifAdmin(@Param("userId") Object userId);
 
+    @Select("select id from Department_new where pid=1")
+    List<Integer> queryCompanyIds();
+
+
     @Select("select  a.id,a.deptno,a.pid from Department_new a LEFT JOIN Department_new b ON b.id =a.Pid where b.pid=#{pid} OR b.id=#{pid}")
     List<Integer> showPerGroupId(@Param("pid") Integer pid);
 
