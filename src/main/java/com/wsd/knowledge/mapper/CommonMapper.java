@@ -37,6 +37,11 @@ public interface CommonMapper {
     @Insert(" insert into FileKind (fileKindName,fileParentId,operationTime) values(#{docName},#{parentId},#{operationTime})")
     Integer insertDocRule(@Param("parentId") Integer parentId, @Param("docName") String docName, @Param("operationTime") String operationTime);
 
+
+    @Select("select id from FileKind where fileParentId=#{parentId} and fileKindName=#{docName} order by operationTime DESC limit 1")
+    Integer selectDocId(@Param("parentId")int parentId,@Param("docName")String  docName);
+
+
     /**
      * 删除文件目录
      * @param fileStyleId

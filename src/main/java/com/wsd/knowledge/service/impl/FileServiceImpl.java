@@ -142,7 +142,7 @@ public class FileServiceImpl implements FileService {
         SystemUser systemUser = userRepositoty.findInfo(userId);
         FileKind fileKind = fileKindMapper.selectFileKind(fileStyleId);
         //生成实体类
-        FileDetail fileDetail = new FileDetail(systemUser.getUsergroup(), systemUser.getUsername(), userId, fileStyleId, fileNo, title
+        FileDetail fileDetail = new FileDetail(systemUser.getDepartment(), systemUser.getUsername(), userId, fileStyleId, fileNo, title
                 , fileKind.getFileKindName(), content, fileurl, photourl, 0, 0, 0, filesize, 1,
                 describe, new DateUtil().getTime(), fileSpecies, systemUser.getUserGroupId(), companyId);
         String re = new DateUtil().cacheExist(fileNo);
@@ -177,7 +177,7 @@ public class FileServiceImpl implements FileService {
         Integer j = null;
         for (String id : ids.split(",")) {
             j = fileMapper.updateFileShow(id);
-            OperationLog operationLog = new OperationLog(systemUser.getUsergroup(), systemUser.getUsername(), userId, Integer.parseInt(id), 2, new DateUtil().getTime(), systemUser.getCompanyId());
+            OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, Integer.parseInt(id), 2, new DateUtil().getTime(), systemUser.getCompanyId());
             String re = new DateUtil().cacheExist(id);
             if (re.equals("full")) {
                 return new JsonResult(2, 0, "网络异常", 0);
@@ -214,7 +214,7 @@ public class FileServiceImpl implements FileService {
             //添加操作日志
             if (operationMapper.queryLookLog(userId, fileId) == null) {
                 SystemUser systemUser = userRepositoty.findInfo(userId);
-                OperationLog operationLog = new OperationLog(systemUser.getUsergroup(), systemUser.getUsername(), userId, fileId, 4, new DateUtil().getTime(), systemUser.getCompanyId());
+                OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, fileId, 4, new DateUtil().getTime(), systemUser.getCompanyId());
                 j = operationMapper.insertOperationLog(operationLog);
             } else {
                 return new JsonResult(0, 0, "已查阅过日志", 0);
@@ -244,7 +244,7 @@ public class FileServiceImpl implements FileService {
             if (operationMapper.queryDownLog(userId, id) == null) {
                 SystemUser systemUser = userRepositoty.findInfo(userId);
                 //添加操作日志
-                OperationLog operationLog = new OperationLog(systemUser.getUsergroup(), systemUser.getUsername(), userId, id, 5, new DateUtil().getSystemTime(), systemUser.getCompanyId());
+                OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, id, 5, new DateUtil().getSystemTime(), systemUser.getCompanyId());
                 j = operationMapper.insertOperationLog(operationLog);
             } else {
                 return new JsonResult(0, 0, "已下载过日志", 0);
@@ -276,7 +276,7 @@ public class FileServiceImpl implements FileService {
         if (result != 0) {
             SystemUser systemUser = userRepositoty.findInfo(userId);
             //添加操作日志
-            OperationLog operationLog = new OperationLog(systemUser.getUsergroup(), systemUser.getUsername(), userId, id, 3, new DateUtil().getTime(), systemUser.getCompanyId());
+            OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, id, 3, new DateUtil().getTime(), systemUser.getCompanyId());
             String str = new DateUtil().cacheExist(String.valueOf(id));
             if (str.equals("full")) {
                 return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
@@ -507,7 +507,7 @@ public class FileServiceImpl implements FileService {
         Integer result = fileMapper.updateFileShow(fileId);
         if (result != 0) {
             SystemUser systemUser = userRepositoty.findInfo(Integer.parseInt(userId));
-            OperationLog operationLog = new OperationLog(systemUser.getUsergroup(), systemUser.getUsername(), Integer.parseInt(userId), Integer.parseInt(fileId), 2, new DateUtil().getTime(), systemUser.getCompanyId());
+            OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), Integer.parseInt(userId), Integer.parseInt(fileId), 2, new DateUtil().getTime(), systemUser.getCompanyId());
             String str = new DateUtil().cacheExist(String.valueOf(userId));
             if (str.equals("full")) {
                 return new JsonResult(2, 0, "出现并发", 0);

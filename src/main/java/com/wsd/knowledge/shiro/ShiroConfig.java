@@ -52,14 +52,14 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/doc.html", "anon");
         filterChainDefinitionMap.put("/image/**", "anon");
 //        filterChainDefinitionMap.put("/loclahost:8080/**", "anon");
-//        filterChainDefinitionMap.put("/http://192.168.22.45:8011/**", "anon");
-//        filterChainDefinitionMap.put("/http://192.168.3.26:5026/ws-knowledge/**", "anon");
+        //filterChainDefinitionMap.put("/http://192.168.22.45:8011/login.htmls", "anon");
+       // filterChainDefinitionMap.put("/http://192.168.3.26:5026/ws-knowledge/**", "anon");
         filterChainDefinitionMap.put("/add", "perms[权限添加:权限删除]");
         filterChainDefinitionMap.put("/userAdd", "perms[uadd22],roles[王东]");
         filterChainDefinitionMap.put("/403403", "perms[403403]");
         // <!-- 过滤链定义，从上向下顺序执行，一般将 /**放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了;
         // <!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
-       // filterChainDefinitionMap.put("/**", "authc");
+        //filterChainDefinitionMap.put("/**", "authc");
         filterChainDefinitionMap.put("/**", "anon"); //关闭验证
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;

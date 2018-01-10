@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @Author EdsionGeng
@@ -75,13 +76,12 @@ public class CommonServiceImpl implements CommonService {
      * @return
      */
     @Override
-    public JsonResult insertRule(Integer parentid, String docName) {
+    public synchronized JsonResult insertRule(Integer parentid, String docName) {
         if (parentid == null || docName == null) {
             return new JsonResult(2, 0, "参数为空", 0);
         }
-        Integer j = commonMapper.insertDocRule(parentid, docName, new DateUtil().getSystemTime());
-        if (j != 0) {
-            return new JsonResult(0, 0, "操作成功", 0);
+        if (commonMapper.insertDocRule(parentid, docName, new DateUtil().getSystemTime()) != 0) {
+            return new JsonResult(0, commonMapper.selectDocId(parentid, docName), "操作成功", 0);
         }
         return new JsonResult(2, 0, "操作失败", 0);
     }
@@ -108,6 +108,7 @@ public class CommonServiceImpl implements CommonService {
 
     /**
      * 修改文档类型
+     *
      * @param object
      * @return
      */
@@ -120,12 +121,11 @@ public class CommonServiceImpl implements CommonService {
         Integer fileStyleId = Integer.parseInt(String.valueOf(jsonObject.get("fileStyleId")));
         String fileName = String.valueOf(jsonObject.get("fileName"));
         String upStyleId = String.valueOf(jsonObject.get("upStyleId"));
-        Integer result =0;
-        if(upStyleId=="null"){
-           result = commonMapper.updateDocRule(fileStyleId, fileName);
-        }
-        else{
-            result = commonMapper.updateDocStyle(fileStyleId, fileName,Integer.parseInt(upStyleId));
+        Integer result = 0;
+        if (upStyleId == "null") {
+            result = commonMapper.updateDocRule(fileStyleId, fileName);
+        } else {
+            result = commonMapper.updateDocStyle(fileStyleId, fileName, Integer.parseInt(upStyleId));
         }
 
         if (result != 0) {
@@ -210,6 +210,7 @@ public class CommonServiceImpl implements CommonService {
             if (StringUtils.equals("0", String.valueOf(treeNode.getFileParentId()))) {
                 trees.add(treeNode);
             }
+
             for (FileKind it : treeNodes) {
                 if (StringUtils.equals(String.valueOf(it.getFileParentId()), String.valueOf(treeNode.getId()))) {
                     if (treeNode.getChildren() == null) {
@@ -220,14 +221,14 @@ public class CommonServiceImpl implements CommonService {
             }
         }
         List<FileKind> list = Lists.newArrayList();
-//        FileKind zero = new FileKind();
-//        zero.setId(0);
-//        zero.setFileKindName("聚财科技文档目录");
-//        zero.setChildren(trees);
-//        if (StringUtils.equals(pid, "0")) {
-//            zero.setChecked(1);
-//        }
-//        list.add(zero);
+        FileKind zero = new FileKind();
+        zero.setId(0);
+        zero.setFileKindName("聚财科技文档目录");
+        zero.setChildren(trees);
+        if (StringUtils.equals(pid, "0")) {
+            zero.setChecked(1);
+        }
+        list.add(zero);
         return list;
     }
 
