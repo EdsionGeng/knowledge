@@ -276,15 +276,19 @@ public class FileServiceImpl implements FileService {
         Integer result = fileMapper.updateFileContentUrl(id, content, fileurl, fileStyleId, fileSize, photourl, describle, fileStyleName, fileSpecies, new DateUtil().getTime());
         if (result != 0) {
             //修改操作日志文件状态
-            operationMapper.updateFileStatus(id);
+
             SystemUser systemUser = userRepositoty.findInfo(userId);
             //添加操作日志
             OperationLog operationLog = new OperationLog(systemUser.getDepartment(), systemUser.getUsername(), userId, id, 3, new DateUtil().getTime(), systemUser.getCompanyId(), 1);
             String str = new DateUtil().cacheExist(String.valueOf(id));
             if (str.equals("full")) {
-                return new JsonResult(2, 0, "网络延时，请稍后加载", 0);
+                return new JsonResult(2, 0, "并发", 0);
             }
             Integer k = operationMapper.insertOperationLog(operationLog);
+//            Map<String,Object> map=new HashMap<>();
+//            map.put("id",String.valueOf(id));
+            Integer i = operationMapper.updateFileStatus(id);
+            System.out.println(i);
             if (chooseUser.equals("1")) {
                 userPermissionMapper.deletePerByFileId(id);
             }
@@ -348,9 +352,9 @@ public class FileServiceImpl implements FileService {
                 //   Integer groupId = userRepositoty.queryGroupIdByName(departmentName);
                 String results = getGroupArray(departmentId);
                 params.put("groupId", results);
-                params.put("useGro","1");
+                params.put("useGro", "1");
             } else {
-                params.put("useGro","");
+                params.put("useGro", "");
                 params.put("groupId", userGroupIds);
             }
             Integer result = 0;

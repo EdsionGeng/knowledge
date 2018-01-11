@@ -41,11 +41,12 @@ public interface OperationMapper {
     /**
      * 更新文件已被修改
      *
-     * @param fileId
+     * @param
      * @return
      */
-    @Update("update OperationLog set status=1 where fileId=#{fileId}")
-    Integer updateFileStatus(@Param("fileId") Integer fileId);
+    @Update("update OperationLog set status=1 where fileId=#{id}")
+   // @SelectProvider(type = Operation.class, method = "updateFile")
+    Integer updateFileStatus(Integer id);
 
     /**
      * 取操作日志最新记录 状态是否
@@ -317,6 +318,15 @@ public interface OperationMapper {
         }
 
 
+        public String updateFile(Map<String, Object> map) {
+            StringBuffer sql = new StringBuffer();
+            sql.append("update OperationLog set status=1 ");
+            if (StringUtils.isNotEmpty((String) map.get("id"))) {
+                sql.append(" where fileId =" +(String) map.get("id")+ " ");
+            }
+            System.out.println(sql);
+            return sql.toString();
+        }
     }
 
 
