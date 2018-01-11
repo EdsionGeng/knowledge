@@ -56,4 +56,7 @@ public interface OperationService {
      */
     JsonResult showSingleFileLog(Integer fileId,Integer page,Integer limit,String  operationStyle,String departmentName);
 
+
+    JsonResult showStatus(String object);
+
 }

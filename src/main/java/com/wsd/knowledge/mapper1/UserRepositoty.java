@@ -33,14 +33,14 @@ public interface UserRepositoty {
     @Select("select username,department,UserGroupId,companyId from SystemUser where id=#{id} ")
     SystemUser findInfo(@Param("id") Integer id);
 
-    /**
-     * 获取个人信息
-     *
-     * @param name
-     * @return
-     */
-    @Select("select id from Department_new where Deptno=#{name} ")
-    Integer queryGroupIdByName(@Param("name") String name);
+//    /**
+//     * 获取个人信息
+//     *
+//     * @param name
+//     * @return
+//     */
+//    @Select("select id from Department_new where Deptno=#{name} ")
+//    Integer queryGroupIdByName(@Param("name") String name);
 
 //    /**
 //     * 查找同一组别下的人

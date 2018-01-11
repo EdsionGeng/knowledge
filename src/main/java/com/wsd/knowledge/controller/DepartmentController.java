@@ -59,7 +59,6 @@ public class DepartmentController {
 
     @ApiOperation(value = "展示级联目录", notes = "无需参数")
     @ApiImplicitParams({
-
     })
     @RequestMapping(value = "show/all/doc.htmls", method = RequestMethod.POST)
     public JsonResult showAllDoc() {

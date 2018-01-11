@@ -117,8 +117,8 @@ public interface FileMapper {
      * @param describle
      * @return
      */
-    @Update("update FileDetail set fileStyleId=#{fileStyleId},fileContent=#{content},fileUrl=#{fileurl},fileSize=#{fileSize},photoUrl=#{photourl},enclosureInfo=#{describle},fileStyle=#{fileStyleName},fileSpecies=#{fileSpecies},updatePcs=updatePcs+1 where id=#{id}")
-    Integer updateFileContentUrl(@Param("id") Integer id, @Param("content") String content, @Param("fileurl") String fileurl, @Param("fileStyleId") Integer fileStyleId, @Param("fileSize") String fileSize, @Param("photourl") String photourl, @Param("describle") String describle, @Param("fileStyleName") String fileStyleName, @Param("fileSpecies") Integer fileSpecies);
+    @Update("update FileDetail set fileStyleId=#{fileStyleId},fileContent=#{content},fileUrl=#{fileurl},fileSize=#{fileSize},photoUrl=#{photourl},enclosureInfo=#{describle},fileStyle=#{fileStyleName},fileSpecies=#{fileSpecies},updatePcs=updatePcs+1,addFileTime=#{newTime} where id=#{id}")
+    Integer updateFileContentUrl(@Param("id") Integer id, @Param("content") String content, @Param("fileurl") String fileurl, @Param("fileStyleId") Integer fileStyleId, @Param("fileSize") String fileSize, @Param("photourl") String photourl, @Param("describle") String describle, @Param("fileStyleName") String fileStyleName, @Param("fileSpecies") Integer fileSpecies,@Param("newTime")String newTime);
 
 //    /**
 //     * 查看用户能看的全部文件
@@ -319,7 +319,7 @@ public interface FileMapper {
                 sql.append(" AND o.fileStyleId in (" + (String) map.get("fileStyleId") + ")");
             }
             sql.append("  order by o.addFileTime Desc  ");
-//            System.out.print(sql);
+           System.out.print(sql);
             return sql.toString();
         }
 
@@ -329,14 +329,18 @@ public interface FileMapper {
             if (StringUtils.isNotEmpty((String) map.get("companyId"))) {
                 sql.append(" AND o.companyId in (" + (String) map.get("companyId") + ")");
             }
-            if (StringUtils.isNotEmpty((String) map.get("groupId"))) {
-                sql.append(" AND o.userGroupId in (" + (String) map.get("groupId") + ")");
+            if (StringUtils.isNotEmpty((String) map.get("useGro"))) {
+                if (StringUtils.isNotEmpty((String) map.get("groupId"))) {
+
+                    sql.append(" AND o.userGroupId in (" + (String) map.get("groupId") + ")");
+                }
             }
+
             if (StringUtils.isNotEmpty((String) map.get("fileStyleId"))) {
                 sql.append(" AND o.fileStyleId in (" + (String) map.get("fileStyleId") + ")");
             }
             sql.append("  order by o.addFileTime Desc  ");
-            System.out.print(sql);
+           // System.out.println(sql);
             return sql.toString();
         }
 
@@ -398,6 +402,7 @@ public interface FileMapper {
                 }
             }
             sql.append("  limit #{startSize},#{pageSize}  ");
+                System.out.println(sql);
             return sql.toString();
         }
         public String showUserIfUpFile1(Map<String, Object> map) {

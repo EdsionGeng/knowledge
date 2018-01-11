@@ -127,7 +127,6 @@ public class CommonServiceImpl implements CommonService {
         } else {
             result = commonMapper.updateDocStyle(fileStyleId, fileName, Integer.parseInt(upStyleId));
         }
-
         if (result != 0) {
             fileMapper.updateFileStyleName(fileStyleId, fileName);
             return new JsonResult(0, 0, "修改成功", 0);

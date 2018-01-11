@@ -29,8 +29,6 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
-
-
     @ApiOperation(value = "用户登录接口", notes = "传递用户名和密码")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "query", dataType = "String", name = "username", value = "姓名", required = true),

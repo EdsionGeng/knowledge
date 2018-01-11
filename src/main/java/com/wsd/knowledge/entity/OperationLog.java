@@ -37,6 +37,8 @@ public class OperationLog implements Serializable {
    //@Column(name = "operationTime", nullable = false, length=64,columnDefinition=" '操作时间'")
     private String operationTime;//操作文件时间
 
+    private int status;
+
     public int getId() {
         return id;
     }
@@ -101,7 +103,15 @@ public class OperationLog implements Serializable {
         this.operationTime = operationTime;
     }
 
-    public OperationLog(String departmentName,String username, int userId, int fileId, int operationStyle, String operationTime,String companyId) {
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public OperationLog(String departmentName, String username, int userId, int fileId, int operationStyle, String operationTime, String companyId,int status) {
         this.departmentName = departmentName;
         this.username=username;
         this.userId = userId;
@@ -109,5 +119,6 @@ public class OperationLog implements Serializable {
         this.operationStyle = operationStyle;
         this.operationTime = operationTime;
         this.companyId=companyId;
+        this.status=status;
     }
 }

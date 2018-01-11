@@ -81,17 +81,18 @@ public class OperationController {
     @RequestMapping(value = "show/allupload.htmls", method = RequestMethod.POST)
     public JsonResult showAllUpload(@RequestBody String object) {
         JSONObject jsonObject = JSONObject.parseObject(object);
-        String  userId = String.valueOf(jsonObject.get("userId"));
-        if(userId.equals("null")){
-            return new JsonResult(2,0,"请登陆" ,0);
+        String userId = String.valueOf(jsonObject.get("userId"));
+        if (userId.equals("null")) {
+            return new JsonResult(2, 0, "请登陆", 0);
         }
-        String  sorType = String.valueOf(jsonObject.get("sortType"));
-        String departmentId=String.valueOf(jsonObject.get("departmentId"));
-        String fileStyleId=String.valueOf(jsonObject.get("fileStyleId"));
+        String sorType = String.valueOf(jsonObject.get("sortType"));
+        String departmentId = String.valueOf(jsonObject.get("departmentId"));
+        String fileStyleId = String.valueOf(jsonObject.get("fileStyleId"));
         Integer current = Integer.parseInt(String.valueOf(jsonObject.get("current")));
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
-        return fileService.showUserUp(Integer.parseInt(userId),sorType,current, pageSize,departmentId,fileStyleId);
+        return fileService.showUserUp(Integer.parseInt(userId), sorType, current, pageSize, departmentId, fileStyleId);
     }
+
     /**
      * 展示当天信息数据
      *
@@ -152,4 +153,22 @@ public class OperationController {
         Integer pageSize = Integer.parseInt(String.valueOf(jsonObject.get("pageSize")));
         return operationService.showSingleFileLog(fileId, current, pageSize, operationStyle, departmentName);
     }
+
+    /**
+     * 展示单个文件最新状态记录
+     *
+     * @param object
+     * @return
+     */
+    @ApiOperation(value = "查看单个文件状态接口", notes = "传递必要参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "fileId", value = "文件ID", required = true),
+
+            @ApiImplicitParam(paramType = "query", dataType = "Integer", name = "userId", value = "用户Id", required = true)
+    })
+    @RequestMapping(value = "show/file/newstatus.htmls", method = RequestMethod.POST)
+    public JsonResult showStatus(@RequestBody String object) {
+        return operationService.showStatus(object);
+    }
+
 }

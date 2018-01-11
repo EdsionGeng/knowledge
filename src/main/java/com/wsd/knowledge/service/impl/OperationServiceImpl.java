@@ -7,6 +7,7 @@ import com.wsd.knowledge.mapper1.UserRepositoty;
 import com.wsd.knowledge.service.OperationService;
 import com.wsd.knowledge.util.DateUtil;
 import com.wsd.knowledge.util.JsonResult;
+import com.wsd.knowledge.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,7 @@ public class OperationServiceImpl implements OperationService {
 
     @Autowired
     private UserRepositoty userRepositoty;
+
     /**
      * 展示个人用户下载记录
      *
@@ -86,8 +88,8 @@ public class OperationServiceImpl implements OperationService {
         if (companyId.equals("null")) {
             return new JsonResult(2, 0, "请登陆", 0);
         }
-        if(companyId.equals("1")){
-            companyId=getCompanyIds();
+        if (companyId.equals("1")) {
+            companyId = getCompanyIds();
         }
         Integer dayLookPcs = operationMapper.countDataLookPcs(startTime, endTime, companyId);
         if (dayLookPcs == null) {
@@ -129,8 +131,8 @@ public class OperationServiceImpl implements OperationService {
         if (companyId.equals("null")) {
             return new JsonResult(2, 0, "请登陆", 0);
         }
-        if(companyId.equals("1")){
-            companyId=getCompanyIds();
+        if (companyId.equals("1")) {
+            companyId = getCompanyIds();
         }
         Map<String, Object> map = new HashMap<>();
         String startTime = DateUtil.mondayToSunday().get("beginDate");
@@ -180,8 +182,8 @@ public class OperationServiceImpl implements OperationService {
         if (companyId.equals("null")) {
             return new JsonResult(2, 0, "请登陆", 0);
         }
-        if(companyId.equals("1")){
-            companyId=getCompanyIds();
+        if (companyId.equals("1")) {
+            companyId = getCompanyIds();
         }
         String startTime = DateUtil.getMonthFirstDay();
         String endTime = DateUtil.getMonthLastDay();
@@ -269,6 +271,31 @@ public class OperationServiceImpl implements OperationService {
         return new JsonResult(0, map, "查询结果", rdPage);
     }
 
+    /**
+     * 展示相对应文件状态
+     *
+     * @param object
+     * @return
+     */
+    @Override
+    public JsonResult showStatus(String object) {
+        JSONObject jsonObject = JSONObject.parseObject(object);
+        String fileId = jsonObject.getString("fileId");
+        String userId = jsonObject.getString("userId");
+        if (StringUtils.isEmpty(fileId) || StringUtils.isEmpty(userId)) {
+            return new JsonResult(2, 0, "参数异常", 0);
+        }
+        if (operationMapper.queryLookLog(Integer.parseInt(userId), Integer.parseInt(fileId)) == null) {
+            return new JsonResult(0, 0, "新上传文件无查看记录", 0);
+        } else {
+            if (operationMapper.queryFileNewStatus(Integer.parseInt(userId), Integer.parseInt(fileId)) == 0) {
+                return new JsonResult(0, 1, "不是最新修改文件", 0);
+            } else {
+                return new JsonResult(0, 2, "是最新修改文件", 0);
+            }
+        }
+    }
+
     String getCompanyIds() {
         List<Integer> companyList = userRepositoty.queryCompanyIds();
         String ss = "";
@@ -279,7 +306,6 @@ public class OperationServiceImpl implements OperationService {
                 }
                 ss += "'" + companyList.get(i) + "'";
             }
-
         }
         return ss;
     }

@@ -2,10 +2,7 @@ package com.wsd.knowledge.mapper;
 
 import com.wsd.knowledge.entity.OperationLog;
 import com.wsd.knowledge.util.StringUtils;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.Map;
@@ -23,8 +20,8 @@ public interface OperationMapper {
      * @param operationLog
      * @return
      */
-    @Insert("insert into OperationLog(departmentName,username,fileId,operationStyle,operationTime,userId) " +
-            "values(#{departmentName},#{username},#{fileId},#{operationStyle},#{operationTime},#{userId})")
+    @Insert("insert into OperationLog(departmentName,username,fileId,operationStyle,operationTime,userId,companyId,status) " +
+            "values(#{departmentName},#{username},#{fileId},#{operationStyle},#{operationTime},#{userId},#{companyId},#{status})")
     Integer insertOperationLog(OperationLog operationLog);
 
     /**
@@ -42,6 +39,25 @@ public interface OperationMapper {
     Integer queryDownLog(@Param("userId") Integer userId, @Param("fileId") Integer fileId);
 
     /**
+     * 更新文件已被修改
+     *
+     * @param fileId
+     * @return
+     */
+    @Update("update OperationLog set status=1 where fileId=#{fileId}")
+    Integer updateFileStatus(@Param("fileId") Integer fileId);
+
+    /**
+     * 取操作日志最新记录 状态是否
+     */
+    @Select("select status from OperationLog where userId=#{userId} and fileId=#{fileId} order by operationTime desc limit 1")
+    Integer queryFileNewStatus(@Param("userId") Integer userId, @Param("fileId") Integer fileId);
+
+
+    @Update("update OperationLog set status=0 where fileId=#{fileId} and userId=#{userId} ")
+    Integer updateFileNewStatus(@Param("userId") Integer userId, @Param("fileId") Integer fileId);
+
+    /**
      * 查询某一文件操作日志记录
      *
      * @param fileId
@@ -49,7 +65,7 @@ public interface OperationMapper {
      */
     @Select("select o.*,CASE o.operationStyle WHEN 1 THEN '添加文档'  WHEN 2 THEN '删除文档' WHEN 3 THEN '更改文档' WHEN 4 THEN '查阅文档' WHEN 5 THEN '下载文档' ELSE '其他'\n" +
             " END AS operation from OperationLog  o  where o.fileId = #{fileId} Order by o.operationTime DESC limit #{startSize},#{limit} ")
-    List<Map> showAllOperationLog(@Param("fileId") int fileId,@Param("startSize")Integer startSize,@Param("limit")Integer limit);
+    List<Map> showAllOperationLog(@Param("fileId") int fileId, @Param("startSize") Integer startSize, @Param("limit") Integer limit);
 
     /**
      * 统计日志记录数量
@@ -122,15 +138,15 @@ public interface OperationMapper {
     Integer countLogByIf(Map<String, Object> map);
 
 
-
     /**
      * 查询当日查看文件日志次数
+     *
      * @param startTime
      * @param endTime
      * @return
      */
     @Select("select count(id) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=4")
-    Integer countDataLookPcs(@Param("startTime")String startTime,@Param("endTime")String endTime,@Param("companyId")String companyId);
+    Integer countDataLookPcs(@Param("startTime") String startTime, @Param("endTime") String endTime, @Param("companyId") String companyId);
 
 //    /**
 //     * 查询当日下载次数
@@ -144,31 +160,34 @@ public interface OperationMapper {
 
     /**
      * 查询当日上传文件次数
+     *
      * @param startTime
      * @param endTime
      * @return
      */
     @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=1")
-    Integer countDataAddPcs(@Param("startTime")String startTime,@Param("endTime")String endTime,@Param("companyId")String companyId);
+    Integer countDataAddPcs(@Param("startTime") String startTime, @Param("endTime") String endTime, @Param("companyId") String companyId);
 
     /**
      * 查询当日删除文件次数
+     *
      * @param startTime
      * @param endTime
      * @return
      */
     @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=2")
-    Integer countDataDeletePcs(@Param("startTime")String startTime,@Param("endTime")String endTime,@Param("companyId")String companyId);
+    Integer countDataDeletePcs(@Param("startTime") String startTime, @Param("endTime") String endTime, @Param("companyId") String companyId);
 
 
     /**
      * 查询当日更改次数
+     *
      * @param startTime
      * @param endTime
      * @return
      */
     @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=3")
-    Integer countDataUpdatePcs(@Param("startTime")String startTime,@Param("endTime")String endTime,@Param("companyId")String companyId);
+    Integer countDataUpdatePcs(@Param("startTime") String startTime, @Param("endTime") String endTime, @Param("companyId") String companyId);
 
 //    /**
 //     * 本周查看文件日志次数
@@ -298,14 +317,7 @@ public interface OperationMapper {
         }
 
 
-
-
-
-
     }
-
-
-
 
 
 }
