@@ -285,10 +285,9 @@ public class FileServiceImpl implements FileService {
                 return new JsonResult(2, 0, "并发", 0);
             }
             Integer k = operationMapper.insertOperationLog(operationLog);
-//            Map<String,Object> map=new HashMap<>();
-//            map.put("id",String.valueOf(id));
-            Integer i = operationMapper.updateFileStatus(id);
-            System.out.println(i);
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", String.valueOf(id));
+            operationMapper.updateFileStatus(map);
             if (chooseUser.equals("1")) {
                 userPermissionMapper.deletePerByFileId(id);
             }

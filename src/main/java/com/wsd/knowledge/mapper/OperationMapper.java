@@ -44,9 +44,9 @@ public interface OperationMapper {
      * @param
      * @return
      */
-    @Update("update OperationLog set status=1 where fileId=#{id}")
-   // @SelectProvider(type = Operation.class, method = "updateFile")
-    Integer updateFileStatus(Integer id);
+    //@Update("update OperationLog set status=1 where fileId=#{id}")
+    @SelectProvider(type = Operation.class, method = "updateFile")
+    Integer updateFileStatus(Map<String, Object> map);
 
     /**
      * 取操作日志最新记录 状态是否
@@ -190,102 +190,6 @@ public interface OperationMapper {
     @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=3")
     Integer countDataUpdatePcs(@Param("startTime") String startTime, @Param("endTime") String endTime, @Param("companyId") String companyId);
 
-//    /**
-//     * 本周查看文件日志次数
-//     * @param startTime
-//     * @param endTime
-//     * @return
-//     */
-//    @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=4")
-//    Integer countWeekLookPcs(@Param("startTime")String startTime,@Param("endTime")String endTime);
-//
-////    /**
-////     * 查询本周下载次数
-////     * @param startTime
-////     * @param endTime
-////     * @return
-////     */
-////    @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=5")
-////    Integer countWeekDownloadPcs(@Param("startTime")String startTime,@Param("endTime")String endTime);
-//
-//
-//    /**
-//     * 查询本周上传文件次数
-//     * @param startTime
-//     * @param endTime
-//     * @return
-//     */
-//    @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=1")
-//    Integer countWeekAddPcs(@Param("startTime")String startTime,@Param("endTime")String endTime);
-//
-//    /**
-//     * 查询本周删除文件次数
-//     * @param startTime
-//     * @param endTime
-//     * @return
-//     */
-//    @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=2")
-//    Integer countWeekDeletePcs(@Param("startTime")String startTime,@Param("endTime")String endTime);
-//
-//
-//    /**
-//     * 查询本周更改次数
-//     * @param startTime
-//     * @param endTime
-//     * @return
-//     */
-//    @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=3")
-//    Integer countWeekUpdatePcs(@Param("startTime")String startTime,@Param("endTime")String endTime);
-//
-//
-//    /**
-//     * 本月查看文件日志次数
-//     * @param startTime
-//     * @param endTime
-//     * @return
-//     */
-//    @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=4")
-//    Integer countMonthLookPcs(@Param("startTime")String startTime,@Param("endTime")String endTime);
-//
-////    /**
-////     * 查询本月下载次数
-////     * @param startTime
-////     * @param endTime
-////     * @return
-////     */
-////    @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=5")
-////    Integer countMonthDownloadPcs(@Param("startTime")String startTime,@Param("endTime")String endTime);
-//
-//
-//    /**
-//     * 查询本月上传文件次数
-//     * @param startTime
-//     * @param endTime
-//     * @return
-//     */
-//    @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=1")
-//    Integer countMonthAddPcs(@Param("startTime")String startTime,@Param("endTime")String endTime);
-//
-//    /**
-//     * 查询本月删除文件次数
-//     * @param startTime
-//     * @param endTime
-//     * @return
-//     */
-//    @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=2")
-//    Integer countMonthDeletePcs(@Param("startTime")String startTime,@Param("endTime")String endTime);
-//
-//
-//    /**
-//     * 查询本月更改次数
-//     * @param startTime
-//     * @param endTime
-//     * @return
-//     */
-//    @Select("select count(*) from OperationLog where operationTime between #{startTime} and #{endTime}  and operationStyle=3")
-//    Integer countMonthUpdatePcs(@Param("startTime")String startTime,@Param("endTime")String endTime);
-
-
     class Operation {
         public String queryLogByDep(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
@@ -298,7 +202,6 @@ public interface OperationMapper {
             if (StringUtils.isNotEmpty((String) map.get("operationStyle"))) {
                 sql.append(" AND o.operationStyle = #{operationStyle} ");
             }
-
             sql.append(" limit #{startSize},#{limit} ");
             return sql.toString();
         }
@@ -306,23 +209,19 @@ public interface OperationMapper {
         public String countLogByDep(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
             sql.append("select count(*) from OperationLog  o  where o.fileId=#{fileId}");
-
             if (StringUtils.isNotEmpty((String) map.get("departmentName"))) {
                 sql.append(" AND o.departmentName <= #{departmentName} ");
             }
             if (StringUtils.isNotEmpty((String) map.get("operationStyle"))) {
                 sql.append(" AND o.operationStyle = #{operationStyle} ");
             }
-
             return sql.toString();
         }
-
-
         public String updateFile(Map<String, Object> map) {
             StringBuffer sql = new StringBuffer();
             sql.append("update OperationLog set status=1 ");
             if (StringUtils.isNotEmpty((String) map.get("id"))) {
-                sql.append(" where fileId =" +(String) map.get("id")+ " ");
+                sql.append(" where fileId =" + (String) map.get("id") + " ");
             }
             System.out.println(sql);
             return sql.toString();
